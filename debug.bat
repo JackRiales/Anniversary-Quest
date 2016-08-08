@@ -1,1 +1,1 @@
-@"C:\Program Files\LOVE\love.exe" "src" --console
+@"U:\Tools\ZeroBraneStudio\zbstudio.exe" "src/main.lua"
