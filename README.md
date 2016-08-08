@@ -1,4 +1,4 @@
-# Cyan's Adventre to Save the Things 2 #
+# Anniversary Quest #
 ## An Anniversary Gift, Written in LOVE <3 (Lua) ##
 
 This is the second time I've given my long-time girlfriend (Cyan) a game of her very own
