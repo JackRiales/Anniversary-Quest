@@ -23,7 +23,7 @@
 
 -- Dependencies
 require 'base.bounds'
-local Entity = require 'base.entity'
+require 'base.entity'
 
 -- Some globals
 ASSET_PATH = "assets/"
@@ -60,7 +60,7 @@ function love.load()
    end
    
    -- ... and a thing to move in it
-   en = Entity_Init("Thing");
+   en = Ent_Init("Thing");
    en.size = 32
    en.speed = 80
    en.transform.position = {
@@ -115,7 +115,7 @@ end
 
 -- Main Update
 function love.update(dt)
-   Entity_Update(en.update)
+   Ent_Update(en.update)
 
    -- Check for leave
    if (love.keyboard.isDown("escape")) then
@@ -132,5 +132,5 @@ end
 -- Main Draw
 function love.draw()
    Room.draw()
-   Entity_Draw(en, en.image, nil)
+   Ent_Draw(en, en.image, nil)
 end

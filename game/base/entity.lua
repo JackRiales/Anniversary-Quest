@@ -19,11 +19,11 @@
 -- can be interacted with (ideally).
 
 -- Global entity table
-Entity_InstanceTable = {}
-Entity_UIDDispatch = 0
+Ent_ITable = {}
+Ent_UIDDispatch = 0
 
 -- Initializes a new instance of an entity
-function Entity_Init(name)
+function Ent_Init(name)
    local self = {}
    self.name = name or "New Entity"
    self.transform = {}
@@ -33,32 +33,35 @@ function Entity_Init(name)
    self.transform.origin   = { x = 0, y = 0 }
    self.transform.shear    = { x = 0, y = 0 }
 
-   self.size     = 0
+   self.graphics = {}
+   self.graphics.source    = { x = 0, y = 0, w = 0, h = 0 }
+   self.graphics.size      = { w = 32, h = 32 }
    
    self.flUpdate = true -- Is this allowed to update?
    self.flDraw   = true -- Is this allowed to draw?
 
    -- Add to the entity table
-   Entity_InstanceTable[Entity_UIDDispatch] = self
-   Entity_UIDDispatch = Entity_UIDDispatch + 1
+   Ent_ITable[Ent_UIDDispatch] = self
+   Ent_UIDDispatch = Ent_UIDDispatch + 1
 
    return self;
 end
 
 -- Updates an entity, in a generic sense, and then
 -- calls the given update function
-function Entity_Update(entity, callback, dt)
-   assert(entity)
+function Ent_Update(entity, callback, dt)
+   -- Do some generic important stuff here
    if callback then
       callback(dt)
    end
 end
 
 -- Draws an entity with the given graphic to the given target (or screen, if nil)
-function Entity_Draw(entity, graphic, target)
-   if entity.flDraw == false or not graphic then
+function Ent_Draw(entity, graphic, target)
+   if entity.flDraw == false then
       return
    end
+   
    love.graphics.setCanvas(target)
    love.graphics.draw(graphic,
 		      entity.transform.position.x,
