@@ -1,7 +1,7 @@
 -- LOVE Configuration file
 
 function love.conf(t)
-   t.identity = "Anniversary9"
+   -- t.identity = "Anniversary9"
    t.accelerometerjoystick = false
 
    t.window.title = "Cyan's Quest 2"
