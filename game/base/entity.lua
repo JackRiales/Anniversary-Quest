@@ -50,6 +50,7 @@ end
 -- Updates an entity, in a generic sense, and then
 -- calls the given update function
 function Ent_Update(entity, callback, dt)
+   if not entity.flUpdate then return end
    -- Do some generic important stuff here
    if callback then
       callback(dt)
@@ -58,10 +59,7 @@ end
 
 -- Draws an entity with the given graphic to the given target (or screen, if nil)
 function Ent_Draw(entity, graphic, target)
-   if entity.flDraw == false then
-      return
-   end
-   
+   if not entity.flDraw then return end
    love.graphics.setCanvas(target)
    love.graphics.draw(graphic,
 		      entity.transform.position.x,
