@@ -19,14 +19,23 @@ function Entity_Init(name)
 
    self.size     = 0
    
-   self.flUpdate = false -- Is this allowed to update?
-   self.flDraw   = false -- Is this allowed to draw?
+   self.flUpdate = true -- Is this allowed to update?
+   self.flDraw   = true -- Is this allowed to draw?
 
    -- Add to the entity table
    Entity_InstanceTable[Entity_UIDDispatch] = self
    Entity_UIDDispatch = Entity_UIDDispatch + 1
 
    return self;
+end
+
+-- Updates an entity, in a generic sense, and then
+-- calls the given update function
+function Entity_Update(entity, callback, dt)
+   assert(entity)
+   if callback then
+      callback(dt)
+   end
 end
 
 -- Draws an entity with the given graphic to the given target (or screen, if nil)

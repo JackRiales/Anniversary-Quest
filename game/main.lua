@@ -6,8 +6,8 @@
 -- Anyway, I hope you enjoy.
 
 -- Dependencies
-require 'bounds'
-local Entity = require 'entity'
+require 'base/bounds'
+local Entity = require 'base/entity'
 
 -- Some globals
 ASSET_PATH = "assets/"
@@ -62,7 +62,7 @@ function love.load()
       w = en.size,
       h = en.size
    }
-   en.image = love.graphics.newImage(ASSET_PATH .. "SprCyan.png");
+   en.image = love.graphics.newImage(ASSET_PATH .. "spr/SprCyan.png");
 
    function en.update(dt)
       if (love.keyboard.isDown("w")) then
@@ -99,7 +99,7 @@ end
 
 -- Main Update
 function love.update(dt)
-   en.update(dt)
+   Entity_Update(en.update)
 
    -- Check for leave
    if (love.keyboard.isDown("escape")) then
@@ -116,6 +116,5 @@ end
 -- Main Draw
 function love.draw()
    Room.draw()
-   --en.draw()
    Entity_Draw(en, en.image, nil)
 end
