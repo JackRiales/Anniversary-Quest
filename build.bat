@@ -1,1 +1,1 @@
-@"C:\Program Files\LOVE\love.exe" "src"
+@"C:\Program Files\LOVE\love.exe" "game"
