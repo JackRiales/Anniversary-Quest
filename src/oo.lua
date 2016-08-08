@@ -26,7 +26,7 @@ function oo.subclass(parent)
 end
 
 -- Creates an instance of a class
-function oo.instance(class)
+function oo.new(class)
    assert(meta[c], "Class is undefined")
    return setmetatable({}, meta[c])
 end
