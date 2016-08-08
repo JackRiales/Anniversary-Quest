@@ -6,6 +6,7 @@
 -- Anyway, I hope you enjoy.
 
 -- Dependencies
+require 'bounds'
 
 -- Main load
 function love.load()
@@ -15,16 +16,18 @@ function love.load()
    
    -- Create a room to walk around in
    Room = {};
+   Room.marginW = 75
+   Room.marginH = 35
    Room.color = {
       r = 95,
       g = 87,
       b = 79
    }
    Room.bounds = {
-      x = 50,
-      y = 20,
-      w = 1180,
-      h = 680,
+      x = Room.marginW,
+      y = Room.marginH,
+      w = love.graphics.getWidth()-Room.marginW*2,
+      h = love.graphics.getHeight()-Room.marginH*2,
    }
    Room.draw = function()
       love.graphics.setColor(Room.color.r, Room.color.g, Room.color.b)
@@ -40,8 +43,8 @@ function love.load()
    Entity.size = 32
    Entity.speed = 80
    Entity.transform = {
-      x = 0,
-      y = 0
+      x = love.graphics.getWidth() / 2,
+      y = love.graphics.getHeight() / 2
    }
    Entity.color = {
       r = 255,
@@ -68,6 +71,9 @@ function love.load()
       (love.keyboard.isDown("d")) then
 	 Entity.transform.x = Entity.transform.x + dt * Entity.speed
       end
+
+      -- Some basic room collision
+      Entity.transform = NearestPoint(Entity.transform, Room.bounds)
    end
    
    function Entity.draw()
@@ -89,6 +95,17 @@ end
 -- Main Update
 function love.update(dt)
    Entity.update(dt)
+
+   -- Check for leave
+   if (love.keyboard.isDown("escape")) then
+      local buttons = {"NO!", "Yep!", escapebutton = 1}
+      local quit = love.window.showMessageBox("Confirmation",
+					      "Are you sure you want to exit?",
+					      buttons);
+      if (quit == 2) then
+	 love.event.push('quit');
+      end
+   end
 end
 
 -- Main Draw
