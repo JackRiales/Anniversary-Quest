@@ -31,4 +31,10 @@ function oo.new(class)
    return setmetatable({}, meta[c])
 end
 
+-- Get the class of an instance
+function oo.classof(i)
+   local mt = getmetatable(i)
+   return rmeta[mt]
+end
+
 return oo
