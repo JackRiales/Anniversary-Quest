@@ -1,0 +1,9 @@
+# Production art files
+.saves/
+*.ase
+
+# Production sound files
+multi/
+*.sesx
+*.wav
+*.pkf
