@@ -34,13 +34,8 @@ function Entity.new(name)
    self.transform.scale    = { x = 1, y = 1 }
    self.transform.origin   = { x = 0, y = 0 }
    self.transform.shear    = { x = 0, y = 0 }
-
-   self.graphics = {}
-   self.graphics.source    = { x = 0, y = 0, w = 0, h = 0 }
-   self.graphics.size      = { w = 32, h = 32 }
    
    self.flUpdate = true -- Is this allowed to update?
-   self.flDraw   = true -- Is this allowed to draw?
 
    -- Add to the entity table
    Ent_ITable[Ent_UIDDispatch] = self
@@ -57,23 +52,6 @@ function Entity:Update(callback, dt)
    if callback then
       callback(dt)
    end
-end
-
--- Draw the entity using a graphic (Drawable) to a given target
-function Entity:Draw(graphic, target)
-   if not self.flDraw then return end
-   love.graphics.setCanvas(target)
-   love.graphics.draw(graphic,
-		      self.transform.position.x,
-		      self.transform.position.y,
-		      self.transform.angle*(180/3.14),
-		      self.transform.scale.x,
-		      self.transform.scale.y,
-		      self.transform.origin.x,
-		      self.transform.origin.y,
-		      self.transform.shear.x,
-		      self.transform.shear.y)
-   love.graphics.setCanvas(nil)
 end
 
 return Entity

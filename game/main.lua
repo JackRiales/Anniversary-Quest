@@ -112,5 +112,7 @@ end
 -- Main Draw
 function love.draw()
    Room.draw()
-   en:Draw(en.image, nil)
+   love.graphics.draw(en.image,
+		      en.transform.position.x,
+		      en.transform.position.y)
 end
