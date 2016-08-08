@@ -14,13 +14,3 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-function love.conf(t)
-   -- t.identity = "Anniversary9"
-   t.accelerometerjoystick = false
-
-   t.window.title = "Anniversary Quest"
-   t.window.icon = nil -- TODO(Jack)
-   t.window.width = 1280
-   t.window.height = 720
-   t.window.fullscreen = false -- TODO(Jack): When done, maybe set to true
-end
