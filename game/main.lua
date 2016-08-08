@@ -23,7 +23,7 @@
 
 -- Dependencies
 require 'base.bounds'
-require 'base.entity'
+local Entity = require 'base.entity'
 
 -- Some globals
 ASSET_PATH = "assets/"
@@ -60,17 +60,12 @@ function love.load()
    end
    
    -- ... and a thing to move in it
-   en = Ent_Init("Thing");
+   en = Entity.new("Thing");
    en.size = 32
    en.speed = 80
    en.transform.position = {
       x = love.graphics.getWidth() / 2,
       y = love.graphics.getHeight() / 2
-   }
-   en.color = {
-      r = 255,
-      g = 0,
-      b = 77
    }
    en.collider = {
       x = 0, -- local to the origin
@@ -80,7 +75,7 @@ function love.load()
    }
    en.image = love.graphics.newImage(ASSET_PATH .. "spr/SprCyan.png");
 
-   function en.update(dt)
+   function en_update(dt)
       if (love.keyboard.isDown("w")) then
 	 en.transform.y = en.transform.position.y - dt * en.speed
       elseif (love.keyboard.isDown("s")) then
@@ -96,26 +91,11 @@ function love.load()
       -- Some basic room collision
       en.transform.position = NearestPoint(en.transform.position, Room.bounds)
    end
-   
-   function en.draw()
-      love.graphics.setColor(en.color.r, en.color.g, en.color.b)
-      love.graphics.rectangle("fill",
-			      en.transform.position.x,
-			      en.transform.position.y,
-			      en.size,
-			      en.size)
-      love.graphics.setColor(0, 228, 54)
-      love.graphics.rectangle("line",
-			      en.transform.position.x + en.collider.x,
-			      en.transform.position.y + en.collider.y,
-			      en.collider.w,
-			      en.collider.h)
-   end
 end
 
 -- Main Update
 function love.update(dt)
-   Ent_Update(en.update)
+   en:Update(en_update, dt)
 
    -- Check for leave
    if (love.keyboard.isDown("escape")) then
@@ -132,5 +112,5 @@ end
 -- Main Draw
 function love.draw()
    Room.draw()
-   Ent_Draw(en, en.image, nil)
+   en:Draw(en.image, nil)
 end

@@ -18,12 +18,14 @@
 -- Defines a generic entity, that reacts to "physics" and
 -- can be interacted with (ideally).
 
+local Entity = {}
+Entity.__index = Entity
+
 -- Global entity table
 Ent_ITable = {}
 Ent_UIDDispatch = 0
 
--- Initializes a new instance of an entity
-function Ent_Init(name)
+function Entity.new(name)
    local self = {}
    self.name = name or "New Entity"
    self.transform = {}
@@ -44,32 +46,34 @@ function Ent_Init(name)
    Ent_ITable[Ent_UIDDispatch] = self
    Ent_UIDDispatch = Ent_UIDDispatch + 1
 
-   return self;
+   return setmetatable(self, Entity)
 end
 
 -- Updates an entity, in a generic sense, and then
 -- calls the given update function
-function Ent_Update(entity, callback, dt)
-   if not entity.flUpdate then return end
+function Entity:Update(callback, dt)
+   if not self.flUpdate then return end
    -- Do some generic important stuff here
    if callback then
       callback(dt)
    end
 end
 
--- Draws an entity with the given graphic to the given target (or screen, if nil)
-function Ent_Draw(entity, graphic, target)
-   if not entity.flDraw then return end
+-- Draw the entity using a graphic (Drawable) to a given target
+function Entity:Draw(graphic, target)
+   if not self.flDraw then return end
    love.graphics.setCanvas(target)
    love.graphics.draw(graphic,
-		      entity.transform.position.x,
-		      entity.transform.position.y,
-		      entity.transform.angle*(180/3.14),
-		      entity.transform.scale.x,
-		      entity.transform.scale.y,
-		      entity.transform.origin.x,
-		      entity.transform.origin.y,
-		      entity.transform.shear.x,
-		      entity.transform.shear.y)
+		      self.transform.position.x,
+		      self.transform.position.y,
+		      self.transform.angle*(180/3.14),
+		      self.transform.scale.x,
+		      self.transform.scale.y,
+		      self.transform.origin.x,
+		      self.transform.origin.y,
+		      self.transform.shear.x,
+		      self.transform.shear.y)
    love.graphics.setCanvas(nil)
 end
+
+return Entity
