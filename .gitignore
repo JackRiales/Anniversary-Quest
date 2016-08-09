@@ -1,3 +1,10 @@
+# Build files
+build/
+*.love
+*.exe
+*.app
+*.dll
+
 # Production art files
 .saves/
 *.ase
