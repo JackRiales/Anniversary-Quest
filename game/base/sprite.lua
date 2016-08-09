@@ -14,48 +14,80 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Sprite = {}
+-- Credit where credit's due, I got help from this tutorial here!
+-- http://www.buildandgun.com/2014/07/animated-sprites-in-love2d.html
+
+local Sprite = {}    -- Main class
+Sprite.Bank = {}     -- Map of all sprite definitions
+Sprite.Textures = {} -- Map of all loaded texture images
 Sprite.__index = Sprite
 
--- Creates a new sprite with the given definition object
-function Sprite.new(def)
+-- Creates a new sprite with the given definition file
+function Sprite.load(def)
+   -- Error check
+   if not def then return nil end
+
+   -- Run the definition and save it
+   local spr = require(def)
+   if not spr then
+      print("Definition file "..def.." returned nil.")
+      return nil
+   end
+   Sprite.Bank[def] = spr
+
+   -- Load image
+   local texture = Sprite.Bank[def].texture_url
+   Sprite.Textures[texture] = love.graphics.newImage(texture)
+   if not Sprite.Textures[texture] then
+      print("Defined image url "..texture.." returned nil.")
+      return nil
+   end
+   return Sprite.Bank[def]
 end
 
---[[
-function Sprite.new(name, texture, frameRate, frames)
+-- Creates a new sprite instance
+function Sprite.new(def)
+   if not def then return nil end
+
+   -- If the bank doesn't have def, try to define it
+   if not Sprite.Bank[def] then
+      if not Sprite.load(def) then return nil end
+   end
+
+   -- We're good! Create the object
    local self = {}
-   self.name   = name or "New Sprite"
-   self.texture= texture
-   self.rate   = frameRate or 30
-   self.frames = frames or {}
-   self.loops  = {}
-   self.anim   = nil
+   self.sprite     = Sprite.Bank[def]
+   self.cAnimation = Sprite.Bank[def].animation_names[1]
+   self.cFrame     = 1
+   self.elapTime   = 0
+   self.timeScale  = 1
    return setmetatable(self, Sprite)
 end
 
-function Sprite:AddFrame(vx, vy, vw, vh)
-   table.insert(self.frames, love.graphics.newQuad(vx, vy, vw, vh,
-						   self.texture:getWidth(),
-						   self.texture:getHeight()))
-end
-
-function Sprite:SetLoopSection(start, stop, name)
-   name = name or "Loop"
-   self.loops[name] = {start = start, stop = stop}
-end
-
-function Sprite:SetAnimation(name)
-   assert(self.loops[name], "No loop by the name "..name.." found in "..self.name)
-   self.anim = self.loops[name]
-end
-
 function Sprite:Update(dt)
-
+   self.elapTime = self.elapTime + dt
+   if self.elapTime > self.sprite.frame_duration * self.timeScale then
+      if self.cFrame < #self.sprite.animations[self.cAnimation] then
+	 self.cFrame = self.cFrame + 1
+      else
+	 self.cFrame = 1
+      end
+      self.elapTime = 0
+   end
 end
 
-function Sprite:Draw(target)
-
-   end
---]]
+function Sprite:Draw(transform)
+   love.graphics.draw(
+      Sprite.Textures[self.sprite.texture_url],
+      self.sprite.animations[self.cAnimation][self.cFrame],
+      transform.position.x,
+      transform.position.y,
+      transform.angle*(180/3.14),
+      transform.scale.x,
+      transform.scale.y,
+      transform.shear.x,
+      transform.shear.y
+   )
+end
 
 return Sprite
