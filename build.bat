@@ -1,1 +1,1 @@
-@"C:\Program Files\LOVE\love.exe" "game" --console
+@"C:\Program Files\LOVE\love.exe" "game"
