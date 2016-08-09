@@ -21,10 +21,7 @@
 local Entity = {}
 Entity.__index = Entity
 
--- Global entity table
-Ent_ITable = {}
-Ent_UIDDispatch = 0
-
+-- Creates and returns a new instance
 function Entity.new(name)
    local self = {}
    self.name = name or "New Entity"
@@ -36,10 +33,6 @@ function Entity.new(name)
    self.transform.shear    = { x = 1, y = 1 }
    
    self.flUpdate = true -- Is this allowed to update?
-
-   -- Add to the entity table
-   Ent_ITable[Ent_UIDDispatch] = self
-   Ent_UIDDispatch = Ent_UIDDispatch + 1
 
    return setmetatable(self, Entity)
 end
