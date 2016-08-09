@@ -14,6 +14,7 @@ if exist %BINDIR% (
    DEL %LOVE%
    DEL %EXE%
    DEL *.dll
+   DEL *.txt
    cd "../.."
 ) ELSE (
   mkdir %BINDIR%
@@ -32,6 +33,9 @@ DEL %BIN%
 
 REM Copy dlls
 copy %LOVEDIR%\*.dll *.dll
+
+REM Copy license
+copy %LOVEDIR%\license.txt love2d.license.txt
 
 REM Go back
 cd "../.."
