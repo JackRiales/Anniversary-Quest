@@ -30,6 +30,11 @@ local Sprite = require 'base.sprite'
 DEBUG = true
 ASSET_PATH = "assets/"
 
+function love.preload()
+   -- Extra graphics settings
+   love.graphics.setDefaultFilter("nearest","nearest")
+end
+
 -- Main load
 function love.load()
    -- Create a room to walk around in
@@ -77,7 +82,7 @@ function love.load()
       w = en.size,
       h = en.size
    }
-   en.animation = Sprite.new('data.SprCyan')
+   en.animation = Sprite.new('data.Sprite-Cyan')
    
    -- TODO(Jack): Obviously we'll want to move this to like a player class file
    function en_update(dt)
