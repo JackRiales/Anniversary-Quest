@@ -78,7 +78,6 @@ function love.load()
       h = en.size
    }
    en.animation = Sprite.new('data.SprCyan')
-   en.animation.loopType = "pingpong"
    
    -- TODO(Jack): Obviously we'll want to move this to like a player class file
    function en_update(dt)

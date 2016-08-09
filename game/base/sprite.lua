@@ -78,10 +78,18 @@ end
 -- "Private" Update functions, for each loop type
 --------------------------------------------------------
 function Sprite:_sequenceUpdate()
-   if self.cFrame < #self.sprite.animations[self.cAnimation] then
-      self.cFrame = self.cFrame + 1
+   if not self.reverse then
+      if self.cFrame < #self.sprite.animations[self.cAnimation] then
+	 self.cFrame = self.cFrame + 1
+      else
+	 self.cFrame = 1
+      end
    else
-      self.cFrame = 1
+      if self.cFrame > 1 then
+	 self.cFrame = self.cFrame - 1
+      else
+	 self.cFrame = #self.sprite.animations[self.cAnimation] - 1
+      end
    end
 end
 
