@@ -17,6 +17,8 @@
 -- Credit where credit's due, I got help from this tutorial here!
 -- http://www.buildandgun.com/2014/07/animated-sprites-in-love2d.html
 
+require "base.util"
+
 local Sprite = {}    -- Main class
 Sprite.Bank = {}     -- Map of all sprite definitions
 Sprite.Textures = {} -- Map of all loaded texture images
@@ -61,17 +63,64 @@ function Sprite.new(def)
    self.cFrame     = 1
    self.elapTime   = 0
    self.timeScale  = 1
+
+   -- Loop type affects how frames change
+   -- Sequence: Simple 1.2.3.1 loop
+   -- PingPong: 1.2.3.2.1
+   -- Stop:     1.2.3. . .
+   self.loopType   = "sequence"
+   self.reverse    = false
+   
    return setmetatable(self, Sprite)
 end
 
-function Sprite:Update(dt)
-   self.elapTime = self.elapTime + dt
-   if self.elapTime > self.sprite.frame_duration * self.timeScale then
+--------------------------------------------------------
+-- "Private" Update functions, for each loop type
+--------------------------------------------------------
+function Sprite:_sequenceUpdate()
+   if self.cFrame < #self.sprite.animations[self.cAnimation] then
+      self.cFrame = self.cFrame + 1
+   else
+      self.cFrame = 1
+   end
+end
+
+function Sprite:_pingPongUpdate()
+   if not self.reverse then
       if self.cFrame < #self.sprite.animations[self.cAnimation] then
 	 self.cFrame = self.cFrame + 1
       else
-	 self.cFrame = 1
+	 self.reverse = InvertBool(self.reverse)
       end
+   else
+      if self.cFrame > 1 then
+	 self.cFrame = self.cFrame - 1
+      else
+	 self.reverse = InvertBool(self.reverse)
+      end
+   end
+end
+
+function Sprite:_stopUpdate()
+   if self.cFrame < #self.sprite.animations[self.cAnimation] then
+      self.cFrame = self.cFrame + 1
+   end
+end
+
+function Sprite:Update(dt)
+   -- Increase elap by dt
+   self.elapTime = self.elapTime + dt
+
+   -- Next frame reached
+   if self.elapTime > self.sprite.frame_duration * self.timeScale then
+      if self.loopType == "sequence" then
+	 self:_sequenceUpdate()
+      elseif self.loopType == "pingpong" then
+	 self:_pingPongUpdate()
+      elseif self.loopType == "stop" then
+	 self:_stopUpdate()
+      end
+      
       self.elapTime = 0
    end
 end
@@ -88,6 +137,10 @@ function Sprite:Draw(transform)
       transform.shear.x,
       transform.shear.y
    )
+end
+
+function Sprite:SetAnimation(name)
+   self.cAnimation = name
 end
 
 return Sprite

@@ -78,7 +78,8 @@ function love.load()
       h = en.size
    }
    en.animation = Sprite.new('data.SprCyan')
-
+   en.animation.loopType = "pingpong"
+   
    -- TODO(Jack): Obviously we'll want to move this to like a player class file
    function en_update(dt)
       if (love.keyboard.isDown("w")) then
@@ -94,8 +95,9 @@ function love.load()
       end
 
       -- Some basic room collision
-      en:SetPosition(NearestPoint({x = en:GetPosition().x + en:GetOrigin().x,
-				   y = en:GetPosition().y + en:GetOrigin().y}, Room.bounds))
+      --[[en:SetPosition(NearestPoint({x = en:GetPosition().x + en:GetOrigin().x,
+	 y = en:GetPosition().y + en:GetOrigin().y}, Room.bounds))--]]
+      
 
       -- Update that sprite
       en.animation:Update(dt)
@@ -128,6 +130,7 @@ end
 -- Main Draw
 function love.draw()
    Room.draw()
+   
    -- Draw sprite
    en.animation:Draw(en.transform)
    
