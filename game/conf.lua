@@ -15,7 +15,7 @@
 --]]
 
 function love.conf(t)
-   -- t.identity = "Anniversary9"
+   t.identity = "AnniversaryQuest"
    t.accelerometerjoystick = false
 
    t.window.title = "Anniversary Quest"
