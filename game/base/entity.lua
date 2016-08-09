@@ -28,6 +28,8 @@ function Entity.new(name)
    self.transform = {}
    self.transform.angle    = 0
    self.transform.position = { x = 0, y = 0 }
+   self.transform.velocity = { x = 0, y = 0 }
+   self.transform.accel    = { x = 0, y = 0 }
    self.transform.scale    = { x = 1, y = 1 }
    self.transform.origin   = { x = 0, y = 0 }
    self.transform.shear    = { x = 1, y = 1 }
@@ -39,12 +41,12 @@ end
 
 -- Updates an entity, in a generic sense, and then
 -- calls the given update function
-function Entity:Update(callback, dt)
+function Entity:Update(dt)
    if not self.flUpdate then return end
-   -- Do some generic important stuff here
-   if callback then
-      callback(dt)
-   end
+   self.transform.velocity.x = self.transform.velocity.x + self.transform.accel.x
+   self.transform.velocity.y = self.transform.velocity.y + self.transform.accel.y
+   self.transform.position.x = self.transform.position.x + self.transform.velocity.x
+   self.transform.position.y = self.transform.position.y + self.transform.velocity.y
 end
 
 function Entity:DrawDebugInfo(color)
@@ -70,17 +72,21 @@ end
    Accessors and Mutators, for convenience
 --]]
 function Entity:GetTransform() return self.transform end
-function Entity:GetPosition() return self.transform.position end
+function Entity:GetPosition()  return self.transform.position end
+function Entity:GetVelocity()  return self.transform.velocity end
+function Entity:GetAcceleration() return self.transform.accel end
 function Entity:GetRotation() return self.transform.angle end
 function Entity:GetScale()    return self.transform.scale end
 function Entity:GetOrigin()   return self.transform.origin end
 function Entity:GetShear()    return self.transform.shear end
 
 function Entity:SetTransform(t) self.transform = t end
-function Entity:SetPosition(p) self.transform.position = p end
-function Entity:SetRotation(a) self.transform.angle = a end
-function Entity:SetScale(s) self.transform.scale = s end
-function Entity:SetOrigin(o) self.transform.origin = o end
-function Entity:SetShear(s) self.transform.shear = s end
+function Entity:SetPosition(p)  self.transform.position = p end
+function Entity:SetVelocity(v)  self.transform.velocity = v end
+function Entity:SetAcceleration(a) self.transform.accel = a end
+function Entity:SetRotation(a)  self.transform.angle = a end
+function Entity:SetScale(s)     self.transform.scale = s end
+function Entity:SetOrigin(o)    self.transform.origin = o end
+function Entity:SetShear(s)     self.transform.shear = s end
 
 return Entity
