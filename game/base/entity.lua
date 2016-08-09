@@ -33,7 +33,7 @@ function Entity.new(name)
    self.transform.position = { x = 0, y = 0 }
    self.transform.scale    = { x = 1, y = 1 }
    self.transform.origin   = { x = 0, y = 0 }
-   self.transform.shear    = { x = 0, y = 0 }
+   self.transform.shear    = { x = 1, y = 1 }
    
    self.flUpdate = true -- Is this allowed to update?
 
@@ -72,5 +72,22 @@ function Entity:DrawDebugInfo(color)
 			6, 8)
    love.graphics.setColor(255,255,255);
 end
+
+--[[
+   Accessors and Mutators, for convenience
+--]]
+function Entity:GetTransform() return self.transform end
+function Entity:GetPosition() return self.transform.position end
+function Entity:GetRotation() return self.transform.angle end
+function Entity:GetScale()    return self.transform.scale end
+function Entity:GetOrigin()   return self.transform.origin end
+function Entity:GetShear()    return self.transform.shear end
+
+function Entity:SetTransform(t) self.transform = t end
+function Entity:SetPosition(p) self.transform.position = p end
+function Entity:SetRotation(a) self.transform.angle = a end
+function Entity:SetScale(s) self.transform.scale = s end
+function Entity:SetOrigin(o) self.transform.origin = o end
+function Entity:SetShear(s) self.transform.shear = s end
 
 return Entity
