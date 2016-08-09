@@ -54,4 +54,23 @@ function Entity:Update(callback, dt)
    end
 end
 
+function Entity:DrawDebugInfo(color)
+   if color then
+      love.graphics.setColor(color.r, color.g, color.b)
+   end
+   love.graphics.print(self.name,
+		       self.transform.position.x,
+		       self.transform.position.y-15)
+   love.graphics.print("P:("..
+			  string.format("%.1f",self.transform.position.x)..","..
+			  string.format("%.1f",self.transform.position.y)..")",
+		       self.transform.position.x,
+		       self.transform.position.y)
+   love.graphics.circle("fill",
+			self.transform.position.x + self.transform.origin.x,
+			self.transform.position.y + self.transform.origin.y,
+			6, 8)
+   love.graphics.setColor(255,255,255);
+end
+
 return Entity
