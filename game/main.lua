@@ -14,7 +14,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
--- Cyan's Adventure to Save the Things 2
+-- Anniversary Quest
 -- by Jack Riales
 --
 -- P.S. If you find yourself reading this, I love you! Happy 9th.
@@ -24,21 +24,18 @@
 -- Dependencies
 require 'base.bounds'
 local Entity = require 'base.entity'
+local Sprite = require 'base.sprite'
 
--- Some globals
+-- Main globals
+DEBUG = true
 ASSET_PATH = "assets/"
-print(love.filesystem.getWorkingDirectory())
 
 -- Main load
 function love.load()
-   -- Prototyping!
-
-   -- TODO(Jack): Find a way to load these out from a data file (tiled?)
-   
    -- Create a room to walk around in
    Room = {};
-   Room.marginW = 75
-   Room.marginH = 35
+   Room.marginW = 95
+   Room.marginH = 10
    Room.color = {
       r = 95,
       g = 87,
@@ -57,15 +54,22 @@ function love.load()
 			      Room.bounds.y,
 			      Room.bounds.w,
 			      Room.bounds.h)
+      love.graphics.setColor(255,255,255);
    end
    
    -- ... and a thing to move in it
    en = Entity.new("Thing");
    en.size = 32
-   en.speed = 80
+   en.speed = 360
    en.transform.position = {
       x = love.graphics.getWidth() / 2,
       y = love.graphics.getHeight() / 2
+   }
+   en.transform.scale = {
+      x = 2, y = 2
+   }
+   en.transform.origin = {
+      x = 16 * en.transform.scale.x, y = 16 * en.transform.scale.x
    }
    en.collider = {
       x = 0, -- local to the origin
@@ -73,46 +77,65 @@ function love.load()
       w = en.size,
       h = en.size
    }
-   en.image = love.graphics.newImage(ASSET_PATH .. "spr/SprCyan.png");
+   en.animation = Sprite.new('data.SprCyan')
 
+   -- TODO(Jack): Obviously we'll want to move this to like a player class file
    function en_update(dt)
       if (love.keyboard.isDown("w")) then
-	 en.transform.y = en.transform.position.y - dt * en.speed
+	 en.transform.position.y = en.transform.position.y - dt * en.speed
       elseif (love.keyboard.isDown("s")) then
-	 en.transform.y = en.transform.position.y + dt * en.speed
+	 en.transform.position.y = en.transform.position.y + dt * en.speed
       end
       
       if (love.keyboard.isDown("a")) then
-	 en.transform.x = en.transform.position.x - dt * en.speed
+	 en.transform.position.x = en.transform.position.x - dt * en.speed
       elseif (love.keyboard.isDown("d")) then
-	 en.transform.x = en.transform.position.x + dt * en.speed
+	 en.transform.position.x = en.transform.position.x + dt * en.speed
       end
 
       -- Some basic room collision
       en.transform.position = NearestPoint(en.transform.position, Room.bounds)
+
+      -- Update that sprite
+      en.animation:Update(dt)
+   end
+end
+
+-- Main input key-pressed
+function love.keypressed(key, scancode, isrepeat)
+   -- Check for toggle debug
+   if key == "`" then
+      if DEBUG then DEBUG = false
+      else DEBUG = true end
+   end
+   
+   -- Check for leave
+   if key == "escape" then
+      local buttons = {"NO!", "Yep!", escapebutton = 1}
+      local quit = love.window.showMessageBox("Confirmation",
+					      "Are you sure you want to exit?",
+					      buttons);
+      if (quit == 2) then love.event.push('quit'); end
    end
 end
 
 -- Main Update
 function love.update(dt)
    en:Update(en_update, dt)
-
-   -- Check for leave
-   if (love.keyboard.isDown("escape")) then
-      local buttons = {"NO!", "Yep!", escapebutton = 1}
-      local quit = love.window.showMessageBox("Confirmation",
-					      "Are you sure you want to exit?",
-					      buttons);
-      if (quit == 2) then
-	 love.event.push('quit');
-      end
-   end
 end
 
 -- Main Draw
 function love.draw()
    Room.draw()
-   love.graphics.draw(en.image,
-		      en.transform.position.x,
-		      en.transform.position.y)
+   -- Draw sprite
+   en.animation:Draw(en.transform)
+   
+   -- Debug info
+   if not DEBUG then return end
+   love.graphics.setColor(0, 255, 0, 100)
+   love.graphics.rectangle("fill", 5, 5, 220, 50)
+   love.graphics.setColor(255, 255, 255)
+   love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, 10)
+   love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, 25)
+   en:DrawDebugInfo({r = 255, g = 0, b = 78})
 end
