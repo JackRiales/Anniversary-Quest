@@ -23,8 +23,12 @@ return {
    speed  = 80,
    accel  = 10,
 
-   -- Shot
-   
+   -- Shot definition
+   shot = {
+      sprite = "",
+      color  = { r = 255, g = 255, b = 255 },
+      effects= {}
+   },
    
    -- Sprite definition
    sprite = "data.Sprite-Cyan",
@@ -33,7 +37,7 @@ return {
    states = {
       idle = "dance",
       move_left = nil, -- TODO
-      move_right= nil  -- TODO
+      move_right= nil, -- TODO
       die       = nil  -- TODO
    }
 }
