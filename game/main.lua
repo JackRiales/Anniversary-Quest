@@ -45,7 +45,7 @@ function love.load()
       x = Room.marginW,
       y = Room.marginH,
       w = love.graphics.getWidth()-Room.marginW*2,
-      h = love.graphics.getHeight()-Room.marginH*2,
+      h = love.graphics.getHeight()-Room.marginH*2,      
    }
    Room.draw = function()
       love.graphics.setColor(Room.color.r, Room.color.g, Room.color.b)
@@ -61,16 +61,16 @@ function love.load()
    en = Entity.new("Thing");
    en.size = 32
    en.speed = 360
-   en.transform.position = {
+   en:SetPosition({
       x = love.graphics.getWidth() / 2,
       y = love.graphics.getHeight() / 2
-   }
-   en.transform.scale = {
+   })
+   en:SetScale({
       x = 2, y = 2
-   }
-   en.transform.origin = {
-      x = 16 * en.transform.scale.x, y = 16 * en.transform.scale.x
-   }
+   })
+   en:SetOrigin({
+      x = 16 * en.transform.scale.x, y = 32 * en.transform.scale.x
+   })
    en.collider = {
       x = 0, -- local to the origin
       y = 0, -- local to the origin
@@ -94,7 +94,8 @@ function love.load()
       end
 
       -- Some basic room collision
-      en.transform.position = NearestPoint(en.transform.position, Room.bounds)
+      en:SetPosition(NearestPoint({x = en:GetPosition().x + en:GetOrigin().x,
+				   y = en:GetPosition().y + en:GetOrigin().y}, Room.bounds))
 
       -- Update that sprite
       en.animation:Update(dt)
@@ -137,5 +138,6 @@ function love.draw()
    love.graphics.setColor(255, 255, 255)
    love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, 10)
    love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, 25)
+   love.graphics.print("Entity Count: "..tostring(#Ent_ITable), 10, 40)
    en:DrawDebugInfo({r = 255, g = 0, b = 78})
 end
