@@ -74,6 +74,41 @@ function Sprite.new(def)
    return setmetatable(self, Sprite)
 end
 
+function Sprite:SetAnimation(name) self.cAnimation = name end
+
+function Sprite:Update(dt)
+   -- Increase elap by dt
+   self.elapTime = self.elapTime + dt
+
+   -- Next frame reached
+   if self.elapTime > self.sprite.frame_duration * self.timeScale then
+      if self.loopType == "sequence" then
+	 self:_sequenceUpdate()
+      elseif self.loopType == "pingpong" then
+	 self:_pingPongUpdate()
+      elseif self.loopType == "stop" then
+	 self:_stopUpdate()
+      end
+      
+      self.elapTime = 0
+   end
+end
+
+function Sprite:Draw(transform)
+   love.graphics.draw(
+      Sprite.Textures[self.sprite.texture_url],
+      self.sprite.animations[self.cAnimation][self.cFrame],
+      transform.position.x,
+      transform.position.y,
+      transform.angle*(180/3.14),
+      transform.scale.x,
+      transform.scale.y,
+      transform.shear.x,
+      transform.shear.y
+   )
+end
+
+
 --------------------------------------------------------
 -- "Private" Update functions, for each loop type
 --------------------------------------------------------
@@ -113,42 +148,6 @@ function Sprite:_stopUpdate()
    if self.cFrame < #self.sprite.animations[self.cAnimation] then
       self.cFrame = self.cFrame + 1
    end
-end
-
-function Sprite:Update(dt)
-   -- Increase elap by dt
-   self.elapTime = self.elapTime + dt
-
-   -- Next frame reached
-   if self.elapTime > self.sprite.frame_duration * self.timeScale then
-      if self.loopType == "sequence" then
-	 self:_sequenceUpdate()
-      elseif self.loopType == "pingpong" then
-	 self:_pingPongUpdate()
-      elseif self.loopType == "stop" then
-	 self:_stopUpdate()
-      end
-      
-      self.elapTime = 0
-   end
-end
-
-function Sprite:Draw(transform)
-   love.graphics.draw(
-      Sprite.Textures[self.sprite.texture_url],
-      self.sprite.animations[self.cAnimation][self.cFrame],
-      transform.position.x,
-      transform.position.y,
-      transform.angle*(180/3.14),
-      transform.scale.x,
-      transform.scale.y,
-      transform.shear.x,
-      transform.shear.y
-   )
-end
-
-function Sprite:SetAnimation(name)
-   self.cAnimation = name
 end
 
 return Sprite
