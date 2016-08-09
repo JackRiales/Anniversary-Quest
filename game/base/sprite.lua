@@ -71,10 +71,14 @@ function Sprite.new(def)
    self.loopType   = "sequence"
    self.reverse    = false
    
+   self.flDraw     = true
+
    return setmetatable(self, Sprite)
 end
 
-function Sprite:SetAnimation(name) self.cAnimation = name end
+function Sprite:SetAnimation(name)
+   self.cAnimation = name
+end
 
 function Sprite:Update(dt)
    -- Increase elap by dt
@@ -95,6 +99,7 @@ function Sprite:Update(dt)
 end
 
 function Sprite:Draw(transform)
+   if not self.flDraw then return end
    love.graphics.draw(
       Sprite.Textures[self.sprite.texture_url],
       self.sprite.animations[self.cAnimation][self.cFrame],
