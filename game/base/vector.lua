@@ -18,7 +18,7 @@ local Vec2 = {}
 Vec2.__index = Vec2
 
 function Vec2.new(x, y)
-   return setmetatable({x=x or 0, y=y or 0}, Vec2)
+   return {x=x or 0, y=y or 0}
 end
 
 function Vec2.verify(v)
@@ -59,7 +59,6 @@ function Vec2.normalized(v)
    if len > 0 then
       return Vec2.new(v.x/len, v.y/len)
    else
-      print("Vec2.normalized - Length was 0")
       return Vec2.new()
    end
 end
