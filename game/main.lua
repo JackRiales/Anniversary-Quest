@@ -22,22 +22,17 @@
 -- Anyway, I hope you enjoy.
 
 -- Dependencies
-require 'base.bounds'
-local Entity = require 'base.entity'
-local Sprite = require 'base.sprite'
+local Player = require 'player'
 
 -- Main globals
 DEBUG = true
-ASSET_PATH = "assets/"
-
-function love.preload()
-   -- Extra graphics settings
-   love.graphics.setDefaultFilter("nearest","nearest")
-end
 
 -- Main load
 function love.load()
-   -- Create a room to walk around in
+   -- Extra graphics settings
+   love.graphics.setDefaultFilter("nearest","nearest")
+   
+   -- Create a room to walk around in (Prototype)
    Room = {};
    Room.marginW = 95
    Room.marginH = 10
@@ -61,51 +56,9 @@ function love.load()
 			      Room.bounds.h)
       love.graphics.setColor(255,255,255);
    end
-   
-   -- ... and a thing to move in it
-   en = Entity.new("Thing");
-   en.size = 32
-   en.speed = 360
-   en:SetPosition({
-      x = love.graphics.getWidth() / 2,
-      y = love.graphics.getHeight() / 2
-   })
-   en:SetScale({
-      x = 2, y = 2
-   })
-   en:SetOrigin({
-      x = 16 * en.transform.scale.x, y = 32 * en.transform.scale.x
-   })
-   en.collider = {
-      x = 0, -- local to the origin
-      y = 0, -- local to the origin
-      w = en.size,
-      h = en.size
-   }
-   en.animation = Sprite.new('data.Sprite-Cyan')
-   
-   -- TODO(Jack): Obviously we'll want to move this to like a player class file
-   function en_update(dt)
-      if (love.keyboard.isDown("w")) then
-	 en.transform.position.y = en.transform.position.y - dt * en.speed
-      elseif (love.keyboard.isDown("s")) then
-	 en.transform.position.y = en.transform.position.y + dt * en.speed
-      end
-      
-      if (love.keyboard.isDown("a")) then
-	 en.transform.position.x = en.transform.position.x - dt * en.speed
-      elseif (love.keyboard.isDown("d")) then
-	 en.transform.position.x = en.transform.position.x + dt * en.speed
-      end
 
-      -- Some basic room collision
-      --[[en:SetPosition(NearestPoint({x = en:GetPosition().x + en:GetOrigin().x,
-	 y = en:GetPosition().y + en:GetOrigin().y}, Room.bounds))--]]
-      
-
-      -- Update that sprite
-      en.animation:Update(dt)
-   end
+   -- Player object loading from definition file
+   Cyan = Player.new("data.Player-Cyan")
 end
 
 -- Main input key-pressed
@@ -128,15 +81,13 @@ end
 
 -- Main Update
 function love.update(dt)
-   en:Update(en_update, dt)
+   Cyan:Update(dt)
 end
 
 -- Main Draw
 function love.draw()
    Room.draw()
-   
-   -- Draw sprite
-   en.animation:Draw(en.transform)
+   Cyan:Draw()
    
    -- Debug info
    if not DEBUG then return end
@@ -145,6 +96,5 @@ function love.draw()
    love.graphics.setColor(255, 255, 255)
    love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, 10)
    love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, 25)
-   love.graphics.print("Entity Count: "..tostring(#Ent_ITable), 10, 40)
-   en:DrawDebugInfo({r = 255, g = 0, b = 78})
+   Cyan.entity:DrawDebugInfo()
 end
