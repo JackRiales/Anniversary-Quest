@@ -43,10 +43,10 @@ end
 -- calls the given update function
 function Entity:Update(dt)
    if not self.flUpdate then return end
-   self.transform.velocity.x = self.transform.velocity.x + self.transform.accel.x
-   self.transform.velocity.y = self.transform.velocity.y + self.transform.accel.y
-   self.transform.position.x = self.transform.position.x + self.transform.velocity.x
-   self.transform.position.y = self.transform.position.y + self.transform.velocity.y
+   self.transform.velocity.x = self.transform.velocity.x + (self.transform.accel.x * dt)
+   self.transform.velocity.y = self.transform.velocity.y + (self.transform.accel.y * dt)
+   self.transform.position.x = self.transform.position.x + (self.transform.velocity.x * dt)
+   self.transform.position.y = self.transform.position.y + (self.transform.velocity.y * dt)
 end
 
 function Entity:DrawDebugInfo(color)
