@@ -26,7 +26,7 @@ function Vec2.verify(v)
 end
 
 function Vec2.toString(v)
-   return "("..tonumber(v.x)..","..tonumber(v.y)..")"
+   return string.format("(%.2f, %.2f)", v.x, v.y)
 end
 
 function Vec2.dist(v1, v2)
