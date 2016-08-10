@@ -83,12 +83,12 @@ function Entity:GetOrigin()   return self.transform.origin end
 function Entity:GetShear()    return self.transform.shear end
 
 function Entity:SetTransform(t) self.transform = t end
-function Entity:SetPosition(p)  self.transform.position = p end
-function Entity:SetVelocity(v)  self.transform.velocity = v end
-function Entity:SetAcceleration(a) self.transform.accel = a end
-function Entity:SetRotation(a)  self.transform.angle = a end
-function Entity:SetScale(s)     self.transform.scale = s end
-function Entity:SetOrigin(o)    self.transform.origin = o end
-function Entity:SetShear(s)     self.transform.shear = s end
+function Entity:SetPosition(x,y) self.transform.position = Vec2.new(x,y) end
+function Entity:SetVelocity(dx,dy) self.transform.velocity = Vec2.new(dx,dy) end
+function Entity:SetAcceleration(ddx,ddy) self.transform.accel = Vec2.new(ddx,ddy) end
+function Entity:SetScale(sx,sy) self.transform.scale = Vec2.new(sx,sy) end
+function Entity:SetOrigin(ox,oy) self.transform.origin = Vec2.new(ox,oy) end
+function Entity:SetShear(sx,sy) self.transform.shear = Vec2.new(sx,sy) end
+function Entity:SetRotation(a) self.transform.angle = a end
 
 return Entity
