@@ -99,11 +99,13 @@ end
 
 -- Main Draw
 function love.draw()
-   Room.draw()
+   -- Room.draw()
    love.graphics.setCanvas(FrameBuffer.canvas)
    love.graphics.clear()
    Cyan:Draw()
-   Cyan:DrawDebug()
+   if DEBUG then
+      Cyan:DrawDebug()
+   end
    love.graphics.setCanvas()
 
    love.graphics.draw(FrameBuffer.canvas,
