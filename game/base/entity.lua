@@ -18,6 +18,8 @@
 -- Defines a generic entity, that reacts to "physics" and
 -- can be interacted with (ideally).
 
+local Vec2 = require 'base.vector'
+
 local Entity = {}
 Entity.__index = Entity
 
@@ -27,12 +29,12 @@ function Entity.new(name)
    self.name = name or "New Entity"
    self.transform = {}
    self.transform.angle    = 0
-   self.transform.position = { x = 0, y = 0 }
-   self.transform.velocity = { x = 0, y = 0 }
-   self.transform.accel    = { x = 0, y = 0 }
-   self.transform.scale    = { x = 1, y = 1 }
-   self.transform.origin   = { x = 0, y = 0 }
-   self.transform.shear    = { x = 1, y = 1 }
+   self.transform.position = Vec2.new()
+   self.transform.velocity = Vec2.new()
+   self.transform.accel    = Vec2.new()
+   self.transform.scale    = Vec2.new(1,1)
+   self.transform.origin   = Vec2.new()
+   self.transform.shear    = Vec2.new(1,1)
    
    self.flUpdate = true -- Is this allowed to update?
 
@@ -43,10 +45,8 @@ end
 -- calls the given update function
 function Entity:Update(dt)
    if not self.flUpdate then return end
-   self.transform.velocity.x = self.transform.velocity.x + (self.transform.accel.x * dt)
-   self.transform.velocity.y = self.transform.velocity.y + (self.transform.accel.y * dt)
-   self.transform.position.x = self.transform.position.x + (self.transform.velocity.x * dt)
-   self.transform.position.y = self.transform.position.y + (self.transform.velocity.y * dt)
+   self.trasnform.velocity:add(self.transform.accel:scale(dt))
+   self.trasnform.position:add(self.transform.velocity:scale(dt))
 end
 
 function Entity:DrawDebugInfo(color)
