@@ -105,7 +105,7 @@ function Sprite:Draw(transform)
       self.sprite.animations[self.cAnimation][self.cFrame],
       transform.position.x,
       transform.position.y,
-      transform.angle*(180/3.14),
+      transform.angle*(180/math.pi),
       transform.scale.x,
       transform.scale.y,
       transform.shear.x,
@@ -119,7 +119,9 @@ end
 --------------------------------------------------------
 function Sprite:_sequenceUpdate()
    if not self.reverse then
-      if self.cFrame < #self.sprite.animations[self.cAnimation] then
+      -- NOTE(Jack): Since not all animations have the same number of frames, I'm checking here if the next frame is nil
+      -- This still crashed on me once, at least I think. May need to change it.
+      if self.cFrame < #self.sprite.animations[self.cAnimation] and self.sprite.animations[self.cAnimation][self.cFrame+1] ~= nil then
 	 self.cFrame = self.cFrame + 1
       else
 	 self.cFrame = 1
