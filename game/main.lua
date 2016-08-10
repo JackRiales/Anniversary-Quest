@@ -57,8 +57,14 @@ function love.load()
       love.graphics.setColor(255,255,255);
    end
 
+   -- Drawing canvas
+   BackBuffer = love.graphics.newCanvas(256,256)
+   Scale_BackBuffer = love.graphics.getHeight()/BackBuffer:getHeight()
+   
    -- Player object loading from definition file
    Cyan = Player.new("data.Player-Cyan")
+   Cyan.entity:SetOrigin(16,32)
+   Cyan.entity:SetPosition(64, 64)
 end
 
 -- Main input key-pressed
@@ -87,7 +93,23 @@ end
 -- Main Draw
 function love.draw()
    Room.draw()
+   love.graphics.setCanvas(BackBuffer)
+   love.graphics.clear()
    Cyan:Draw()
+   love.graphics.setCanvas()
+
+   love.graphics.rectangle("line",
+			   love.graphics.getWidth()/2-(BackBuffer:getWidth()*Scale_BackBuffer)/2, 0,
+			   BackBuffer:getWidth()*Scale_BackBuffer,
+			   BackBuffer:getHeight()*Scale_BackBuffer)
+   love.graphics.draw(BackBuffer,
+		      love.graphics.getWidth()/2-(BackBuffer:getWidth()*Scale_BackBuffer)/2,
+		      0,
+		      0,
+		      Scale_BackBuffer,
+		      Scale_BackBuffer,
+		      0,
+		      0)
    
    -- Debug info
    if not DEBUG then return end
@@ -96,5 +118,5 @@ function love.draw()
    love.graphics.setColor(255, 255, 255)
    love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, 10)
    love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, 25)
-   Cyan.entity:DrawDebugInfo()
+   Cyan:DrawDebug()
 end
