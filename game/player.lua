@@ -68,8 +68,33 @@ function Player.new(def)
 end
 
 function Player:SetMove(v)
-   local motion = Vec2.scale(Vec2.normalized(v), self.speed)
-   self.entity:SetVelocity(motion.x, motion.y)
+   -- If the axes are 0, introduce a stopping force (opposite velocity)
+   if v.x == 0 and v.y == 0 then
+      v = Vec2.threshold(Vec2.scale(self.entity:GetVelocity(), -1), 1)
+   end
+
+   -- Set the acceleration from the axes
+   local motion = Vec2.scale(Vec2.normalized(v), self.accel)
+   self.entity:SetAcceleration(motion.x, motion.y)
+
+   -- Ensure velocity never crosses speed
+   local trimmedVel = Vec2.trim(self.entity:GetVelocity(), self.speed)
+   self.entity:SetVelocity(trimmedVel.x, trimmedVel.y)
+
+   -- Threshold velocity
+   local minimumVel = 1
+   local thresh = Vec2.threshold(self.entity:GetVelocity(), minimumVel)
+   self.entity:SetVelocity(thresh.x, thresh.y)
+end
+
+function Player:SetSpriteState(v)
+   if v.x > 0 then
+      self.sprite:SetAnimation(self.states.move_right)
+   elseif v.x < 0 then
+      self.sprite:SetAnimation(self.states.move_left)
+   else
+      self.sprite:SetAnimation(self.states.idle)
+   end
 end
 
 function Player:Update(dt)
@@ -80,8 +105,11 @@ function Player:Update(dt)
    elseif love.keyboard.isDown("d") then Player.Axes.x =  1 end
    
    self:SetMove(Player.Axes)
+   self:SetSpriteState(Player.Axes)
+   
    self.entity:Update(dt)
    self.sprite:Update(dt)
+   
    Player.Axes = Vec2.new()
 end
 
@@ -96,11 +124,12 @@ function Player:DrawDebug(color)
       love.graphics.setColor(self.color.r, self.color.g, self.color.b)
    end
    local wp = self.entity:GetWorldPosition()
+
    -- Draw the origin point
    love.graphics.circle("fill", wp.x, wp.y, 3, 5)
 
    -- Print debug info
-   PrintWrapped(wp.x, wp.y, 15, {self.name,
+   PrintWrapped(wp.x-16, wp.y, 15, {self.name,
 				 Vec2.toString(self.entity:GetPosition()),
 				 Vec2.toString(self.entity:GetVelocity())})
    love.graphics.setColor(255,255,255)

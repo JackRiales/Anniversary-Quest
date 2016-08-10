@@ -20,8 +20,8 @@ return {
    color  = { r = 0, g = 255, b = 255 },
 
    -- Movement
-   speed  = 80,
-   accel  = 10,
+   speed  = 140,
+   accel  = 320,
 
    -- Shot definition
    shot = {
@@ -36,8 +36,8 @@ return {
    -- Animation names
    states = {
       idle = "dance",
-      move_left = nil, -- TODO
-      move_right= nil, -- TODO
+      move_left = "walk_left",
+      move_right= "walk_right",
       die       = nil  -- TODO
    }
 }

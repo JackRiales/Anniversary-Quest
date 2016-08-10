@@ -22,7 +22,7 @@ require "love.graphics"
 -- Not necessarily needed, since LOVE has methods to get these,
 -- but it's nice to have for defining quads down below
 local texture_width = 128
-local texture_height= 32
+local texture_height= 128
 
 -- Tile width. Again, not necessarily needed but nice for readability
 local sprite_tile_size = 32
@@ -39,7 +39,9 @@ return {
 
    -- Animation definitions
    animation_names = {
-      "dance"
+      "dance",
+      "walk_right",
+      "walk_left"
    },
    animations = {
       dance = {
@@ -47,6 +49,20 @@ return {
 	 love.graphics.newQuad(32, 0, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
 	 love.graphics.newQuad(64, 0, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
 	 love.graphics.newQuad(96, 0, sprite_tile_size, sprite_tile_size, texture_width, texture_height)
+      },
+      walk_right = {
+	 love.graphics.newQuad(0, 32, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
+	 love.graphics.newQuad(32,32, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
+	 love.graphics.newQuad(64,32, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
+	 love.graphics.newQuad(96,32, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
+	 love.graphics.newQuad(0, 64, sprite_tile_size, sprite_tile_size, texture_width, texture_height)
+      },
+      walk_left = {
+	 love.graphics.newQuad(32, 64, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
+	 love.graphics.newQuad(64, 64, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
+	 love.graphics.newQuad(96, 64, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
+	 love.graphics.newQuad(0,  96, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
+	 love.graphics.newQuad(32, 96, sprite_tile_size, sprite_tile_size, texture_width, texture_height)
       }
    }
 }
