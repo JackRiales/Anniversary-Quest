@@ -40,3 +40,9 @@ function CastBoolNegative(bool)
       return 1
    end
 end
+
+function PrintWrapped(x, y, lineSpace, lines)
+   for index,value in ipairs(lines) do
+      love.graphics.print(value, x, y+(lineSpace*(index-1)))
+   end
+end
