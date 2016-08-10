@@ -63,6 +63,28 @@ function Vec2.normalized(v)
    end
 end
 
+function Vec2.floor(v)
+   assert(Vec2.verify(v), "Vec2.floor - Wrong argument types")
+   return Vec2.new(math.floor(v.x), math.floor(v.y))
+end
+
+function Vec2.trim(v, len)
+   assert(Vec2.verify(v), "Vec2.trim - Wrong argument types")
+   local s = len*len / Vec2.magnitude2(v)
+   s = (s > 1 and 1) or math.sqrt(s)
+   return Vec2.new(v.x * s, v.y * s)
+end
+
+function Vec2.threshold(v, min)
+   assert(Vec2.verify(v), "Vec2.threshold - Wrong argument types")
+   local len = Vec2.magnitude(v)
+   if len < min then
+      return Vec2.new()
+   else
+      return v
+   end
+end
+
 function Vec2.angle(v1, v2)
    assert(Vec2.verify(v1) and Vec2.verify(v2), "Vec2.angle - Wrong argument types")
    return math.atan2(v1.y, v1.x) - math.atan2(v2.y, v2.x)
