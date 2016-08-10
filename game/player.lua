@@ -68,7 +68,8 @@ function Player.new(def)
 end
 
 function Player:SetMove(v)
-   self.entity.velocity = Vec2.scale(v, self.accel)
+   local motion = Vec2.scale(Vec2.normalized(v), self.speed)
+   self.entity:SetVelocity(motion.x, motion.y)
 end
 
 function Player:Update(dt)
@@ -77,10 +78,11 @@ function Player:Update(dt)
    elseif love.keyboard.isDown("s") then Player.Axes.y =  1 end
    if love.keyboard.isDown("a")     then Player.Axes.x = -1
    elseif love.keyboard.isDown("d") then Player.Axes.x =  1 end
-
-   self:SetMove(Player.Axes) 
+   
+   self:SetMove(Player.Axes)
    self.entity:Update(dt)
    self.sprite:Update(dt)
+   Player.Axes = Vec2.new()
 end
 
 function Player:Draw()

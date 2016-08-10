@@ -43,9 +43,25 @@ function Vec2.dist2(v1, v2)
    return dx*dx + dy*dy
 end
 
+function Vec2.magnitude(v)
+   assert(Vec2.verify(v), "Vec2.magnitude - Wrong argument types")
+   return math.sqrt(v.x*v.x + v.y*v.y)
+end
+
+function Vec2.magnitude2(v)
+   assert(Vec2.verify(v), "Vec2.magnitude2 - Wrong argument types")
+   return v.x*v.x + v.y*v.y
+end
+
 function Vec2.normalized(v)
    assert(Vec2.verify(v), "Vec2.normalized - Wrong argument types")
-   return v:clone():normalize()
+   local len = Vec2.magnitude(v)
+   if len > 0 then
+      return Vec2.new(v.x/len, v.y/len)
+   else
+      print("Vec2.normalized - Length was 0")
+      return Vec2.new()
+   end
 end
 
 function Vec2.angle(v1, v2)
