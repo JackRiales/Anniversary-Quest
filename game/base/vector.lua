@@ -25,6 +25,10 @@ function Vec2.verify(v)
    return type(v) == 'table' and type(v.x) == 'number' and type(v.y) == 'number'
 end
 
+function Vec2.toString(v)
+   return "("..tonumber(v.x)..","..tonumber(v.y)..")"
+end
+
 function Vec2.dist(v1, v2)
    assert(Vec2.verify(v1) and Vec2.verify(v2), "Vec2.dist - Wrong argument types")
    local dx = v1.x - v2.x
