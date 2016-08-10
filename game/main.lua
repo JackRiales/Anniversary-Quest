@@ -58,9 +58,16 @@ function love.load()
    end
 
    -- Drawing canvas
-   BackBuffer = love.graphics.newCanvas(256,256)
-   Scale_BackBuffer = love.graphics.getHeight()/BackBuffer:getHeight()
-   
+   FrameBuffer = {}
+   FrameBuffer.width  = 256
+   FrameBuffer.height = 256
+   FrameBuffer.canvas = love.graphics.newCanvas(FrameBuffer.width, FrameBuffer.height)
+   FrameBuffer.scale  = love.graphics.getHeight()/FrameBuffer.canvas:getHeight()
+   FrameBuffer.offset = {
+      x = love.graphics.getWidth()/2 - (FrameBuffer.canvas:getWidth()*FrameBuffer.scale)/2,
+      y = 0
+   }
+
    -- Player object loading from definition file
    Cyan = Player.new("data.Player-Cyan")
    Cyan.entity:SetOrigin(16,32)
@@ -93,30 +100,29 @@ end
 -- Main Draw
 function love.draw()
    Room.draw()
-   love.graphics.setCanvas(BackBuffer)
+   love.graphics.setCanvas(FrameBuffer.canvas)
    love.graphics.clear()
    Cyan:Draw()
+   Cyan:DrawDebug()
    love.graphics.setCanvas()
 
-   love.graphics.rectangle("line",
-			   love.graphics.getWidth()/2-(BackBuffer:getWidth()*Scale_BackBuffer)/2, 0,
-			   BackBuffer:getWidth()*Scale_BackBuffer,
-			   BackBuffer:getHeight()*Scale_BackBuffer)
-   love.graphics.draw(BackBuffer,
-		      love.graphics.getWidth()/2-(BackBuffer:getWidth()*Scale_BackBuffer)/2,
+   love.graphics.draw(FrameBuffer.canvas,
+		      FrameBuffer.offset.x,
+		      FrameBuffer.offset.y,
 		      0,
-		      0,
-		      Scale_BackBuffer,
-		      Scale_BackBuffer,
-		      0,
-		      0)
+		      FrameBuffer.scale,
+		      FrameBuffer.scale)
    
    -- Debug info
    if not DEBUG then return end
+   love.graphics.rectangle("line",
+			   FrameBuffer.offset.x,
+			   FrameBuffer.offset.y,
+			   FrameBuffer.canvas:getWidth()*FrameBuffer.scale,
+			   FrameBuffer.canvas:getHeight()*FrameBuffer.scale)
    love.graphics.setColor(0, 255, 0, 100)
    love.graphics.rectangle("fill", 5, 5, 220, 50)
    love.graphics.setColor(255, 255, 255)
    love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, 10)
    love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, 25)
-   Cyan:DrawDebug()
 end
