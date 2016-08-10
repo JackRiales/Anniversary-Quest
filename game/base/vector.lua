@@ -59,9 +59,14 @@ function Vec2.sub(v1, v2)
    return Vec2.new(v1.x-v2.x, v1.y-v2.y)
 end
 
+function Vec2.scale(v, s)
+   assert(Vec2.verify(v) and type(s) == 'number', "Vec2.mul - Wrong argument types")
+   return Vec2.new(v.x*s, v.y*s)
+end
+
 function Vec2.cross(v1, v2)
    assert(Vec2.verify(v1) and Vec2.verify(v2), "Vec2.sub - Wrong argument types")
-   return Vec2.new(v1.x * v2.y - v1.y * v2.x)
+   return v1.x * v2.y - v1.y * v2.x
 end
 
 -----------------------------------------------------------------
@@ -98,17 +103,21 @@ end
 
 function Vec2:add(v2)
    assert(Vec2.verify(v2), "Vec2.add - Wrong argument types")
-   return Vec2.new(self.x+v2.x, self.y+v2.y)
+   self.x, self.y = self.x+v2.x, self.y+v2.y
 end
 
 function Vec2:sub(v2)
    assert(Vec2.verify(v2), "Vec2.sub - Wrong argument types")
-   return Vec2.new(self.x-v2.x, self.y-v2.y)
+   self.x, self.y = self.x-v2.x, self.y-v2.y
+end
+
+function Vec2:scale(s)
+   self.x, self.y = self.x * s, self.y * s
 end
 
 function Vec2:cross(v2)
    assert(Vec2.verify(v2), "Vec2.sub - Wrong argument types")
-   return Vec2.new(self.x * v2.y - self.y * v2.x)
+   return self.x * v2.y - self.y * v2.x
 end
 
 return Vec2
