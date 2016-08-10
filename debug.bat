@@ -1,1 +1,1 @@
-@"U:\Tools\ZeroBraneStudio\zbstudio.exe" "U:\Projects\CyanNumber9\game\main.lua"
+@"U:\Tools\ZeroBraneStudio\zbstudio.exe" "U:\Projects\AnniversaryQuest\game\main.lua"
