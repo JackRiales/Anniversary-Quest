@@ -39,7 +39,7 @@ function Vec2.dist2(v1, v2)
    return dx*dx + dy*dy
 end
 
-function Vec2.getNormalized(v)
+function Vec2.normalized(v)
    assert(Vec2.verify(v), "Vec2.getNormalized - Wrong argument types")
    return v:clone():normalize()
 end
