@@ -15,7 +15,7 @@
 --]]
 
 local Vec2 = {}
-Vec2.__index = vector
+Vec2.__index = Vec2
 
 function Vec2.new(x, y)
    return setmetatable({x=x or 0, y=y or 0}, Vec2)
@@ -40,7 +40,7 @@ function Vec2.dist2(v1, v2)
 end
 
 function Vec2.normalized(v)
-   assert(Vec2.verify(v), "Vec2.getNormalized - Wrong argument types")
+   assert(Vec2.verify(v), "Vec2.normalized - Wrong argument types")
    return v:clone():normalize()
 end
 
@@ -60,64 +60,13 @@ function Vec2.sub(v1, v2)
 end
 
 function Vec2.scale(v, s)
-   assert(Vec2.verify(v) and type(s) == 'number', "Vec2.mul - Wrong argument types")
+   assert(Vec2.verify(v) and type(s) == 'number', "Vec2.scale - Wrong argument types")
    return Vec2.new(v.x*s, v.y*s)
 end
 
 function Vec2.cross(v1, v2)
    assert(Vec2.verify(v1) and Vec2.verify(v2), "Vec2.sub - Wrong argument types")
    return v1.x * v2.y - v1.y * v2.x
-end
-
------------------------------------------------------------------
--- Instance functions
------------------------------------------------------------------
-function Vec2:clone()
-   return Vec2.new(self.x, self.y)
-end
-
-function Vec2:__tostring()
-   return "("..tonumber(self.x)..","..tonumber(self.y)..")"
-end
-
-function Vec2:magnitude()
-   return math.sqrt(self.x*self.x + self.y*self.y)
-end
-
-function Vec2:magnitude2()
-   return self.x*self.x + self.y*self.y
-end
-
-function Vec2:normalize()
-   local len = self:len()
-   if len > 0 then
-      self.x, self.y = self.x / len, self.y / len
-   end
-   return self
-end
-
-function Vec2:angle(v2)
-   assert(Vec2.verify(v2), "Vec2.angle - Wrong argument types")
-   return math.atan2(self.y, self.x) - math.atan2(v2.y, v2.x)
-end
-
-function Vec2:add(v2)
-   assert(Vec2.verify(v2), "Vec2.add - Wrong argument types")
-   self.x, self.y = self.x+v2.x, self.y+v2.y
-end
-
-function Vec2:sub(v2)
-   assert(Vec2.verify(v2), "Vec2.sub - Wrong argument types")
-   self.x, self.y = self.x-v2.x, self.y-v2.y
-end
-
-function Vec2:scale(s)
-   self.x, self.y = self.x * s, self.y * s
-end
-
-function Vec2:cross(v2)
-   assert(Vec2.verify(v2), "Vec2.sub - Wrong argument types")
-   return self.x * v2.y - self.y * v2.x
 end
 
 return Vec2
