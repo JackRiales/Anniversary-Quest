@@ -23,6 +23,7 @@ local Sprite = require 'base.sprite'
 Player = {}
 Player.__index = Player
 Player.Bank = {}
+Player.Axes = Vec2.new()
 
 -- Loads a player definition file
 function Player.load(def)
@@ -67,24 +68,40 @@ function Player.new(def)
 end
 
 function Player:SetMove(v)
-   --self.entity:SetAcceleration(Vec2.scale(v, self.accel))
+   self.entity.velocity = Vec2.scale(v, self.accel)
 end
 
 function Player:Update(dt)
    -- Gather motion axes
-   local axes = Vec2.new()
-   if love.keyboard.isDown("w") then axes.y = -1
-   elseif love.keyboard.isDown("s") then axes.y = 1 end
-   if love.keyboard.isDown("a") then axes.x = -1
-   elseif love.keyboard.isDown("d") then axes.x = 1 end
-   self:SetMove(axes)
-   
+   if love.keyboard.isDown("w")     then Player.Axes.y = -1
+   elseif love.keyboard.isDown("s") then Player.Axes.y =  1 end
+   if love.keyboard.isDown("a")     then Player.Axes.x = -1
+   elseif love.keyboard.isDown("d") then Player.Axes.x =  1 end
+
+   self:SetMove(Player.Axes) 
    self.entity:Update(dt)
    self.sprite:Update(dt)
 end
 
 function Player:Draw()
    self.sprite:Draw(self.entity.transform)
+end
+
+function Player:DrawDebug(color)
+   if color then
+      love.graphics.setColor(color.r, color.g, color.b)
+   else
+      love.graphics.setColor(self.color.r, self.color.g, self.color.b)
+   end
+   local wp = self.entity:GetWorldPosition()
+   -- Draw the origin point
+   love.graphics.circle("fill", wp.x, wp.y, 3, 5)
+
+   -- Print debug info
+   PrintWrapped(wp.x, wp.y, 15, {self.name,
+				 Vec2.toString(self.entity:GetPosition()),
+				 Vec2.toString(self.entity:GetVelocity())})
+   love.graphics.setColor(255,255,255)
 end
 
 return Player
