@@ -31,32 +31,11 @@ DEBUG = true
 function love.load()
    -- Extra graphics settings
    love.graphics.setDefaultFilter("nearest","nearest")
-   
-   -- Create a room to walk around in (Prototype)
-   Room = {};
-   Room.marginW = 95
-   Room.marginH = 10
-   Room.color = {
-      r = 95,
-      g = 87,
-      b = 79
-   }
-   Room.bounds = {
-      x = Room.marginW,
-      y = Room.marginH,
-      w = love.graphics.getWidth()-Room.marginW*2,
-      h = love.graphics.getHeight()-Room.marginH*2,      
-   }
-   Room.draw = function()
-      love.graphics.setColor(Room.color.r, Room.color.g, Room.color.b)
-      love.graphics.rectangle("fill",
-			      Room.bounds.x,
-			      Room.bounds.y,
-			      Room.bounds.w,
-			      Room.bounds.h)
-      love.graphics.setColor(255,255,255);
-   end
 
+   -- Load assets
+   fntJoystix = love.graphics.newFont("assets/fonts/pixelfj.ttf", 8)
+   sprDungeon = love.graphics.newImage("assets/spr/BGRoom-Dungeon.png")
+   
    -- Drawing canvas
    FrameBuffer = {}
    FrameBuffer.width  = 256
@@ -102,13 +81,13 @@ end
 
 -- Main Draw
 function love.draw()
-   -- Room.draw()
-
    -- Draw game to canvas
    love.graphics.setCanvas(FrameBuffer.canvas)
-   love.graphics.clear()
+   love.graphics.clear(50, 100, 75)
+   love.graphics.draw(sprDungeon, 0, 0)
    Cyan:Draw()
    if DEBUG then
+      love.graphics.setFont(fntJoystix)
       Cyan:DrawDebug()
    end
    love.graphics.setCanvas()
@@ -128,9 +107,15 @@ function love.draw()
 			   FrameBuffer.offset.y,
 			   FrameBuffer.canvas:getWidth()*FrameBuffer.scale,
 			   FrameBuffer.canvas:getHeight()*FrameBuffer.scale)
+   
    love.graphics.setColor(0, 255, 0, 100)
-   love.graphics.rectangle("fill", 5, 5, 220, 50)
+   love.graphics.rectangle("fill", 5, 5, 180, 50)
    love.graphics.setColor(255, 255, 255)
    love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, 10)
    love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, 25)
+   love.graphics.print(string.format("Controls: %s %s %s %s",
+				     Cyan.controls.moveUp,
+				     Cyan.controls.moveLeft,
+				     Cyan.controls.moveDown,
+				     Cyan.controls.moveRight), 10, 40)
 end
