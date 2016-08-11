@@ -63,8 +63,13 @@ function Player.new(def)
       moveLeft = 'a',
       moveRight= 'd'
    }
+   self.jcontrols = {
+      moveUp   = "u",
+      moveDown = "d",
+      moveLeft = "l",
+      moveRight= "r"
+   }
    self.controls.jid  = 1 -- joystick id
-   self.controls.mode = "keyboard" -- "keyboard" or "joystick", f1 to change
    
    self.entity = Entity.new(self.data.name)
    
@@ -93,17 +98,29 @@ function Player:SetControls(moveUp, moveDown, moveLeft, moveRight)
    self.controls.moveRight= moveRight
 end
 
-function Player:GetInputAxes()
-   if self.controls.mode == "keyboard" then
-      if     love.keyboard.isDown(self.controls.moveUp)    then Player.Axes.y = -1
-      elseif love.keyboard.isDown(self.controls.moveDown)  then Player.Axes.y =  1 end
-      if     love.keyboard.isDown(self.controls.moveLeft)  then Player.Axes.x = -1
-      elseif love.keyboard.isDown(self.controls.moveRight) then Player.Axes.x =  1 end
-   elseif self.controls.mode == "joystick" then
-      local joystick = love.joystick.getJoysticks()[1]
+function Player:GetMotionInput()
+   -- Check keyboard input
+   if     love.keyboard.isDown(self.controls.moveUp)    then Player.Axes.y = -1
+   elseif love.keyboard.isDown(self.controls.moveDown)  then Player.Axes.y =  1 end
+   if     love.keyboard.isDown(self.controls.moveLeft)  then Player.Axes.x = -1
+   elseif love.keyboard.isDown(self.controls.moveRight) then Player.Axes.x =  1 end
+
+   -- Check joystick axes
+   if love.joystick.getJoystickCount() < 1 then return end
+   local joystick = love.joystick.getJoysticks()[self.controls.jid]
+   if Player.Axes.x == 0 and Player.Axes.y == 0 then
       local axes_x, axes_y = joystick:getAxes(1)
       local axVec = Vec2.new(axes_x, axes_y) 
       Player.Axes = Vec2.threshold(axVec, 0.2) -- Dead zone the stick
+   end
+
+   -- Check d-pad
+   if Player.Axes.x == 0 and Player.Axes.y == 0 then
+      local hat = joystick:getHat(1)
+      if     string.find(hat, self.jcontrols.moveUp)    then Player.Axes.y = -1
+      elseif string.find(hat, self.jcontrols.moveDown)  then Player.Axes.y =  1 end
+      if     string.find(hat, self.jcontrols.moveLeft)  then Player.Axes.x = -1
+      elseif string.find(hat, self.jcontrols.moveRight) then Player.Axes.x =  1 end
    end
 end
 
@@ -140,17 +157,13 @@ function Player:KeyPressed(key, scancode, isrepeat, isdebug)
    if (isdebug or false) then
       if     key == '.' then self.speed = self.speed + 10 ; print("Speed = "..self.speed)
       elseif key == ',' then self.speed = self.speed - 10 ; print("Speed = "..self.speed) end
-      if key == 'f1' then
-	 if self.controls.mode == "keyboard" then self.controls.mode = "joystick"
-	 else self.controls.mode = "keyboard" end
-      end
    end
 end
 
 -- Player update event
 function Player:Update(dt)
    -- Gather motion axes
-   self:GetInputAxes()
+   self:GetMotionInput()
 
    self.collider.rect:Set(self.entity:GetWorldPosition().x-self.collider.width/2,
 			  self.entity:GetWorldPosition().y-self.collider.height/2,
@@ -196,8 +209,7 @@ function Player:DrawDebug(color)
    -- Print debug info
    PrintWrapped(wp.x-16, wp.y, 15, {self.name,
 				    "P:"..Vec2.toString(self.entity:GetPosition()),
-				    "V:"..Vec2.toString(self.entity:GetVelocity()),
-				    "InMode:"..self.controls.mode})
+				    "V:"..Vec2.toString(self.entity:GetVelocity())})
    love.graphics.setColor(255,255,255)
 end
 
