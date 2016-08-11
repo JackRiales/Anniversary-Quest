@@ -14,8 +14,6 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-print("SprCyan data loaded")
-
 require "love.graphics"
 
 -- Width and height of the texture
