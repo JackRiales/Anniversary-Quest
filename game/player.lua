@@ -19,6 +19,7 @@ require 'base.bounds'
 local Vec2   = require 'base.vector'
 local Entity = require 'base.entity'
 local Sprite = require 'base.sprite'
+local Collider = require 'base.collider'
 
 Player = {}
 Player.__index = Player
@@ -62,11 +63,20 @@ function Player.new(def)
       moveLeft = 'a',
       moveRight= 'd'
    }
+   self.controls.jid  = 1 -- joystick id
+   self.controls.mode = "joystick" -- "keyboard" or "joystick"
    
    self.entity = Entity.new(self.data.name)
    
    self.sprite = Sprite.new(self.data.sprite)
    self.states = self.data.states
+
+   self.collider = {}
+   self.collider.width = 16
+   self.collider.height= 8
+   self.collider.rect = Collider.new(self.entity:GetPosition().x-self.collider.width/2,
+				     self.entity:GetPosition().y-self.collider.height/2,
+				     self.collider.width, self.collider.height)
    
    self.shot   = self.data.shot
    self.direction = Vec2.new(0, 1)
@@ -81,6 +91,20 @@ function Player:SetControls(moveUp, moveDown, moveLeft, moveRight)
    self.controls.moveDown = moveDown
    self.controls.moveLeft = moveLeft
    self.controls.moveRight= moveRight
+end
+
+function Player:GetInputAxes()
+   if self.controls.mode == "keyboard" then
+      if     love.keyboard.isDown(self.controls.moveUp)    then Player.Axes.y = -1
+      elseif love.keyboard.isDown(self.controls.moveDown)  then Player.Axes.y =  1 end
+      if     love.keyboard.isDown(self.controls.moveLeft)  then Player.Axes.x = -1
+      elseif love.keyboard.isDown(self.controls.moveRight) then Player.Axes.x =  1 end
+   elseif self.controls.mode == "joystick" then
+      local joystick = love.joystick.getJoysticks()[1]
+      local axes_x, axes_y = joystick:getAxes(1)
+      local axVec = Vec2.new(axes_x, axes_y) 
+      Player.Axes = Vec2.threshold(axVec, 0.2) -- Dead zone the stick
+   end
 end
 
 -- Sets the movement vector based on the given vector (input axes)
@@ -118,10 +142,15 @@ end
 -- Player update event
 function Player:Update(dt)
    -- Gather motion axes
-   if love.keyboard.isDown(self.controls.moveUp) then Player.Axes.y = -1
-   elseif love.keyboard.isDown(self.controls.moveDown) then Player.Axes.y =  1 end
-   if love.keyboard.isDown(self.controls.moveLeft) then Player.Axes.x = -1
-   elseif love.keyboard.isDown(self.controls.moveRight) then Player.Axes.x =  1 end
+   self:GetInputAxes()
+
+   self.collider.rect:Set(self.entity:GetWorldPosition().x-self.collider.width/2,
+			  self.entity:GetWorldPosition().y-self.collider.height/2,
+			  self.collider.width, self.collider.height)
+   local collisions = self.collider.rect:Check()
+   if #collisions > 1 then
+      
+   end
    
    self:SetMove(Player.Axes)
    self:SetSpriteState(Player.Axes)
@@ -149,6 +178,13 @@ function Player:DrawDebug(color)
    -- Draw the origin point
    love.graphics.circle("fill", wp.x, wp.y, 3, 5)
 
+   -- Draw the collider
+   love.graphics.rectangle("line",
+			   self.collider.rect.x,
+			   self.collider.rect.y,
+			   self.collider.rect.w,
+			   self.collider.rect.h)
+   
    -- Print debug info
    PrintWrapped(wp.x-16, wp.y, 15, {self.name,
 				    "P:"..Vec2.toString(self.entity:GetPosition()),

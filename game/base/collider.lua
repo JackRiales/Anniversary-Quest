@@ -26,14 +26,25 @@ function Collider.new(x, y, w, h)
    local self = {}
    self.id     = Collider.ID
    self.active = true
-   self.x      = x
-   self.y      = y
-   self.w      = w
-   self.h      = h
+   self.x      = x or 0
+   self.y      = y or 0
+   self.w      = w or 0
+   self.h      = h or 0
    local ret = setmetatable(self, Collider)
    Collider.ITable[self.id] = ret
    Collider.ID = Collider.ID + 1
    return ret
+end
+
+function Collider:SetActive(bool)
+   self.active = bool
+end
+
+function Collider:Set(x, y, w, h)
+   self.x      = x
+   self.y      = y
+   self.w      = w
+   self.h      = h
 end
 
 function Collider:GetCenterPoint()
@@ -59,3 +70,5 @@ end
 function Collider:Destroy()
    Collider.ITable[self.id] = nil
 end
+
+return Collider
