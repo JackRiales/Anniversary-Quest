@@ -21,7 +21,7 @@ return {
 
    -- Movement
    speed  = 140,
-   accel  = 320,
+   accel  = 400,
 
    -- Shot definition
    shot = {
