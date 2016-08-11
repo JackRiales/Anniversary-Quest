@@ -35,6 +35,7 @@ function Player.load(def)
       print("Definition file "..def.." returned nil.")
       return nil
    end
+
    Player.Bank[def] = p
    return Player.Bank[def]
 end
@@ -80,11 +81,6 @@ function Player:SetMove(v)
    -- Ensure velocity never crosses speed
    local trimmedVel = Vec2.trim(self.entity:GetVelocity(), self.speed)
    self.entity:SetVelocity(trimmedVel.x, trimmedVel.y)
-
-   -- Threshold velocity
-   local minimumVel = 1
-   local thresh = Vec2.threshold(self.entity:GetVelocity(), minimumVel)
-   self.entity:SetVelocity(thresh.x, thresh.y)
 end
 
 function Player:SetSpriteState(v)
