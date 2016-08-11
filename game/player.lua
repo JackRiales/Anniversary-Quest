@@ -55,6 +55,13 @@ function Player.new(def)
    self.color  = self.data.color
    self.speed  = self.data.speed
    self.accel  = self.data.accel
+
+   self.controls = {
+      moveUp   = 'w',
+      moveDown = 's',
+      moveLeft = 'a',
+      moveRight= 'd'
+   }
    
    self.entity = Entity.new(self.data.name)
    
@@ -66,6 +73,14 @@ function Player.new(def)
    self.shooting = false
    
    return setmetatable(self, Player)
+end
+
+-- Sets the player controls to the given keys
+function Player:SetControls(moveUp, moveDown, moveLeft, moveRight)
+   self.controls.moveUp   = moveUp
+   self.controls.moveDown = moveDown
+   self.controls.moveLeft = moveLeft
+   self.controls.moveRight= moveRight
 end
 
 -- Sets the movement vector based on the given vector (input axes)
@@ -103,10 +118,10 @@ end
 -- Player update event
 function Player:Update(dt)
    -- Gather motion axes
-   if love.keyboard.isDown("w")     then Player.Axes.y = -1
-   elseif love.keyboard.isDown("s") then Player.Axes.y =  1 end
-   if love.keyboard.isDown("a")     then Player.Axes.x = -1
-   elseif love.keyboard.isDown("d") then Player.Axes.x =  1 end
+   if love.keyboard.isDown(self.controls.moveUp) then Player.Axes.y = -1
+   elseif love.keyboard.isDown(self.controls.moveDown) then Player.Axes.y =  1 end
+   if love.keyboard.isDown(self.controls.moveLeft) then Player.Axes.x = -1
+   elseif love.keyboard.isDown(self.controls.moveRight) then Player.Axes.x =  1 end
    
    self:SetMove(Player.Axes)
    self:SetSpriteState(Player.Axes)
@@ -136,8 +151,8 @@ function Player:DrawDebug(color)
 
    -- Print debug info
    PrintWrapped(wp.x-16, wp.y, 15, {self.name,
-				 Vec2.toString(self.entity:GetPosition()),
-				 Vec2.toString(self.entity:GetVelocity())})
+				    "P:"..Vec2.toString(self.entity:GetPosition()),
+				    "V:"..Vec2.toString(self.entity:GetVelocity())})
    love.graphics.setColor(255,255,255)
 end
 
