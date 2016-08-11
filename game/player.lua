@@ -64,7 +64,7 @@ function Player.new(def)
       moveRight= 'd'
    }
    self.controls.jid  = 1 -- joystick id
-   self.controls.mode = "joystick" -- "keyboard" or "joystick"
+   self.controls.mode = "keyboard" -- "keyboard" or "joystick", f1 to change
    
    self.entity = Entity.new(self.data.name)
    
@@ -135,8 +135,16 @@ function Player:SetSpriteState(v)
 end
 
 -- Player key press event (On Key Down)
-function Player:KeyPressed(key, scancode, isrepeat)
-
+function Player:KeyPressed(key, scancode, isrepeat, isdebug)
+   -- Debug press controls
+   if (isdebug or false) then
+      if     key == '.' then self.speed = self.speed + 10 ; print("Speed = "..self.speed)
+      elseif key == ',' then self.speed = self.speed - 10 ; print("Speed = "..self.speed) end
+      if key == 'f1' then
+	 if self.controls.mode == "keyboard" then self.controls.mode = "joystick"
+	 else self.controls.mode = "keyboard" end
+      end
+   end
 end
 
 -- Player update event
@@ -188,7 +196,8 @@ function Player:DrawDebug(color)
    -- Print debug info
    PrintWrapped(wp.x-16, wp.y, 15, {self.name,
 				    "P:"..Vec2.toString(self.entity:GetPosition()),
-				    "V:"..Vec2.toString(self.entity:GetVelocity())})
+				    "V:"..Vec2.toString(self.entity:GetVelocity()),
+				    "InMode:"..self.controls.mode})
    love.graphics.setColor(255,255,255)
 end
 

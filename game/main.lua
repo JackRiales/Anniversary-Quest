@@ -71,7 +71,7 @@ function love.keypressed(key, scancode, isrepeat)
    end
 
    -- Player keypress events
-   Cyan:KeyPressed(key, scancode, isrepeat)
+   Cyan:KeyPressed(key, scancode, isrepeat, DEBUG)
 end
 
 -- Main Update
@@ -113,9 +113,4 @@ function love.draw()
    love.graphics.setColor(255, 255, 255)
    love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, 10)
    love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, 25)
-   love.graphics.print(string.format("Controls: %s %s %s %s",
-				     Cyan.controls.moveUp,
-				     Cyan.controls.moveLeft,
-				     Cyan.controls.moveDown,
-				     Cyan.controls.moveRight), 10, 40)
 end
