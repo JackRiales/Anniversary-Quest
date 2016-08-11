@@ -68,6 +68,7 @@ function Player.new(def)
    return setmetatable(self, Player)
 end
 
+-- Sets the movement vector based on the given vector (input axes)
 function Player:SetMove(v)
    -- If the axes are 0, introduce a stopping force (opposite velocity)
    if v.x == 0 and v.y == 0 then
@@ -83,6 +84,7 @@ function Player:SetMove(v)
    self.entity:SetVelocity(trimmedVel.x, trimmedVel.y)
 end
 
+-- Sets the sprite state, based on the given vector (input axes)
 function Player:SetSpriteState(v)
    if v.x > 0 or v.y > 0 then
       self.sprite:SetAnimation(self.states.move_right)
@@ -93,6 +95,12 @@ function Player:SetSpriteState(v)
    end
 end
 
+-- Player key press event (On Key Down)
+function Player:KeyPressed(key, scancode, isrepeat)
+
+end
+
+-- Player update event
 function Player:Update(dt)
    -- Gather motion axes
    if love.keyboard.isDown("w")     then Player.Axes.y = -1
@@ -109,10 +117,12 @@ function Player:Update(dt)
    Player.Axes = Vec2.new()
 end
 
+-- Player draw event
 function Player:Draw()
    self.sprite:Draw(self.entity.transform)
 end
 
+-- Player debug draw event
 function Player:DrawDebug(color)
    if color then
       love.graphics.setColor(color.r, color.g, color.b)

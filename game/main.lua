@@ -90,6 +90,9 @@ function love.keypressed(key, scancode, isrepeat)
 					      buttons);
       if (quit == 2) then love.event.push('quit'); end
    end
+
+   -- Player keypress events
+   Cyan:KeyPressed(key, scancode, isrepeat)
 end
 
 -- Main Update
@@ -100,6 +103,8 @@ end
 -- Main Draw
 function love.draw()
    -- Room.draw()
+
+   -- Draw game to canvas
    love.graphics.setCanvas(FrameBuffer.canvas)
    love.graphics.clear()
    Cyan:Draw()
@@ -108,6 +113,7 @@ function love.draw()
    end
    love.graphics.setCanvas()
 
+   -- Draw the frame buffer
    love.graphics.draw(FrameBuffer.canvas,
 		      FrameBuffer.offset.x,
 		      FrameBuffer.offset.y,
