@@ -68,6 +68,11 @@ function Vec2.floor(v)
    return Vec2.new(math.floor(v.x), math.floor(v.y))
 end
 
+function Vec2.round(v)
+   assert(Vec2.verify(v), "Vec2.round - Wrong argument types")
+   return Vec2.new(math.floor(v.x+0.5), math.floor(v.y+0.5))
+end
+
 function Vec2.trim(v, len)
    assert(Vec2.verify(v), "Vec2.trim - Wrong argument types")
    local s = len*len / Vec2.magnitude2(v)

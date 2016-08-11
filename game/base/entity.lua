@@ -45,10 +45,10 @@ end
 -- calls the given update function
 function Entity:Update(dt)
    if not self.flUpdate then return end
-   self.transform.velocity = Vec2.add(self.transform.velocity,
-				      Vec2.scale(self.transform.accel, dt))
-   self.transform.position = Vec2.add(self.transform.position,
-				      Vec2.scale(self.transform.velocity, dt))
+   self.transform.velocity = Vec2.round(Vec2.add(self.transform.velocity,
+						 Vec2.scale(self.transform.accel, dt)))
+   self.transform.position = Vec2.round(Vec2.add(self.transform.position,
+						 Vec2.scale(self.transform.velocity, dt)))
 end
 
 --[[
