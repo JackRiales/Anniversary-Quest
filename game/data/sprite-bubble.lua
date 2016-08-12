@@ -33,8 +33,7 @@ return {
 	 love.graphics.newQuad(48, 0, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
 	 love.graphics.newQuad(64, 0, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
 	 love.graphics.newQuad(96, 0, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
-	 love.graphics.newQuad(112,0, sprite_tile_size, sprite_tile_size, texture_width, texture_height),
-	 love.graphics.newQuad(128,0, sprite_tile_size, sprite_tile_size, texture_width, texture_height)
+	 love.graphics.newQuad(112,0, sprite_tile_size, sprite_tile_size, texture_width, texture_height)
       }
    }
 }
