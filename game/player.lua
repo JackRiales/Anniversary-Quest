@@ -87,10 +87,12 @@ function Player.new(def)
    self.collider.rect = Collider.new(self.entity:GetPosition().x-self.collider.width/2,
 				     self.entity:GetPosition().y-self.collider.height/2,
 				     self.collider.width, self.collider.height)
-   
+
+   self.bullets = {}
    self.shot = self.data.shot
    self.shot.sprite = Sprite.new(self.data.shot.sprite)
    self.shot.direction = Vec2.new(0, 1)
+   self.shot.time = 0
    self.shooting = false
    
    return setmetatable(self, Player)
@@ -195,13 +197,42 @@ function Player:Update(dt)
    if #collisions > 1 then
       -- TODO(Jack)
    end
-   
+
+   -- Shooting
+   self.shot.time = self.shot.time + dt
+   if self.shooting then
+      if self.shot.time > self.shot.rate then
+	 -- TODO(Jack): Add pooling; move to class
+	 local bullet = {}
+	 bullet.time = 0
+	 bullet.entity = Entity.new("bullet")
+	 bullet.entity:SetPosition(self.entity:GetWorldPosition().x-8, self.entity:GetWorldPosition().y-8)
+	 local bvel = Vec2.scale(Vec2.normalized(self.shot.direction), self.shot.speed)
+	 bullet.entity:SetVelocity(bvel.x, bvel.y)
+	 bullet.entity:SetAcceleration(-bvel.x/2, -bvel.y/2)
+
+	 bullet.sprite = self.shot.sprite
+	 table.insert(self.bullets, bullet)
+	 self.shot.time = 0
+      end
+   end
+   for i,value in ipairs(self.bullets) do
+      value.time = value.time + dt
+      if value.time > self.shot.ttl then table.remove(self.bullets, i) end
+      value.entity:Update(dt)
+      value.entity:SetRotation(value.entity:GetRotation()+1)
+   end
+   self.shot.sprite:Update(dt)
+
+   -- Move and animate
    self:SetMove(Player.Axes)
    self:SetSpriteState(Player.Axes)
-   
+
+   -- Update transforms and sprite
    self.entity:Update(dt)
    self.sprite:Update(dt)
-   
+
+   -- Reset
    Player.Axes = Vec2.new()
 end
 
@@ -215,6 +246,11 @@ function Player:Draw()
 
    -- Draw Sprite
    self.sprite:Draw(self.entity.transform)
+
+   -- Draw bullets
+   for i,value in ipairs(self.bullets) do
+      value.sprite:Draw(value.entity.transform)
+   end
 end
 
 -- Player debug draw event
