@@ -186,9 +186,10 @@ function Player:Update(dt)
    -- Gather input
    self:GetMotionInput()
    self:GetShootInput()
-   
-   self.collider.rect:Set(self.entity:GetWorldPosition().x-self.collider.width/2,
-			  self.entity:GetWorldPosition().y-self.collider.height/2,
+
+   -- Set collider
+   self.collider.rect:Set(self.entity:GetPosition().x-self.collider.width/2,
+			  self.entity:GetPosition().y-self.collider.height/2,
 			  self.collider.width, self.collider.height)
    local collisions = self.collider.rect:Check()
    if #collisions > 1 then
@@ -207,7 +208,7 @@ end
 -- Player draw event
 function Player:Draw()
    -- Draw shadow
-   local shadowPos = self.entity:GetWorldPosition()
+   local shadowPos = self.entity:GetPosition()
    love.graphics.setColor(0, 0, 0, 100)
    love.graphics.ellipse("fill", shadowPos.x, shadowPos.y, 8, 4)
    love.graphics.setColor(255,255,255,255)
@@ -223,7 +224,7 @@ function Player:DrawDebug(color)
    else
       love.graphics.setColor(self.color.r, self.color.g, self.color.b)
    end
-   local wp = self.entity:GetWorldPosition()
+   local wp = self.entity:GetPosition()
 
    -- Draw the origin point
    love.graphics.circle("fill", wp.x, wp.y, 3, 5)

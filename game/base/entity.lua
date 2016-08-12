@@ -34,7 +34,6 @@ function Entity.new(name)
    self.transform.accel    = Vec2.new()
    self.transform.scale    = Vec2.new(1,1)
    self.transform.origin   = Vec2.new()
-   self.transform.shear    = Vec2.new(1,1)
    
    self.flUpdate = true -- Is this allowed to update?
 
@@ -61,7 +60,6 @@ function Entity:GetAcceleration() return self.transform.accel end
 function Entity:GetRotation() return self.transform.angle end
 function Entity:GetScale()    return self.transform.scale end
 function Entity:GetOrigin()   return self.transform.origin end
-function Entity:GetShear()    return self.transform.shear end
 function Entity:GetWorldPosition()
    return Vec2.add(self.transform.position, self.transform.origin)
 end
@@ -72,7 +70,6 @@ function Entity:SetVelocity(dx,dy) self.transform.velocity = Vec2.new(dx,dy) end
 function Entity:SetAcceleration(ddx,ddy) self.transform.accel = Vec2.new(ddx,ddy) end
 function Entity:SetScale(sx,sy) self.transform.scale = Vec2.new(sx,sy) end
 function Entity:SetOrigin(ox,oy) self.transform.origin = Vec2.new(ox,oy) end
-function Entity:SetShear(sx,sy) self.transform.shear = Vec2.new(sx,sy) end
 function Entity:SetRotation(a) self.transform.angle = a end
 
 return Entity

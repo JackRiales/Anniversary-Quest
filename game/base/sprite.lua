@@ -113,8 +113,8 @@ function Sprite:Draw(transform)
       transform.angle*(180/math.pi),
       transform.scale.x,
       transform.scale.y,
-      transform.shear.x,
-      transform.shear.y
+      transform.origin.x,
+      transform.origin.y
    )
 end
 
