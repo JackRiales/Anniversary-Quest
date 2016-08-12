@@ -209,7 +209,7 @@ function Player:Update(dt)
 	 bullet.entity:SetPosition(self.entity:GetPosition().x-8, self.entity:GetPosition().y-8)
 	 local bvel = Vec2.scale(Vec2.normalized(self.shot.direction), self.shot.speed)
 	 bullet.entity:SetVelocity(bvel.x, bvel.y)
-	 bullet.entity:SetAcceleration(-bvel.x/2, -bvel.y/2)
+	 bullet.entity:SetAcceleration(-bvel.x/4, -bvel.y/4)
 
 	 bullet.sprite = self.shot.sprite
 	 table.insert(self.bullets, bullet)
@@ -220,7 +220,6 @@ function Player:Update(dt)
       value.time = value.time + dt
       if value.time > self.shot.ttl then table.remove(self.bullets, i) end
       value.entity:Update(dt)
-      value.entity:SetRotation(value.entity:GetRotation()+1)
    end
    self.shot.sprite:Update(dt)
 
