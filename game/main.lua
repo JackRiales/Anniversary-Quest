@@ -35,6 +35,11 @@ function love.load()
    -- Load assets
    fntJoystix = love.graphics.newFont("assets/fonts/pixelfj.ttf", 8)
    sprDungeon = love.graphics.newImage("assets/spr/BGRoom-Dungeon.png")
+
+   -- Set cursor
+   imgCursor = love.graphics.newImage("assets/spr/Cursor.png")
+   Cursor = love.mouse.newCursor(imgCursor:getData(), imgCursor:getWidth()/2, imgCursor:getHeight()/2)
+   love.mouse.setCursor(Cursor)
    
    -- Drawing canvas
    FrameBuffer = {}
