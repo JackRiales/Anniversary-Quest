@@ -26,6 +26,9 @@ return {
    -- Shot definition
    shot = {
       sprite = "data.sprite-bubble",
+      ttl    = 2,
+      speed  = 40,
+      rate   = 0.3,
       color  = { r = 255, g = 255, b = 255 },
       effects= {}
    },
