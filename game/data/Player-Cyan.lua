@@ -34,7 +34,7 @@ return {
    },
    
    -- Sprite definition
-   sprite = "data.Sprite-Cyan",
+   sprite = "data.sprite-cyan",
 
    -- Animation names
    states = {

@@ -53,7 +53,7 @@ function love.load()
    }
 
    -- Player object loading from definition file
-   Cyan = Player.new("data.Player-Cyan")
+   Cyan = Player.new("data.player-cyan")
    Cyan.entity:SetOrigin(16,32)
    Cyan.entity:SetPosition(64, 64)
 end
