@@ -110,7 +110,7 @@ function Sprite:Draw(transform)
       self.sprite.animations[self.cAnimation][self.cFrame],
       transform.position.x,
       transform.position.y,
-      transform.angle*(180/math.pi),
+      math.rad(transform.angle),
       transform.scale.x,
       transform.scale.y,
       transform.origin.x,
