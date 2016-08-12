@@ -185,6 +185,13 @@ end
 
 -- Player draw event
 function Player:Draw()
+   -- Draw shadow
+   local shadowPos = self.entity:GetWorldPosition()
+   love.graphics.setColor(0, 0, 0, 100)
+   love.graphics.ellipse("fill", shadowPos.x, shadowPos.y, 8, 4)
+   love.graphics.setColor(255,255,255,255)
+
+   -- Draw Sprite
    self.sprite:Draw(self.entity.transform)
 end
 
