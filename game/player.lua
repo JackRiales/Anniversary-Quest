@@ -206,10 +206,10 @@ function Player:Update(dt)
 	 local bullet = {}
 	 bullet.time = 0
 	 bullet.entity = Entity.new("bullet")
-	 bullet.entity:SetPosition(self.entity:GetPosition().x-8, self.entity:GetPosition().y-8)
+	 bullet.entity:SetPosition(self.entity:GetPosition().x+self.shot.direction.x*5, self.entity:GetPosition().y-32)
 	 local bvel = Vec2.scale(Vec2.normalized(self.shot.direction), self.shot.speed)
-	 bullet.entity:SetVelocity(bvel.x, bvel.y)
-	 bullet.entity:SetAcceleration(-bvel.x/4, -bvel.y/4)
+	 bullet.entity:SetVelocity(bvel.x,bvel.y)
+	 bullet.entity:SetAcceleration(-bvel.x/2, -bvel.y/2)
 
 	 bullet.sprite = self.shot.sprite
 	 table.insert(self.bullets, bullet)
