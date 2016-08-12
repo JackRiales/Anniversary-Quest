@@ -206,7 +206,8 @@ function Player:Update(dt)
 	 local bullet = {}
 	 bullet.time = 0
 	 bullet.entity = Entity.new("bullet")
-	 bullet.entity:SetPosition(self.entity:GetPosition().x+self.shot.direction.x*5, self.entity:GetPosition().y-32)
+	 bullet.entity:SetOrigin(8,8)
+	 bullet.entity:SetPosition(self.entity:GetPosition().x+self.shot.direction.x*5, self.entity:GetPosition().y-16)
 	 local bvel = Vec2.scale(Vec2.normalized(self.shot.direction), self.shot.speed)
 	 bullet.entity:SetVelocity(bvel.x,bvel.y)
 	 bullet.entity:SetAcceleration(-bvel.x/2, -bvel.y/2)
@@ -276,6 +277,9 @@ function Player:DrawDebug(color)
 				    "P:"..Vec2.toString(self.entity:GetPosition()),
 				    "V:"..Vec2.toString(self.entity:GetVelocity()),
 				    "Shot:"..Vec2.toString(self.shot.direction).." "..tostring(self.shooting)})
+   for i,value in ipairs(self.bullets) do
+      love.graphics.circle("fill", value.entity:GetPosition().x,value.entity:GetPosition().y,3,3)
+   end
    love.graphics.setColor(255,255,255)
 end
 
