@@ -62,7 +62,11 @@ function Player.new(def)
       moveUp   = 'w',
       moveDown = 's',
       moveLeft = 'a',
-      moveRight= 'd'
+      moveRight= 'd',
+      shootUp   = 'up',
+      shootDown = 'down',
+      shootLeft = 'left',
+      shootRight= 'right',
    }
    self.controls.joystick = {
       moveUp   = "u", -- hat up
@@ -84,19 +88,23 @@ function Player.new(def)
 				     self.entity:GetPosition().y-self.collider.height/2,
 				     self.collider.width, self.collider.height)
    
-   self.shot   = self.data.shot
-   self.direction = Vec2.new(0, 1)
+   self.shot = self.data.shot
+   self.shot.sprite = Sprite.new(self.data.shot.sprite)
+   self.shot.direction = Vec2.new(0, 1)
    self.shooting = false
    
    return setmetatable(self, Player)
 end
 
--- Sets the player controls to the given keys
-function Player:SetControls(moveUp, moveDown, moveLeft, moveRight)
-   self.controls.moveUp   = moveUp
-   self.controls.moveDown = moveDown
-   self.controls.moveLeft = moveLeft
-   self.controls.moveRight= moveRight
+function Player:SetKeyboardControls(controls)
+   self.controls.keys.moveUp   = controls.moveUp   or "w"
+   self.controls.keys.moveDown = controls.moveDown or "s"
+   self.controls.keys.moveLeft = controls.moveLeft or "a"
+   self.controls.keys.moveRight= controls.moveRight or "d"
+   self.controls.keys.shootUp  = controls.shootUp or "up"
+   self.controls.keys.shootDown= controls.shootDown or "down"
+   self.controls.keys.shootLeft= controls.shootLeft or "left"
+   self.controls.keys.shootRight = controls.shootRight or "right"
 end
 
 function Player:GetMotionInput()
@@ -123,6 +131,18 @@ function Player:GetMotionInput()
       if     string.find(hat, self.controls.joystick.moveLeft)  then Player.Axes.x = -1
       elseif string.find(hat, self.controls.joystick.moveRight) then Player.Axes.x =  1 end
    end
+end
+
+function Player:GetShootInput()
+   if     love.keyboard.isDown(self.controls.keys.shootUp)    then
+      self.shot.direction = Vec2.new(0,-1) ; self.shooting = true
+   elseif love.keyboard.isDown(self.controls.keys.shootDown)  then
+      self.shot.direction = Vec2.new(0,1) ; self.shooting = true
+   elseif love.keyboard.isDown(self.controls.keys.shootLeft)  then
+      self.shot.direction = Vec2.new(-1,0) ; self.shooting = true
+   elseif love.keyboard.isDown(self.controls.keys.shootRight) then
+      self.shot.direction = Vec2.new(1,0) ; self.shooting = true
+   else self.shot.direction = Vec2.new() ; self.shooting = false end
 end
 
 -- Sets the movement vector based on the given vector (input axes)
@@ -156,22 +176,23 @@ end
 function Player:KeyPressed(key, scancode, isrepeat, isdebug)
    -- Debug press controls
    if (isdebug or false) then
-      if     key == '.' then self.speed = self.speed + 10 ; print("Speed = "..self.speed)
-      elseif key == ',' then self.speed = self.speed - 10 ; print("Speed = "..self.speed) end
+      if     key == '>' then self.speed = self.speed + 10 ; print("Speed = "..self.speed)
+      elseif key == '<' then self.speed = self.speed - 10 ; print("Speed = "..self.speed) end
    end
 end
 
 -- Player update event
 function Player:Update(dt)
-   -- Gather motion axes
+   -- Gather input
    self:GetMotionInput()
-
+   self:GetShootInput()
+   
    self.collider.rect:Set(self.entity:GetWorldPosition().x-self.collider.width/2,
 			  self.entity:GetWorldPosition().y-self.collider.height/2,
 			  self.collider.width, self.collider.height)
    local collisions = self.collider.rect:Check()
    if #collisions > 1 then
-      
+      -- TODO(Jack)
    end
    
    self:SetMove(Player.Axes)
@@ -215,9 +236,10 @@ function Player:DrawDebug(color)
 			   self.collider.rect.h)
    
    -- Print debug info
-   PrintWrapped(wp.x-16, wp.y, 15, {self.name,
+   PrintWrapped(wp.x-16, wp.y, 10, {self.name,
 				    "P:"..Vec2.toString(self.entity:GetPosition()),
-				    "V:"..Vec2.toString(self.entity:GetVelocity())})
+				    "V:"..Vec2.toString(self.entity:GetVelocity()),
+				    "Shot:"..Vec2.toString(self.shot.direction).." "..tostring(self.shooting)})
    love.graphics.setColor(255,255,255)
 end
 
