@@ -60,9 +60,6 @@ function Entity:GetAcceleration() return self.transform.accel end
 function Entity:GetRotation() return self.transform.angle end
 function Entity:GetScale()    return self.transform.scale end
 function Entity:GetOrigin()   return self.transform.origin end
-function Entity:GetWorldPosition()
-   return Vec2.add(self.transform.position, self.transform.origin)
-end
 
 function Entity:SetTransform(t) self.transform = t end
 function Entity:SetPosition(x,y) self.transform.position = Vec2.new(x,y) end
