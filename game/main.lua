@@ -22,6 +22,7 @@
 -- Anyway, I hope you enjoy.
 
 -- Dependencies
+require 'base.camera'
 local Player = require 'player'
 
 -- Main globals
@@ -91,31 +92,36 @@ end
 -- Main Update
 function love.update(dt)
    Cyan:Update(dt)
+   Camera.setPosition(Cyan.entity:GetPosition().x-128, Cyan.entity:GetPosition().y-128)
 end
 
 -- Main Draw
 function love.draw()
    -- Draw game to canvas
    love.graphics.setCanvas(FrameBuffer.canvas)
+   Camera.set()
    love.graphics.clear(50, 100, 75)
 
    -- Draw game
    love.graphics.draw(sprDungeon, 0, 0)
    Cyan:Draw()
 
+   -- Draw debug
+   if DEBUG then
+      love.graphics.setFont(fntJoystix)
+      Cyan:DrawDebug()
+   end
+   Camera.unset()
+   
    -- Draw ui (just proof of concept, doesn't actually do anything)
+   -- TODO(Jack): Draw GUI elements to their own canvas
    love.graphics.setColor(10,10,10,100)
    love.graphics.rectangle("fill", 5,5,68,26)
    love.graphics.setColor(255,255,255,255)
    love.graphics.draw(sprIcons, qIconHeart, 10, 10)
    love.graphics.draw(sprIcons, qIconHeart, 31, 10)
    love.graphics.draw(sprIcons, qIconHeart, 52, 10)
-   
-   -- Draw debug
-   if DEBUG then
-      love.graphics.setFont(fntJoystix)
-      Cyan:DrawDebug()
-   end
+
    love.graphics.setCanvas()
 
    -- Draw the frame buffer
