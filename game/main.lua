@@ -35,7 +35,16 @@ function love.load()
    -- Load assets
    fntJoystix = love.graphics.newFont("assets/fonts/pixelfj.ttf", 8)
    sprDungeon = love.graphics.newImage("assets/spr/BGRoom-Dungeon.png")
+   sprCyanPortrait = love.graphics.newImage("assets/spr/CyanPortrait.png")
+   sprIcons   = love.graphics.newImage("assets/spr/SprIcons.png")
 
+   -- Icon quads
+   qIconHeart = love.graphics.newQuad(0, 0, 16, 16, 80, 16)
+   qIconPhantomHeart = love.graphics.newQuad(16, 0, 16, 16, 80, 16)
+   qIconCoin  = love.graphics.newQuad(32, 0, 16, 16, 80, 16)
+   qIconBomb  = love.graphics.newQuad(48, 0, 16, 16, 80, 16)
+   qIconKey   = love.graphics.newQuad(64, 0, 16, 16, 80, 16)
+   
    -- Set cursor
    imgCursor = love.graphics.newImage("assets/spr/Cursor.png")
    Cursor = love.mouse.newCursor(imgCursor:getData(), imgCursor:getWidth()/2, imgCursor:getHeight()/2)
@@ -89,8 +98,20 @@ function love.draw()
    -- Draw game to canvas
    love.graphics.setCanvas(FrameBuffer.canvas)
    love.graphics.clear(50, 100, 75)
+
+   -- Draw game
    love.graphics.draw(sprDungeon, 0, 0)
    Cyan:Draw()
+
+   -- Draw ui (just proof of concept, doesn't actually do anything)
+   love.graphics.setColor(10,10,10,100)
+   love.graphics.rectangle("fill", 5,5,68,26)
+   love.graphics.setColor(255,255,255,255)
+   love.graphics.draw(sprIcons, qIconHeart, 10, 10)
+   love.graphics.draw(sprIcons, qIconHeart, 31, 10)
+   love.graphics.draw(sprIcons, qIconHeart, 52, 10)
+   
+   -- Draw debug
    if DEBUG then
       love.graphics.setFont(fntJoystix)
       Cyan:DrawDebug()
