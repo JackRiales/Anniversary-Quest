@@ -1,3 +1,6 @@
+# Comment files
+__*
+
 # Build files
 build/
 *.love
