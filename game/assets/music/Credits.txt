@@ -1,0 +1,5 @@
+Tracks: Visager_-_*
+Artist: Visager
+Producer: Visager
+Source: http://freemusicarchive.org/member/Visager/blog/Making_Music_for_Unknown_Worlds
+License: CC Attribution
