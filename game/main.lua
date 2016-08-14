@@ -29,6 +29,10 @@ local sti = require 'lib.sti'
 
 -- Main globals
 DEBUG = true
+
+WINDOW_WIDTH = love.graphics.getWidth()
+WINDOW_HEIGHT = love.graphics.getHeight()
+
 ASSET_PATH = "assets/"
 IMAGE_PATH = ASSET_PATH.."images/"
 FONT_PATH  = ASSET_PATH.."fonts/"
@@ -100,6 +104,9 @@ end
 
 -- Main Update
 function love.update(dt)
+   WINDOW_WIDTH = love.graphics.getWidth()
+   WINDOW_HEIGHT = love.graphics.getHeight()
+
    -- Update frame buffer based on current window state
    FrameBuffer.canvas = love.graphics.newCanvas(FrameBuffer.width, FrameBuffer.height)
    FrameBuffer.scale  = love.graphics.getHeight()/FrameBuffer.canvas:getHeight()
@@ -121,6 +128,8 @@ function love.draw()
    love.graphics.clear(50, 100, 75)
 
    -- Draw map
+   local cyanpos = Camera.position
+   map:setDrawRange(-cyanpos.x, -cyanpos.y, WINDOW_WIDTH, WINDOW_HEIGHT)
    map:draw()
    
    -- Draw game
