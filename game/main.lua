@@ -29,6 +29,7 @@ local sti = require 'lib.sti'
 
 -- Main globals
 DEBUG = true
+GUI   = true
 
 WINDOW_WIDTH = love.graphics.getWidth()
 WINDOW_HEIGHT = love.graphics.getHeight()
@@ -51,6 +52,7 @@ function love.load()
    fntJoystix = love.graphics.newFont(FONT_PATH.."pixelfj.ttf", 8)
    sprCyanPortrait = love.graphics.newImage(IMAGE_PATH.."CyanPortrait.png")
    sprIcons   = love.graphics.newImage(IMAGE_PATH.."Icons.png")
+   sprBars    = love.graphics.newImage(IMAGE_PATH.."Bar.png")
 
    -- Icon quads
    qIconHeart = love.graphics.newQuad(0, 0, 16, 16, 80, 16)
@@ -83,12 +85,20 @@ end
 
 -- Main input key-pressed
 function love.keypressed(key, scancode, isrepeat)
-   -- Check for toggle debug
+   -- Check for toggle debug (remove on release)
    if key == "`" then
       if DEBUG then DEBUG = false
       else DEBUG = true end
    end
-   
+
+   -- Debug commands
+   if DEBUG then
+      if key == 'f1' then
+	 if GUI then GUI = false
+	 else GUI = true end
+      end
+   end
+
    -- F11 toggles fullscreen mode
    if key == 'f11' then
       love.window.setFullscreen(not love.window.getFullscreen(), "desktop")
@@ -149,13 +159,15 @@ function love.draw()
    
    -- Draw ui (just proof of concept, doesn't actually do anything)
    -- TODO(Jack): Draw GUI elements to their own canvas
-   love.graphics.setColor(10,10,10,100)
-   love.graphics.rectangle("fill", 5,5,68,26)
-   love.graphics.setColor(255,255,255,255)
-   love.graphics.draw(sprIcons, qIconHeart, 10, 10)
-   love.graphics.draw(sprIcons, qIconHeart, 31, 10)
-   love.graphics.draw(sprIcons, qIconHeart, 52, 10)
-
+   if GUI then
+      love.graphics.setColor(255,0,0)
+      love.graphics.rectangle("fill", 10, 10, sprBars:getWidth(), 8)
+      love.graphics.setColor(0,25,255)
+      love.graphics.rectangle("fill", 10, 18, sprBars:getWidth(), 8)
+      love.graphics.setColor(255,255,255)
+      love.graphics.draw(sprBars, 10, 10)
+   end
+   
    love.graphics.setCanvas()
 
    -- Draw the frame buffer
