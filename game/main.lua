@@ -89,6 +89,11 @@ function love.keypressed(key, scancode, isrepeat)
       else DEBUG = true end
    end
    
+   -- F11 toggles fullscreen mode
+   if key == 'f11' then
+      love.window.setFullscreen(not love.window.getFullscreen(), "desktop")
+   end
+
    -- Check for leave
    if key == "escape" then
       local buttons = {"NO!", "Yep!", escapebutton = 1}
