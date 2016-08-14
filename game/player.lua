@@ -165,9 +165,13 @@ end
 
 -- Sets the sprite state, based on the given vector (input axes)
 function Player:SetSpriteState(v)
-   if v.x > 0 or v.y > 0 then
+   if v.x > 0 then
       self.sprite:SetAnimation(self.states.move_right)
-   elseif v.x < 0 or v.y < 0 then
+   elseif v.x < 0 then
+      self.sprite:SetAnimation(self.states.move_left)
+   elseif v.y > 0 then
+      self.sprite:SetAnimation(self.states.move_right)
+   elseif v.y < 0 then
       self.sprite:SetAnimation(self.states.move_left)
    else
       self.sprite:SetAnimation(self.states.idle)
