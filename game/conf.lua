@@ -20,6 +20,8 @@ function love.conf(t)
 
    t.window.title = "Anniversary Quest"
    t.window.icon = nil -- TODO(Jack)
+   t.window.minwidth = 640
+   t.window.minheight = 480
    t.window.width = 800
    t.window.height = 600
    t.window.resizable = true
