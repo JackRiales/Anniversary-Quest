@@ -91,6 +91,14 @@ end
 
 -- Main Update
 function love.update(dt)
+   -- Update frame buffer based on current window state
+   FrameBuffer.canvas = love.graphics.newCanvas(FrameBuffer.width, FrameBuffer.height)
+   FrameBuffer.scale  = love.graphics.getHeight()/FrameBuffer.canvas:getHeight()
+   FrameBuffer.offset = {
+      x = love.graphics.getWidth()/2 - (FrameBuffer.canvas:getWidth()*FrameBuffer.scale)/2,
+      y = 0
+   }
+   
    Cyan:Update(dt)
    Camera.setPosition(Cyan.entity:GetPosition().x-128, Cyan.entity:GetPosition().y-128)
 end

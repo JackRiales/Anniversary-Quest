@@ -22,5 +22,9 @@ function love.conf(t)
    t.window.icon = nil -- TODO(Jack)
    t.window.width = 1280
    t.window.height = 720
-   t.window.fullscreen = false -- TODO(Jack): When done, maybe set to true
+   t.window.resizable = true
+
+   -- Disabled modules
+   t.modules.touch = false
+   t.modules.video = false
 end
