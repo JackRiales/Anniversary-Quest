@@ -178,8 +178,8 @@ end
 function Player:KeyPressed(key, scancode, isrepeat, isdebug)
    -- Debug press controls
    if (isdebug or false) then
-      if     key == '>' then self.speed = self.speed + 10 ; print("Speed = "..self.speed)
-      elseif key == '<' then self.speed = self.speed - 10 ; print("Speed = "..self.speed) end
+      if     key == '.' then self.speed = self.speed + 10 ; print("[DEBUG] Speed = "..self.speed)
+      elseif key == ',' then self.speed = self.speed - 10 ; print("[DEBUG] Speed = "..self.speed) end
    end
 end
 
