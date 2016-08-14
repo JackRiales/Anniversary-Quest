@@ -25,17 +25,23 @@
 require 'base.camera'
 local Player = require 'player'
 
+local sti = require 'lib.sti'
+
 -- Main globals
 DEBUG = true
 ASSET_PATH = "assets/"
 IMAGE_PATH = ASSET_PATH.."images/"
 FONT_PATH  = ASSET_PATH.."fonts/"
 MUSIC_PATH = ASSET_PATH.."music/"
+MAP_PATH   = "data/map-data/"
 
 -- Main load
 function love.load()
    -- Extra graphics settings
    love.graphics.setDefaultFilter("nearest","nearest")
+
+   -- Load map
+   map = sti(MAP_PATH.."test-map.lua")
 
    -- Load assets
    fntJoystix = love.graphics.newFont(FONT_PATH.."pixelfj.ttf", 8)
@@ -101,7 +107,8 @@ function love.update(dt)
       x = love.graphics.getWidth()/2 - (FrameBuffer.canvas:getWidth()*FrameBuffer.scale)/2,
       y = 0
    }
-   
+
+   map:update(dt)
    Cyan:Update(dt)
    Camera.setPosition(Cyan.entity:GetPosition().x-128, Cyan.entity:GetPosition().y-128)
 end
@@ -113,6 +120,9 @@ function love.draw()
    Camera.set()
    love.graphics.clear(50, 100, 75)
 
+   -- Draw map
+   map:draw()
+   
    -- Draw game
    Cyan:Draw()
 
