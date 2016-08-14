@@ -21,7 +21,7 @@ local texture_height= 16
 local sprite_tile_size = 16
 
 return {
-   texture_url = "assets/spr/SprYellowFly.png",
+   texture_url = "assets/images/YellowFly.png",
    sprite_name = "YellowFly",
    frame_duration = 0.10,
    animation_names = {"default"},

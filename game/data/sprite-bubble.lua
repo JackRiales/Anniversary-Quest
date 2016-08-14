@@ -21,7 +21,7 @@ local texture_height= 16
 local sprite_tile_size = 16
 
 return {
-   texture_url = "assets/spr/SprBubble.png",
+   texture_url = "assets/images/Bubble.png",
    sprite_name = "Bubble",
    frame_duration = 0.10,
    animation_names = {"default"},

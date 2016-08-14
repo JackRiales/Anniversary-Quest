@@ -27,6 +27,10 @@ local Player = require 'player'
 
 -- Main globals
 DEBUG = true
+ASSET_PATH = "assets/"
+IMAGE_PATH = ASSET_PATH.."images/"
+FONT_PATH  = ASSET_PATH.."fonts/"
+MUSIC_PATH = ASSET_PATH.."music/"
 
 -- Main load
 function love.load()
@@ -34,10 +38,9 @@ function love.load()
    love.graphics.setDefaultFilter("nearest","nearest")
 
    -- Load assets
-   fntJoystix = love.graphics.newFont("assets/fonts/pixelfj.ttf", 8)
-   sprDungeon = love.graphics.newImage("assets/spr/BGRoom-Dungeon.png")
-   sprCyanPortrait = love.graphics.newImage("assets/spr/CyanPortrait.png")
-   sprIcons   = love.graphics.newImage("assets/spr/SprIcons.png")
+   fntJoystix = love.graphics.newFont(FONT_PATH.."pixelfj.ttf", 8)
+   sprCyanPortrait = love.graphics.newImage(IMAGE_PATH.."CyanPortrait.png")
+   sprIcons   = love.graphics.newImage(IMAGE_PATH.."Icons.png")
 
    -- Icon quads
    qIconHeart = love.graphics.newQuad(0, 0, 16, 16, 80, 16)
@@ -47,7 +50,7 @@ function love.load()
    qIconKey   = love.graphics.newQuad(64, 0, 16, 16, 80, 16)
    
    -- Set cursor
-   imgCursor = love.graphics.newImage("assets/spr/Cursor.png")
+   imgCursor = love.graphics.newImage(IMAGE_PATH.."Cursor.png")
    Cursor = love.mouse.newCursor(imgCursor:getData(), imgCursor:getWidth()/2, imgCursor:getHeight()/2)
    love.mouse.setCursor(Cursor)
    
@@ -111,7 +114,6 @@ function love.draw()
    love.graphics.clear(50, 100, 75)
 
    -- Draw game
-   love.graphics.draw(sprDungeon, 0, 0)
    Cyan:Draw()
 
    -- Draw debug
