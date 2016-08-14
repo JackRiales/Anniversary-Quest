@@ -8,6 +8,9 @@ build/
 *.app
 *.dll
 
+# Map files
+*.tmx
+
 # Production art files
 .saves/
 *.ase
