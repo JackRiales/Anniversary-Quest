@@ -1,6 +1,9 @@
 # Comment files
 __*
 
+# Emacs temp files
+.#*
+
 # Build files
 build/
 *.love
