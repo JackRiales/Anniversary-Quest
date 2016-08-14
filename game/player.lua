@@ -277,7 +277,14 @@ function Player:DrawDebug(color)
 			   self.collider.rect.h)
    
    -- Print debug info
-   PrintWrapped(wp.x-16, wp.y, 10, {self.name,
+   love.graphics.setColor(0, 0, 0, 100)
+   love.graphics.rectangle("fill", wp.x-21, wp.y+5, 120, 48)
+   if color then
+      love.graphics.setColor(color.r, color.g, color.b)
+   else
+      love.graphics.setColor(self.color.r, self.color.g, self.color.b)
+   end
+   PrintWrapped(wp.x-16, wp.y+10, 10, {self.name,
 				    "P:"..Vec2.toString(self.entity:GetPosition()),
 				    "V:"..Vec2.toString(self.entity:GetVelocity()),
 				    "Shot:"..Vec2.toString(self.shot.direction).." "..tostring(self.shooting)})
