@@ -25,7 +25,7 @@
 require 'base.camera'
 local Player = require 'player'
 
-local sti = require 'lib.sti'
+local Map    = require 'map'
 lick = require 'lib.lick'
 lick.reset = true
 
@@ -48,7 +48,7 @@ function love.load()
    love.graphics.setDefaultFilter("nearest","nearest")
 
    -- Load map
-   map = sti(MAP_PATH.."test-map.lua")
+   map = Map.new(MAP_PATH.."test-map.lua")
 
    -- Load assets
    fntJoystix = love.graphics.newFont(FONT_PATH.."pixelfj.ttf", 8)
@@ -147,8 +147,7 @@ function love.draw()
 
    -- Draw map
    local cyanpos = Camera.position
-   map:setDrawRange(-cyanpos.x, -cyanpos.y, WINDOW_WIDTH, WINDOW_HEIGHT)
-   map:draw()
+   map.sti:setDrawRange(-cyanpos.x, -cyanpos.y, WINDOW_WIDTH, WINDOW_HEIGHT)
    
    -- Draw game
    Cyan:Draw()
