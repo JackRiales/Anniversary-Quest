@@ -24,7 +24,7 @@
 -- Dependencies
 require 'base.camera'
 local Player = require 'player'
-local Map    = require 'map'
+local Map    = require 'base.map'
 
 lick = require 'lib.lick'
 lick.reset = true
