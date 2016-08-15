@@ -11,16 +11,16 @@ This is by no means the most well written game, as I'm starting it less than 3 w
 (August 24).
 
 ### Todo ###
-[x] Walking around a tilemap
-[ ] Gamepad support :+1:
-[ ] Interactive buttons
-[ ] Entering a 'battle phase'
+- [x] Walking around a tilemap
+- [ ] Gamepad support :+1:
+- [ ] Interactive buttons
+- [ ] Entering a 'battle phase'
 
 ### Stretch Goals ###
 If I have time I'll want to do these things
 
-[ ] Second character (playable)
-[ ] Story and cutscenes????
+- [ ] Second character (playable)
+- [ ] Story and cutscenes????
 
 ### Credits ###
 This game was written by me! (Jack) With help from:
