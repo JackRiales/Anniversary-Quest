@@ -1,5 +1,5 @@
 # Anniversary Quest #
-## An Anniversary Gift, Written in LOVE <3 (Lua) ##
+## An Anniversary Gift, Written in LÖVE :two_hearts: (Lua) ##
 ---
 This is the second time I've given my long-time girlfriend (Cyan) a game of her very own
 for our anniversary. The first time, it was written in Game Maker. And alas, the project file is long gone!
@@ -12,9 +12,13 @@ This is by no means the most well written game, as I'm starting it less than 3 w
 
 ### Todo ###
 - [x] Walking around a tilemap
-- [ ] Gamepad support :+1:
-- [ ] Interactive buttons
+- [x] Gamepad support :+1:
+- [ ] Interactive, clickable buttons
+- [ ] Cross platform building (Win32, mac and linux)
 - [ ] Entering a 'battle phase'
+- [ ] RPG elements (stats and numbers and things)
+- [ ] Basic dialog
+- [ ] Basic inventory
 
 ### Stretch Goals ###
 If I have time I'll want to do these things
