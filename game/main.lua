@@ -24,23 +24,61 @@
 -- Dependencies
 require 'base.camera'
 local Player = require 'player'
-
 local Map    = require 'map'
+
 lick = require 'lib.lick'
 lick.reset = true
 
 -- Main globals
+-- TODO(Jack): Maybe move debug stuff to its own module, since there's so much of it
 DEBUG = true
-GUI   = true
+
+-- Debug Draw flags
+gDRAWMAP = true
+gDRAWGUI = true
 
 WINDOW_WIDTH = love.graphics.getWidth()
 WINDOW_HEIGHT = love.graphics.getHeight()
+PIXEL_WIDTH = 256
+PIXEL_HEIGHT = 256
+GUI_PIXEL_WIDTH = 128
+GUI_PIXEL_HEIGHT = 128
 
 ASSET_PATH = "assets/"
 IMAGE_PATH = ASSET_PATH.."images/"
 FONT_PATH  = ASSET_PATH.."fonts/"
 MUSIC_PATH = ASSET_PATH.."music/"
 MAP_PATH   = "data/map-data/"
+
+-- Helper functions for buffer scale and offset algs
+-- TODO(Jack) Move buffer stuff to its own module
+function gGetBufferScale(bufferHeight)
+   return love.graphics.getHeight()/bufferHeight
+end
+
+function gGetBufferOffset(width, scale)
+   return {
+      x = love.graphics.getWidth()/2 - (width * scale)/2,
+      y = 0
+   }
+end
+
+function gMakeBuffer(width, height)
+   local buffer = {}   
+   buffer.width  = width
+   buffer.height = height
+   buffer.canvas = love.graphics.newCanvas(buffer.width, buffer.height)
+   buffer.scale  = gGetBufferScale(buffer.canvas:getHeight())
+   buffer.offset = gGetBufferOffset(buffer.canvas:getWidth(), buffer.scale)
+   return buffer
+end
+
+function gUpdateBuffer(buffer, width, height)
+   buffer.width  = width
+   buffer.height = height
+   buffer.scale  = gGetBufferScale(buffer.canvas:getHeight())
+   buffer.offset = gGetBufferOffset(buffer.canvas:getWidth(), buffer.scale)
+end
 
 -- Main load
 function love.load()
@@ -63,22 +101,22 @@ function love.load()
    qIconCoin  = love.graphics.newQuad(32, 0, 16, 16, 80, 16)
    qIconBomb  = love.graphics.newQuad(48, 0, 16, 16, 80, 16)
    qIconKey   = love.graphics.newQuad(64, 0, 16, 16, 80, 16)
-   
+
+   -- Button quads
+   qButtonBattle= love.graphics.newQuad(0, 0, 16, 16, 80, 16)
+   qButtonSmile = love.graphics.newQuad(16, 0, 16, 16, 80, 16)
+   qButtonTalk  = love.graphics.newQuad(32, 0, 16, 16, 80, 16)
+   qButtonBribe = love.graphics.newQuad(48, 0, 16, 16, 80, 16)
+   qButtonRun   = love.graphics.newQuad(64, 0, 16, 16, 80, 16)
+
    -- Set cursor
    imgCursor = love.graphics.newImage(IMAGE_PATH.."gui/Cursor.png")
    Cursor = love.mouse.newCursor(imgCursor:getData(), imgCursor:getWidth()/2, imgCursor:getHeight()/2)
    love.mouse.setCursor(Cursor)
    
-   -- Drawing canvas
-   FrameBuffer = {}
-   FrameBuffer.width  = 256
-   FrameBuffer.height = 256
-   FrameBuffer.canvas = love.graphics.newCanvas(FrameBuffer.width, FrameBuffer.height)
-   FrameBuffer.scale  = love.graphics.getHeight()/FrameBuffer.canvas:getHeight()
-   FrameBuffer.offset = {
-      x = love.graphics.getWidth()/2 - (FrameBuffer.canvas:getWidth()*FrameBuffer.scale)/2,
-      y = 0
-   }
+   -- Drawing canvases
+   FrameBuffer = gMakeBuffer(PIXEL_WIDTH, PIXEL_HEIGHT)
+   GUIBuffer = gMakeBuffer(GUI_PIXEL_WIDTH, GUI_PIXEL_HEIGHT)
 
    -- Player object loading from definition file
    Cyan = Player.new("data.player-cyan")
@@ -97,8 +135,13 @@ function love.keypressed(key, scancode, isrepeat)
    -- Debug commands
    if DEBUG then
       if key == 'f1' then
-	 if GUI then GUI = false
-	 else GUI = true end
+	 if gDRAWGUI then gDRAWGUI = false
+	 else gDRAWGUI = true end
+      end
+
+      if key == 'f2' then
+	 if gDRAWMAP then gDRAWMAP = false
+	 else gDRAWMAP = true end
       end
    end
 
@@ -126,12 +169,8 @@ function love.update(dt)
    WINDOW_HEIGHT = love.graphics.getHeight()
 
    -- Update frame buffer based on current window state
-   FrameBuffer.canvas = love.graphics.newCanvas(FrameBuffer.width, FrameBuffer.height)
-   FrameBuffer.scale  = love.graphics.getHeight()/FrameBuffer.canvas:getHeight()
-   FrameBuffer.offset = {
-      x = love.graphics.getWidth()/2 - (FrameBuffer.canvas:getWidth()*FrameBuffer.scale)/2,
-      y = 0
-   }
+   gUpdateBuffer(FrameBuffer, PIXEL_WIDTH, PIXEL_HEIGHT)
+   gUpdateBuffer(GUIBuffer, GUI_PIXEL_WIDTH, GUI_PIXEL_HEIGHT)
 
    map:update(dt)
    Cyan:Update(dt)
@@ -148,6 +187,10 @@ function love.draw()
    -- Draw map
    local cyanpos = Camera.position
    map.sti:setDrawRange(-cyanpos.x, -cyanpos.y, WINDOW_WIDTH, WINDOW_HEIGHT)
+
+   if gDRAWMAP then
+      map:draw()
+   end
    
    -- Draw game
    Cyan:Draw()
@@ -161,13 +204,33 @@ function love.draw()
    
    -- Draw ui (just proof of concept, doesn't actually do anything)
    -- TODO(Jack): Draw GUI elements to their own canvas
-   if GUI then
+   if gDRAWGUI then
+      love.graphics.setCanvas(GUIBuffer.canvas)
+      love.graphics.clear()
+
+      -- Status bars
+      local barWidth = sprBars:getWidth()
       love.graphics.setColor(255,0,0)
-      love.graphics.rectangle("fill", 10, 10, sprBars:getWidth(), 8)
+      love.graphics.rectangle("fill", 0, 0, barWidth, 8)
       love.graphics.setColor(0,25,255)
-      love.graphics.rectangle("fill", 10, 18, sprBars:getWidth(), 8)
+      love.graphics.rectangle("fill", 0, 8, barWidth, 8)
       love.graphics.setColor(255,255,255)
-      love.graphics.draw(sprBars, 10, 10)
+      love.graphics.draw(sprBars, 0, 0)
+
+      -- Buttons
+      local btnWidth  = 16
+      local btnHeight = sprButtons:getHeight()
+      local margin    = 3
+      local xOffset   = GUI_PIXEL_WIDTH/2-btnWidth*5/2-margin*5
+      local yOffset   = GUI_PIXEL_HEIGHT-btnHeight-margin
+      love.graphics.setColor(0, 0, 0, 100)
+      love.graphics.rectangle("fill", 0, yOffset-2, GUI_PIXEL_WIDTH, GUI_PIXEL_HEIGHT)
+      love.graphics.setColor(255,255,255,255)
+      love.graphics.draw(sprButtons, qButtonBattle,btnWidth*0*margin/2+xOffset, yOffset)
+      love.graphics.draw(sprButtons, qButtonSmile, btnWidth*1*margin/2+xOffset, yOffset)
+      love.graphics.draw(sprButtons, qButtonTalk,  btnWidth*2*margin/2+xOffset, yOffset)
+      love.graphics.draw(sprButtons, qButtonBribe, btnWidth*3*margin/2+xOffset, yOffset)
+      love.graphics.draw(sprButtons, qButtonRun,   btnWidth*4*margin/2+xOffset, yOffset)
    end
    
    love.graphics.setCanvas()
@@ -179,6 +242,18 @@ function love.draw()
 		      0,
 		      FrameBuffer.scale,
 		      FrameBuffer.scale)
+
+   -- Draw GUI buffer
+   if gDRAWGUI then
+      love.graphics.setBlendMode("alpha", "premultiplied")
+      love.graphics.draw(GUIBuffer.canvas,
+			 GUIBuffer.offset.x,
+			 GUIBuffer.offset.y,
+			 0,
+			 GUIBuffer.scale,
+			 GUIBuffer.scale)
+      love.graphics.setBlendMode("alpha")
+   end
    
    -- Debug info
    if not DEBUG then return end
@@ -187,10 +262,9 @@ function love.draw()
 			   FrameBuffer.offset.y,
 			   FrameBuffer.canvas:getWidth()*FrameBuffer.scale,
 			   FrameBuffer.canvas:getHeight()*FrameBuffer.scale)
-   
-   love.graphics.setColor(0, 255, 0, 100)
-   love.graphics.rectangle("fill", 5, 5, 180, 50)
+   love.graphics.setColor(0, 0, 0, 100)
+   love.graphics.rectangle("fill", 5, WINDOW_HEIGHT-40, 180, 35)
    love.graphics.setColor(255, 255, 255)
-   love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, 10)
-   love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, 25)
+   love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, WINDOW_HEIGHT-35)
+   love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, WINDOW_HEIGHT-20)
 end
