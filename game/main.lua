@@ -50,10 +50,11 @@ function love.load()
 
    -- Load assets
    fntJoystix = love.graphics.newFont(FONT_PATH.."pixelfj.ttf", 8)
-   sprCyanPortrait = love.graphics.newImage(IMAGE_PATH.."CyanPortrait.png")
-   sprIcons   = love.graphics.newImage(IMAGE_PATH.."Icons.png")
-   sprBars    = love.graphics.newImage(IMAGE_PATH.."Bar.png")
-
+   sprCyanPortrait = love.graphics.newImage(IMAGE_PATH.."static/CyanPortrait.png")
+   sprIcons   = love.graphics.newImage(IMAGE_PATH.."gui/Icons.png")
+   sprBars    = love.graphics.newImage(IMAGE_PATH.."gui/Bar.png")
+   sprButtons = love.graphics.newImage(IMAGE_PATH.."gui/BattleButtons.png")
+   
    -- Icon quads
    qIconHeart = love.graphics.newQuad(0, 0, 16, 16, 80, 16)
    qIconPhantomHeart = love.graphics.newQuad(16, 0, 16, 16, 80, 16)
@@ -62,7 +63,7 @@ function love.load()
    qIconKey   = love.graphics.newQuad(64, 0, 16, 16, 80, 16)
    
    -- Set cursor
-   imgCursor = love.graphics.newImage(IMAGE_PATH.."Cursor.png")
+   imgCursor = love.graphics.newImage(IMAGE_PATH.."gui/Cursor.png")
    Cursor = love.mouse.newCursor(imgCursor:getData(), imgCursor:getWidth()/2, imgCursor:getHeight()/2)
    love.mouse.setCursor(Cursor)
    

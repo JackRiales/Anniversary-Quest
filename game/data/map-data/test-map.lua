@@ -18,7 +18,7 @@ return {
       tileheight = 16,
       spacing = 0,
       margin = 0,
-      image = "../../assets/images/Tiles.png",
+      image = "../../assets/images/tilemaps/Tiles.png",
       imagewidth = 128,
       imageheight = 48,
       tileoffset = {

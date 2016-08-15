@@ -27,7 +27,7 @@ local sprite_tile_size = 32
 
 return {
    -- Location of the image file
-   texture_url = "assets/images/Cyan.png",
+   texture_url = "assets/images/sheets/Cyan.png",
    
    -- Name used for this sprite sheet
    sprite_name = "Cyan",
