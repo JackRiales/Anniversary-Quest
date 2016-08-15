@@ -72,6 +72,14 @@ function gUpdateBuffer(buffer, width, height)
    buffer.offset = gGetBufferOffset(buffer.canvas:getWidth(), buffer.scale)
 end
 
+gPaused = false
+
+-- Temporary pause function
+function gTogglePause()
+   if gPaused then gPaused = false
+   else gPaused = true end
+end
+
 -- Main load
 function love.load()
    -- Extra graphics settings
@@ -81,7 +89,7 @@ function love.load()
    map = Map.new(GLOBAL.MAP_PATH.."test-map.lua")
 
    -- Load assets
-   fntJoystix = love.graphics.newFont(GLOBAL.FONT_PATH.."pixelfj.ttf", 8)
+   fntPixel = love.graphics.newFont(GLOBAL.FONT_PATH.."pixelfj.TTF", 8)
    sprCyanPortrait = love.graphics.newImage(GLOBAL.IMAGE_PATH.."static/CyanPortrait.png")
    sprIcons   = love.graphics.newImage(GLOBAL.IMAGE_PATH.."gui/Icons.png")
    sprBars    = love.graphics.newImage(GLOBAL.IMAGE_PATH.."gui/Bar.png")
@@ -137,6 +145,11 @@ function love.keypressed(key, scancode, isrepeat)
       end
    end
 
+   -- Pause
+   if key == 'p' or key == 'tab' then
+      gTogglePause()
+   end
+   
    -- F11 toggles fullscreen mode
    if key == 'f11' then
       love.window.setFullscreen(not love.window.getFullscreen(), "desktop")
@@ -155,6 +168,14 @@ function love.keypressed(key, scancode, isrepeat)
    Cyan:KeyPressed(key, scancode, isrepeat, DEBUG)
 end
 
+-- Main joystick button press
+function love.joystickpressed(joystick, button)
+   -- Pause on select button pressed
+   if button == 7 then
+      gTogglePause()
+   end
+end
+
 -- Main Update
 function love.update(dt)
    GLOBAL.WINDOW_WIDTH = love.graphics.getWidth()
@@ -163,6 +184,9 @@ function love.update(dt)
    -- Update frame buffer based on current window state
    gUpdateBuffer(FrameBuffer, GLOBAL.PIXEL_WIDTH, GLOBAL.PIXEL_HEIGHT)
    gUpdateBuffer(GUIBuffer, GLOBAL.GUI_PIXEL_WIDTH, GLOBAL.GUI_PIXEL_HEIGHT)
+
+   -- Everything past here should be affected by pause
+   if gPaused then return end
 
    map:update(dt)
    Cyan:Update(dt)
@@ -189,7 +213,7 @@ function love.draw()
 
    -- Draw debug
    if DEBUG then
-      love.graphics.setFont(fntJoystix)
+      love.graphics.setFont(fntPixel)
       Cyan:DrawDebug()
    end
    Camera.unset()
@@ -247,6 +271,12 @@ function love.draw()
 			 GUIBuffer.scale,
 			 GUIBuffer.scale)
       love.graphics.setBlendMode("alpha")
+   end
+
+   if gPaused then
+      love.graphics.setColor(0, 0, 0, 155)
+      love.graphics.rectangle("fill", 0, 0, GLOBAL.WINDOW_WIDTH, GLOBAL.WINDOW_HEIGHT)
+      love.graphics.setColor(255,255,255,255)
    end
    
    -- Debug info
