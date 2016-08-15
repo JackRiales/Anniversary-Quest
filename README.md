@@ -12,12 +12,14 @@ This is by no means the most well written game, as I'm starting it less than 3 w
 
 ### Credits ###
 This game was written by me! (Jack) With help from:
-     * [LÖVE2D](https://love2d.org), a Lua framework by Anders Rude
-     * [Simple Tiled Implementation (STI)](https://github.com/karai17/Simple-Tiled-Implementation), A very helpful tool for integrating Tiled into LÖVE2D games
-     * [Lick.lua](https://github.com/headchant/LICK), A teeny tiny live code editing library that helped me save a lot of time
+* [LÖVE2D](https://love2d.org), a Lua framework by Anders Rude
+* [Simple Tiled Implementation (STI)](https://github.com/karai17/Simple-Tiled-Implementation), A very helpful tool for integrating Tiled into LÖVE2D games
+* [Lick.lua](https://github.com/headchant/LICK), A teeny tiny live code editing library that helped me save a lot of time
 
 (So far) All of the art assets have been made by me. (This might change though!!)
 
 Music was made by Visager, and obtained from this [Free Music Archive](http://freemusicarchive.org/member/Visager/blog/Making_Music_for_Unknown_Worlds) page.
 You can find more music from this incredible individual by going to www.visager.us
 [Licensed under CC Attribution](https://creativecommons.org/licenses/by/4.0/)
+
+![Cyan Portrait][https://github.com/JackRiales/Anniversary-Quest/blob/master/game/assets/images/static/CyanPortrait.png?raw=true]
