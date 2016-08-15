@@ -23,32 +23,24 @@
 
 -- Dependencies
 require 'base.camera'
-local Player = require 'player'
+local GLOBAL = require 'global'
 local Map    = require 'base.map'
-
-lick = require 'lib.lick'
-lick.reset = true
+local Player = require 'player'
 
 -- Main globals
 -- TODO(Jack): Maybe move debug stuff to its own module, since there's so much of it
 DEBUG = true
 
+-- Live code editing library
+-- Debug only
+if DEBUG then
+   lick = require 'lib.lick'
+   lick.reset = true
+end
+
 -- Debug Draw flags
 gDRAWMAP = true
 gDRAWGUI = true
-
-WINDOW_WIDTH = love.graphics.getWidth()
-WINDOW_HEIGHT = love.graphics.getHeight()
-PIXEL_WIDTH = 256
-PIXEL_HEIGHT = 256
-GUI_PIXEL_WIDTH = 128
-GUI_PIXEL_HEIGHT = 128
-
-ASSET_PATH = "assets/"
-IMAGE_PATH = ASSET_PATH.."images/"
-FONT_PATH  = ASSET_PATH.."fonts/"
-MUSIC_PATH = ASSET_PATH.."music/"
-MAP_PATH   = "data/map-data/"
 
 -- Helper functions for buffer scale and offset algs
 -- TODO(Jack) Move buffer stuff to its own module
@@ -86,14 +78,14 @@ function love.load()
    love.graphics.setDefaultFilter("nearest","nearest")
 
    -- Load map
-   map = Map.new(MAP_PATH.."test-map.lua")
+   map = Map.new(GLOBAL.MAP_PATH.."test-map.lua")
 
    -- Load assets
-   fntJoystix = love.graphics.newFont(FONT_PATH.."pixelfj.ttf", 8)
-   sprCyanPortrait = love.graphics.newImage(IMAGE_PATH.."static/CyanPortrait.png")
-   sprIcons   = love.graphics.newImage(IMAGE_PATH.."gui/Icons.png")
-   sprBars    = love.graphics.newImage(IMAGE_PATH.."gui/Bar.png")
-   sprButtons = love.graphics.newImage(IMAGE_PATH.."gui/BattleButtons.png")
+   fntJoystix = love.graphics.newFont(GLOBAL.FONT_PATH.."pixelfj.ttf", 8)
+   sprCyanPortrait = love.graphics.newImage(GLOBAL.IMAGE_PATH.."static/CyanPortrait.png")
+   sprIcons   = love.graphics.newImage(GLOBAL.IMAGE_PATH.."gui/Icons.png")
+   sprBars    = love.graphics.newImage(GLOBAL.IMAGE_PATH.."gui/Bar.png")
+   sprButtons = love.graphics.newImage(GLOBAL.IMAGE_PATH.."gui/BattleButtons.png")
    
    -- Icon quads
    qIconHeart = love.graphics.newQuad(0, 0, 16, 16, 80, 16)
@@ -110,13 +102,13 @@ function love.load()
    qButtonRun   = love.graphics.newQuad(64, 0, 16, 16, 80, 16)
 
    -- Set cursor
-   imgCursor = love.graphics.newImage(IMAGE_PATH.."gui/Cursor.png")
+   imgCursor = love.graphics.newImage(GLOBAL.IMAGE_PATH.."gui/Cursor.png")
    Cursor = love.mouse.newCursor(imgCursor:getData(), imgCursor:getWidth()/2, imgCursor:getHeight()/2)
    love.mouse.setCursor(Cursor)
    
    -- Drawing canvases
-   FrameBuffer = gMakeBuffer(PIXEL_WIDTH, PIXEL_HEIGHT)
-   GUIBuffer = gMakeBuffer(GUI_PIXEL_WIDTH, GUI_PIXEL_HEIGHT)
+   FrameBuffer = gMakeBuffer(GLOBAL.PIXEL_WIDTH, GLOBAL.PIXEL_HEIGHT)
+   GUIBuffer = gMakeBuffer(GLOBAL.GUI_PIXEL_WIDTH, GLOBAL.GUI_PIXEL_HEIGHT)
 
    -- Player object loading from definition file
    Cyan = Player.new("data.player-cyan")
@@ -165,12 +157,12 @@ end
 
 -- Main Update
 function love.update(dt)
-   WINDOW_WIDTH = love.graphics.getWidth()
-   WINDOW_HEIGHT = love.graphics.getHeight()
+   GLOBAL.WINDOW_WIDTH = love.graphics.getWidth()
+   GLOBAL.WINDOW_HEIGHT = love.graphics.getHeight()
 
    -- Update frame buffer based on current window state
-   gUpdateBuffer(FrameBuffer, PIXEL_WIDTH, PIXEL_HEIGHT)
-   gUpdateBuffer(GUIBuffer, GUI_PIXEL_WIDTH, GUI_PIXEL_HEIGHT)
+   gUpdateBuffer(FrameBuffer, GLOBAL.PIXEL_WIDTH, GLOBAL.PIXEL_HEIGHT)
+   gUpdateBuffer(GUIBuffer, GLOBAL.GUI_PIXEL_WIDTH, GLOBAL.GUI_PIXEL_HEIGHT)
 
    map:update(dt)
    Cyan:Update(dt)
@@ -186,7 +178,7 @@ function love.draw()
 
    -- Draw map
    local cyanpos = Camera.position
-   map.sti:setDrawRange(-cyanpos.x, -cyanpos.y, WINDOW_WIDTH, WINDOW_HEIGHT)
+   map.sti:setDrawRange(-cyanpos.x, -cyanpos.y, GLOBAL.WINDOW_WIDTH, GLOBAL.WINDOW_HEIGHT)
 
    if gDRAWMAP then
       map:draw()
@@ -210,9 +202,11 @@ function love.draw()
 
       -- Status bars
       local barWidth = sprBars:getWidth()
-      love.graphics.setColor(255,0,0)
+      local lifeColor = {r=255, g=45, b=72}
+      local powerColor = {r=72, g=76, b=255}
+      love.graphics.setColor(lifeColor.r,lifeColor.g,lifeColor.b)
       love.graphics.rectangle("fill", 0, 0, barWidth, 8)
-      love.graphics.setColor(0,25,255)
+      love.graphics.setColor(powerColor.r,powerColor.g,powerColor.b)
       love.graphics.rectangle("fill", 0, 8, barWidth, 8)
       love.graphics.setColor(255,255,255)
       love.graphics.draw(sprBars, 0, 0)
@@ -221,10 +215,10 @@ function love.draw()
       local btnWidth  = 16
       local btnHeight = sprButtons:getHeight()
       local margin    = 3
-      local xOffset   = GUI_PIXEL_WIDTH/2-btnWidth*5/2-margin*5
-      local yOffset   = GUI_PIXEL_HEIGHT-btnHeight-margin
+      local xOffset   = GLOBAL.GUI_PIXEL_WIDTH/2-btnWidth*5/2-margin*5
+      local yOffset   = GLOBAL.GUI_PIXEL_HEIGHT-btnHeight-margin
       love.graphics.setColor(0, 0, 0, 100)
-      love.graphics.rectangle("fill", 0, yOffset-2, GUI_PIXEL_WIDTH, GUI_PIXEL_HEIGHT)
+      love.graphics.rectangle("fill", 0, yOffset-2, GLOBAL.GUI_PIXEL_WIDTH, GLOBAL.GUI_PIXEL_HEIGHT)
       love.graphics.setColor(255,255,255,255)
       love.graphics.draw(sprButtons, qButtonBattle,btnWidth*0*margin/2+xOffset, yOffset)
       love.graphics.draw(sprButtons, qButtonSmile, btnWidth*1*margin/2+xOffset, yOffset)
@@ -263,8 +257,8 @@ function love.draw()
 			   FrameBuffer.canvas:getWidth()*FrameBuffer.scale,
 			   FrameBuffer.canvas:getHeight()*FrameBuffer.scale)
    love.graphics.setColor(0, 0, 0, 100)
-   love.graphics.rectangle("fill", 5, WINDOW_HEIGHT-40, 180, 35)
+   love.graphics.rectangle("fill", 5, GLOBAL.WINDOW_HEIGHT-40, 180, 35)
    love.graphics.setColor(255, 255, 255)
-   love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, WINDOW_HEIGHT-35)
-   love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, WINDOW_HEIGHT-20)
+   love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, GLOBAL.WINDOW_HEIGHT-35)
+   love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, GLOBAL.WINDOW_HEIGHT-20)
 end
