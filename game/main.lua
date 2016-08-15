@@ -281,14 +281,22 @@ function love.draw()
    
    -- Debug info
    if not DEBUG then return end
+   local stats = love.graphics.getStats()
    love.graphics.rectangle("line",
 			   FrameBuffer.offset.x,
 			   FrameBuffer.offset.y,
 			   FrameBuffer.canvas:getWidth()*FrameBuffer.scale,
 			   FrameBuffer.canvas:getHeight()*FrameBuffer.scale)
-   love.graphics.setColor(0, 0, 0, 100)
-   love.graphics.rectangle("fill", 5, GLOBAL.WINDOW_HEIGHT-40, 180, 35)
+   love.graphics.setColor(255, 0, 0, 100)
+   love.graphics.rectangle("fill", 5, GLOBAL.WINDOW_HEIGHT-110, 180, 135)
    love.graphics.setColor(255, 255, 255)
    love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, GLOBAL.WINDOW_HEIGHT-35)
    love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, GLOBAL.WINDOW_HEIGHT-20)
+   love.graphics.print(string.format("Draw Calls: %d\nCanvas Switches: %d\nTexture Mem: %.2f MB\nImages: %d\nCanvases: %d\nFonts: %d",
+				     stats.drawcalls,
+				     stats.canvasswitches,
+				     stats.texturememory/1024/1024,
+				     stats.images,
+				     stats.canvases,
+				     stats.fonts), 10, GLOBAL.WINDOW_HEIGHT-100)
 end
