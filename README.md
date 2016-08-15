@@ -10,8 +10,17 @@ You know, why not!?
 This is by no means the most well written game, as I'm starting it less than 3 weeks before our anniversary
 (August 24).
 
-### TODO ###
+### Todo ###
+[x] Walking around a tilemap
+[ ] Gamepad support :+1:
+[ ] Interactive buttons
+[ ] Entering a 'battle phase'
 
+### Stretch Goals ###
+If I have time I'll want to do these things
+
+[ ] Second character (playable)
+[ ] Story and cutscenes????
 
 ### Credits ###
 This game was written by me! (Jack) With help from:
@@ -22,6 +31,4 @@ This game was written by me! (Jack) With help from:
 (So far) All of the art assets have been made by me. (This might change though!!)
 
 Music was made by Visager, and obtained from this [Free Music Archive](http://freemusicarchive.org/member/Visager/blog/Making_Music_for_Unknown_Worlds) page.
-You can find more music from this incredible individual by going to www.visager.us
-
-Licensed under [CC Attribution](https://creativecommons.org/licenses/by/4.0/)
+You can find more music from this incredible individual by going to www.visager.us | Licensed under [CC Attribution](https://creativecommons.org/licenses/by/4.0/)
