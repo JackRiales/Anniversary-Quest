@@ -26,6 +26,8 @@ require 'base.camera'
 local Player = require 'player'
 
 local sti = require 'lib.sti'
+lick = require 'lib.lick'
+lick.reset = true
 
 -- Main globals
 DEBUG = true
