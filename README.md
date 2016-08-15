@@ -22,4 +22,4 @@ Music was made by Visager, and obtained from this [Free Music Archive](http://fr
 You can find more music from this incredible individual by going to www.visager.us
 [Licensed under CC Attribution](https://creativecommons.org/licenses/by/4.0/)
 
-![Cyan Portrait][https://github.com/JackRiales/Anniversary-Quest/blob/master/game/assets/images/static/CyanPortrait.png?raw=true]
+![Cyan Portrait][https://github.com/JackRiales/Anniversary-Quest/blob/master/game/assets/images/static/CyanPortrait.png]
