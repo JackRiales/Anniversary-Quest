@@ -38,8 +38,8 @@ GLOBAL.GUI_PIXEL_HEIGHT = 128
 -- when I rearrange things. That gets to be a big hassle...
 GLOBAL.ASSET_PATH = "assets/"
 GLOBAL.IMAGE_PATH = GLOBAL.ASSET_PATH.."images/"
-GLOBAL.FONT_PATH  = GLOBAL.ASSET_PATH.."fonts/"
 GLOBAL.MUSIC_PATH = GLOBAL.ASSET_PATH.."music/"
+GLOBAL.FONT_PATH  = GLOBAL.ASSET_PATH.."fonts/"
 
 GLOBAL.DATA_PATH  = "data/"
 GLOBAL.MAP_PATH   = GLOBAL.DATA_PATH.."map-data/"
