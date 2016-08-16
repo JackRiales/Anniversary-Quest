@@ -28,9 +28,9 @@ If I have time I'll want to do these things
 
 ### Credits ###
 This game was written by me! (Jack) With help from:
-* [LÖVE2D](https://love2d.org), a Lua framework by Anders Rude
-* [Simple Tiled Implementation (STI)](https://github.com/karai17/Simple-Tiled-Implementation), by @karai17,A very helpful tool for integrating Tiled into LÖVE2D games
-* [Lick.lua](https://github.com/headchant/LICK), by @headchant, A teeny tiny live code editing library that helped me save a lot of time
+* [LÖVE2D](https://love2d.org), a Lua framework by [Anders Rude](https://bitbucket.org/rude/)
+* [Simple Tiled Implementation (STI)](https://github.com/karai17/Simple-Tiled-Implementation), by [karai17](https://github.com/karai17),A very helpful tool for integrating Tiled into LÖVE2D games
+* [Lick.lua](https://github.com/headchant/LICK), by [headchant](https://github.com/headchant), A teeny tiny live code editing library that helped me save a lot of time
 
 (So far) All of the art assets have been made by me. (This might change though!!)
 
