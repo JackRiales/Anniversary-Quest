@@ -88,20 +88,12 @@ function love.load()
    -- Load map
    map = Map.new(GLOBAL.MAP_PATH.."test-map.lua")
 
-   -- Load assets
-   fntPixel = love.graphics.newFont(GLOBAL.FONT_PATH.."pixelfj.TTF", 8)
-   sprCyanPortrait = love.graphics.newImage(GLOBAL.IMAGE_PATH.."static/CyanPortrait.png")
-   sprIcons   = love.graphics.newImage(GLOBAL.IMAGE_PATH.."gui/Icons.png")
-   sprBars    = love.graphics.newImage(GLOBAL.IMAGE_PATH.."gui/Bar.png")
-   sprButtons = love.graphics.newImage(GLOBAL.IMAGE_PATH.."gui/BattleButtons.png")
+   -- Asset references
+   local lg = love.graphics
+   fntPixel   = lg.newFont(GLOBAL.FONT_PATH.."pixelfj.TTF", 8)
+   sprBars    = lg.newImage(GLOBAL.IMAGE_PATH.."gui/Bar.png")
+   sprButtons = lg.newImage(GLOBAL.IMAGE_PATH.."gui/BattleButtons.png")
    
-   -- Icon quads
-   qIconHeart = love.graphics.newQuad(0, 0, 16, 16, 80, 16)
-   qIconPhantomHeart = love.graphics.newQuad(16, 0, 16, 16, 80, 16)
-   qIconCoin  = love.graphics.newQuad(32, 0, 16, 16, 80, 16)
-   qIconBomb  = love.graphics.newQuad(48, 0, 16, 16, 80, 16)
-   qIconKey   = love.graphics.newQuad(64, 0, 16, 16, 80, 16)
-
    -- Button quads
    qButtonBattle= love.graphics.newQuad(0, 0, 16, 16, 80, 16)
    qButtonSmile = love.graphics.newQuad(16, 0, 16, 16, 80, 16)
