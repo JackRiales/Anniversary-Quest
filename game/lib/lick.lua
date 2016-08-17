@@ -38,7 +38,7 @@ local function update(dt)
                 lick.debugoutput =  err .. "\n" 
             end 
         else
-            print("CHUNK LOADED\n")
+            -- print("CHUNK LOADED\n")
             lick.debugoutput = nil
         end
         if lick.reset then
