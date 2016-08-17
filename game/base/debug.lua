@@ -14,8 +14,12 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
+print("Loading debug libraries...")
+
+Debug = {}
+
 -- Global debug flags
-DEBUGFlags = {
+Debug.Flags = {
    UPDATE   = true, -- Turn off updates (except for debug commands)
    DRAW     = true, -- Turn this off to disable rendering completely
    DRAW_DBG = true, -- Whether or not to draw debug displays
@@ -28,7 +32,7 @@ DEBUGFlags = {
 local _messages = {}
 local _lineSpacing = 15
 
-local function DEBUGErrorHandler(err)
+function Debug.ErrorHandler(err)
    local msg = {}
    msg.text = err
    msg.color = {r=255, g=25, b=25}
@@ -36,8 +40,8 @@ local function DEBUGErrorHandler(err)
 end
 
 -- Draw errors onscreen
-local function DEBUGErrorDraw()
-   for i,v in messages do
+function Debug.ErrorDraw()
+   for i,v in ipairs(_messages) do
       love.graphics.setColor(v.color.r, v.color.g, v.color.b)
       love.graphics.print(v.text, 0, (i-1)*_lineSpacing)
    end
@@ -45,14 +49,31 @@ local function DEBUGErrorDraw()
 end
 
 -- Draw a user defined message to the screen as if it were an error
-function DEBUGLog(message, color)
+function Debug.Log(message, color)
    local msg = {}
    msg.text = message
    msg.color = color
    table.insert(_messages, msg)
 end
 
-function DEBUGDraw()
-   if not DEBUGFlags.DRAW or not DEBUGFlags.DRAW_DBG then return end
-   DEBUGErrorDraw()
+function Debug.Draw()
+   if not Debug.Flags.DRAW or not Debug.Flags.DRAW_DBG then return end
+
+   -- Draw errors onscreen
+   Debug.ErrorDraw()
+
+   -- Graphics stats
+   local stats = love.graphics.getStats()
+   love.graphics.setColor(255, 0, 0, 100)
+   love.graphics.rectangle("fill", 5, love.graphics.getHeight()-110, 180, 135)
+   love.graphics.setColor(255, 255, 255)
+   love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, love.graphics.getHeight()-35)
+   love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, love.graphics.getHeight()-20)
+   love.graphics.print(string.format("Draw Calls: %d\nCanvas Switches: %d\nTexture Mem: %.2f MB\nImages: %d\nCanvases: %d\nFonts: %d",
+				     stats.drawcalls,
+				     stats.canvasswitches,
+				     stats.texturememory/1024/1024,
+				     stats.images,
+				     stats.canvases,
+				     stats.fonts), 10, love.graphics.getHeight()-100)
 end
