@@ -24,25 +24,20 @@
 -- Dependencies
 require 'base.camera'
 local GLOBAL = require 'global'
+local Button = require 'base.button'
 local Map    = require 'base.map'
 local Player = require 'player'
-local Button = require 'button'
 
--- Main globals
--- TODO(Jack): Maybe move debug stuff to its own module, since there's so much of it
-DEBUG = true
+-- Require this module for a debug build
+-- Remove on release
+require 'base.debug'
 
 -- Live code editing library
 -- Debug only
-if DEBUG then
-   require 'debug'
+if Debug then
    lick = require 'lib.lick'
    lick.reset = true
 end
-
--- Debug Draw flags
-gDRAWMAP = true
-gDRAWGUI = true
 
 -- Helper functions for buffer scale and offset algs
 -- TODO(Jack) Move buffer stuff to its own module
@@ -125,20 +120,20 @@ end
 function love.keypressed(key, scancode, isrepeat)
    -- Check for toggle debug (remove on release)
    if key == "`" then
-      if DEBUG then DEBUG = false
-      else DEBUG = true end
+      if Debug.Flags.DRAW_DBG then Debug.Flags.DRAW_DBG = false
+      else Debug.Flags.DRAW_DBG = true end
    end
 
    -- Debug commands
-   if DEBUG then
+   if Debug then
       if key == 'f1' then
-	 if gDRAWGUI then gDRAWGUI = false
-	 else gDRAWGUI = true end
+	 if Debug.Flags.DRAW_GUI then Debug.Flags.DRAW_GUI = false
+	 else Debug.Flags.DRAW_GUI = true end
       end
 
       if key == 'f2' then
-	 if gDRAWMAP then gDRAWMAP = false
-	 else gDRAWMAP = true end
+	 if Debug.Flags.DRAW_MAP then Debug.Flags.DRAW_MAP = false
+	 else Debug.Flags.DRAW_MAP = true end
       end
    end
 
@@ -162,7 +157,7 @@ function love.keypressed(key, scancode, isrepeat)
    end
 
    -- Player keypress events
-   Cyan:KeyPressed(key, scancode, isrepeat, DEBUG)
+   Cyan:KeyPressed(key, scancode, isrepeat, Debug)
 end
 
 -- Main joystick button press
@@ -203,7 +198,7 @@ function love.draw()
    local cyanpos = Camera.position
    map.sti:setDrawRange(-cyanpos.x, -cyanpos.y, GLOBAL.WINDOW_WIDTH, GLOBAL.WINDOW_HEIGHT)
 
-   if gDRAWMAP then
+   if Debug and Debug.Flags.DRAW_MAP then
       map:draw()
    end
    
@@ -211,7 +206,7 @@ function love.draw()
    Cyan:Draw()
 
    -- Draw debug
-   if DEBUG then
+   if Debug.Flags.DRAW_DBG then
       love.graphics.setFont(fntPixel)
       Cyan:DrawDebug()
    end
@@ -219,7 +214,7 @@ function love.draw()
    
    -- Draw ui (just proof of concept, doesn't actually do anything)
    -- TODO(Jack): Draw GUI elements to their own canvas
-   if gDRAWGUI then
+   if Debug.Flags.DRAW_GUI then
       love.graphics.setCanvas(GUIBuffer.canvas)
       love.graphics.clear()
 
@@ -261,7 +256,7 @@ function love.draw()
 		      FrameBuffer.scale)
 
    -- Draw GUI buffer
-   if gDRAWGUI then
+   if Debug.Flags.DRAW_GUI then
       love.graphics.setBlendMode("alpha", "premultiplied")
       love.graphics.draw(GUIBuffer.canvas,
 			 GUIBuffer.offset.x,
@@ -279,25 +274,12 @@ function love.draw()
    end
    
    -- Debug info
-   if not DEBUG then return end
-   DEBUGDraw()
-   local stats = love.graphics.getStats()
+   if not Debug.Flags.DRAW_DBG then return end
+   Debug.Draw()
    love.graphics.rectangle("line",
 			   FrameBuffer.offset.x,
 			   FrameBuffer.offset.y,
 			   FrameBuffer.canvas:getWidth()*FrameBuffer.scale,
 			   FrameBuffer.canvas:getHeight()*FrameBuffer.scale)
-   love.graphics.setColor(255, 0, 0, 100)
-   love.graphics.rectangle("fill", 5, GLOBAL.WINDOW_HEIGHT-110, 180, 135)
-   love.graphics.setColor(255, 255, 255)
-   love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, GLOBAL.WINDOW_HEIGHT-35)
-   love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, GLOBAL.WINDOW_HEIGHT-20)
-   love.graphics.print(string.format("Draw Calls: %d\nCanvas Switches: %d\nTexture Mem: %.2f MB\nImages: %d\nCanvases: %d\nFonts: %d",
-				     stats.drawcalls,
-				     stats.canvasswitches,
-				     stats.texturememory/1024/1024,
-				     stats.images,
-				     stats.canvases,
-				     stats.fonts), 10, GLOBAL.WINDOW_HEIGHT-100)
    myButton:DrawDebug()
 end
