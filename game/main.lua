@@ -26,6 +26,7 @@ require 'base.camera'
 local GLOBAL = require 'global'
 local Map    = require 'base.map'
 local Player = require 'player'
+local Button = require 'button'
 
 -- Main globals
 -- TODO(Jack): Maybe move debug stuff to its own module, since there's so much of it
@@ -34,6 +35,7 @@ DEBUG = true
 -- Live code editing library
 -- Debug only
 if DEBUG then
+   require 'debug'
    lick = require 'lib.lick'
    lick.reset = true
 end
@@ -114,6 +116,9 @@ function love.load()
    Cyan = Player.new("data.player-cyan")
    Cyan.entity:SetOrigin(16,32)
    Cyan.entity:SetPosition(64, 64)
+
+   -- Testinb buttons...
+   myButton = Button.new({x=20, y=20, w=600, h=500}, function() print("hello!") end, function() print("hovering...") end)
 end
 
 -- Main input key-pressed
@@ -183,6 +188,8 @@ function love.update(dt)
    map:update(dt)
    Cyan:Update(dt)
    Camera.setPosition(Cyan.entity:GetPosition().x-128, Cyan.entity:GetPosition().y-128)
+
+   myButton:update(dt)
 end
 
 -- Main Draw
@@ -273,6 +280,7 @@ function love.draw()
    
    -- Debug info
    if not DEBUG then return end
+   DEBUGDraw()
    local stats = love.graphics.getStats()
    love.graphics.rectangle("line",
 			   FrameBuffer.offset.x,
@@ -291,4 +299,5 @@ function love.draw()
 				     stats.images,
 				     stats.canvases,
 				     stats.fonts), 10, GLOBAL.WINDOW_HEIGHT-100)
+   myButton:DrawDebug()
 end
