@@ -16,11 +16,12 @@
 
 print("Loading debug libraries...")
 
-Debug = {}
+local Debug = {}
 
 -- Global debug flags
 Debug.Flags = {
    UPDATE   = true, -- Turn off updates (except for debug commands)
+   FPS_MAN  = true, -- Manually handle frame limiting, instead of relying on vsync
    DRAW     = true, -- Turn this off to disable rendering completely
    DRAW_DBG = true, -- Whether or not to draw debug displays
    DRAW_MAP = true, -- Draw the map
@@ -77,3 +78,5 @@ function Debug.Draw()
 				     stats.canvases,
 				     stats.fonts), 10, love.graphics.getHeight()-100)
 end
+
+return Debug
