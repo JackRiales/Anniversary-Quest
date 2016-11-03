@@ -22,6 +22,9 @@ local GLOBAL = {}
 GLOBAL.WINDOW_WIDTH     = love.graphics.getWidth()
 GLOBAL.WINDOW_HEIGHT    = love.graphics.getHeight()
 
+-- Preferred FPS
+GLOBAL.FRAMERATE        = 60
+
 -- Frame buffer resolution
 -- Effectively, the resolution for everything in the main game display
 GLOBAL.PIXEL_WIDTH      = 256
