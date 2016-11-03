@@ -16,7 +16,7 @@
 
 local Vec2 = require 'base.vector'
 
-Camera = {}
+local Camera = {}
 Camera.position = Vec2.new()
 Camera.scale    = Vec2.new(1, 1)
 Camera.rotation = 0
@@ -58,3 +58,5 @@ end
 function Camera.setScale(x, y)
    Camera.scale = Vec2.new(x or 1, y or 1)
 end
+
+return Camera
