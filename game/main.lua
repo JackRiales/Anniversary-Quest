@@ -32,12 +32,6 @@ local Player = require 'player'
 -- Remove on release
 local Debug = require 'base.debug'
 
--- Live code editing library
--- Debug only
-if Debug then
-   lick = require 'lib.lick'
-   lick.reset = true
-end
 
 -- Helper functions for buffer scale and offset algs
 -- TODO(Jack) Move buffer stuff to its own module
