@@ -1,5 +1,5 @@
 # Anniversary Quest #
-## An Anniversary Gift, Written in LÖVE :two_hearts: (Lua) ##
+## An Anniversary Gift, Written in LÃ–VE :two_hearts: (Lua) ##
 ---
 This is the second time I've given my long-time girlfriend (Cyan) a game of her very own
 for our anniversary. The first time, it was written in Game Maker. And alas, the project file is long gone!
@@ -7,14 +7,11 @@ for our anniversary. The first time, it was written in Game Maker. And alas, the
 This time I thought it'd be fitting (and somewhat ironic) to write it in LOVE Lua, and open source it because...
 You know, why not!?
 
-This is by no means the most well written game, as I'm starting it less than 3 weeks before our anniversary
-(August 24).
-
 ### Todo ###
 - [x] Walking around a tilemap
 - [x] Gamepad support :+1:
-- [ ] Interactive, clickable buttons
-- [ ] Cross platform building (Win32, mac and linux)
+- [x] Interactive, clickable buttons
+- [x] Cross platform building (Win32, mac and linux)
 - [ ] Entering a 'battle phase'
 - [ ] RPG elements (stats and numbers and things)
 - [ ] Basic dialog
@@ -28,8 +25,8 @@ If I have time I'll want to do these things
 
 ### Credits ###
 This game was written by me! (Jack) With help from:
-* [LÖVE2D](https://love2d.org), a Lua framework by [Anders Rude](https://bitbucket.org/rude/)
-* [Simple Tiled Implementation (STI)](https://github.com/karai17/Simple-Tiled-Implementation), by [karai17](https://github.com/karai17),A very helpful tool for integrating Tiled into LÖVE2D games
+* [LÃ–VE2D](https://love2d.org), a Lua framework by [Anders Rude](https://bitbucket.org/rude/)
+* [Simple Tiled Implementation (STI)](https://github.com/karai17/Simple-Tiled-Implementation), by [karai17](https://github.com/karai17),A very helpful tool for integrating Tiled into LÃ–VE2D games
 * [Lick.lua](https://github.com/headchant/LICK), by [headchant](https://github.com/headchant), A teeny tiny live code editing library that helped me save a lot of time
 
 (So far) All of the art assets have been made by me. (This might change though!!)
