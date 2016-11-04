@@ -64,12 +64,6 @@ function gUpdateBuffer(buffer, width, height)
    buffer.offset = gGetBufferOffset(buffer.canvas:getWidth(), buffer.scale)
 end
 
--- Temporary pause function
-function gTogglePause()
-   if gPaused then gPaused = false
-   else gPaused = true end
-end
-
 -- Main load
 function love.load()
    -- Extra graphics settings
@@ -140,7 +134,8 @@ function love.keypressed(key, scancode, isrepeat)
 
    -- Pause
    if key == 'p' or key == 'tab' then
-      gTogglePause()
+      if gPaused then gPaused = false
+      else gPaused = true end
    end
 
    -- F11 toggles fullscreen mode
