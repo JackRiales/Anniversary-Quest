@@ -114,19 +114,19 @@ end
 -- Main input key-pressed
 function love.keypressed(key, scancode, isrepeat)
    -- Check for toggle debug (remove on release)
-   if key == "`" then
+   if key == "f1" then
       if Debug.Flags.DRAW_DBG then Debug.Flags.DRAW_DBG = false
       else Debug.Flags.DRAW_DBG = true end
    end
 
    -- Debug commands
    if Debug then
-      if key == 'f1' then
+      if key == 'f2' then
 	 if Debug.Flags.DRAW_GUI then Debug.Flags.DRAW_GUI = false
 	 else Debug.Flags.DRAW_GUI = true end
       end
 
-      if key == 'f2' then
+      if key == 'f3' then
 	 if Debug.Flags.DRAW_MAP then Debug.Flags.DRAW_MAP = false
 	 else Debug.Flags.DRAW_MAP = true end
       end

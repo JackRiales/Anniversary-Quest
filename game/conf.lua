@@ -14,6 +14,9 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
+-- Cupid debugging system
+require 'lib.cupid';
+
 function love.conf(t)
    t.identity = "AnniversaryQuest"
    t.accelerometerjoystick = false
