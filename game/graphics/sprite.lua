@@ -17,8 +17,6 @@
 -- Credit where credit's due, I got help from this tutorial here!
 -- http://www.buildandgun.com/2014/07/animated-sprites-in-love2d.html
 
-require "base.util"
-
 local Sprite = {}    -- Main class
 Sprite.Bank = {}     -- Map of all sprite definitions
 Sprite.Textures = {} -- Map of all loaded texture images
@@ -143,13 +141,13 @@ function Sprite:_pingPongUpdate()
       if self.cFrame < #self.sprite.animations[self.cAnimation] then
 	 self.cFrame = self.cFrame + 1
       else
-	 self.reverse = InvertBool(self.reverse)
+	 self.reverse = not self.reverse
       end
    else
       if self.cFrame > 1 then
 	 self.cFrame = self.cFrame - 1
       else
-	 self.reverse = InvertBool(self.reverse)
+	 self.reverse = not self.reverse
       end
    end
 end

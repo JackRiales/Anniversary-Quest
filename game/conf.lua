@@ -17,6 +17,7 @@
 -- Cupid debugging system
 require 'lib.cupid';
 
+-- LOVE2D Configuration
 function love.conf(t)
    t.identity = "AnniversaryQuest"
    t.accelerometerjoystick = false

@@ -18,7 +18,7 @@
 -- Defines a generic entity, that reacts to "physics" and
 -- can be interacted with (ideally).
 
-local Vec2 = require 'base.vector'
+local Vec2 = require 'math.vector'
 
 local Entity = {}
 Entity.__index = Entity

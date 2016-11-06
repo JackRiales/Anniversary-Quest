@@ -14,7 +14,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Vec2 = require 'base.vector'
+local Vec2 = require 'math.vector'
 
 local Camera = {}
 Camera.position = Vec2.new()

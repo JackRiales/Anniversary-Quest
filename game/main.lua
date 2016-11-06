@@ -22,47 +22,21 @@
 -- Anyway, I hope you enjoy.
 
 -- Dependencies
-local GLOBAL = require 'global'
-local Camera = require 'base.camera'
-local Button = require 'base.button'
-local Map    = require 'base.map'
-local Player = require 'player'
+local AQ     = require 'aq_conf'
+local Camera = require 'entities.camera'
+local Map    = require 'entities.map'
+local Player = require 'entities.player'
+local Button = require 'ui.button'
+local Canvas = require 'graphics.canvas'
 
--- Require this module for a debug build
--- Remove on release
-local Debug = require 'base.debug'
+-- Remove on Release --
+local Debug = {}
+Debug.DrawInfo = true
+Debug.DrawHelpers = true
+Debug.DrawGUI = true
+-- Remove on Release --
 
 gPaused = false
-
--- Helper functions for buffer scale and offset algs
--- TODO(Jack) Move buffer stuff to its own module
-function gGetBufferScale(bufferHeight)
-   return love.graphics.getHeight()/bufferHeight
-end
-
-function gGetBufferOffset(width, scale)
-   return {
-      x = love.graphics.getWidth()/2 - (width * scale)/2,
-      y = 0
-   }
-end
-
-function gMakeBuffer(width, height)
-   local buffer = {}
-   buffer.width  = width
-   buffer.height = height
-   buffer.canvas = love.graphics.newCanvas(buffer.width, buffer.height)
-   buffer.scale  = gGetBufferScale(buffer.canvas:getHeight())
-   buffer.offset = gGetBufferOffset(buffer.canvas:getWidth(), buffer.scale)
-   return buffer
-end
-
-function gUpdateBuffer(buffer, width, height)
-   buffer.width  = width
-   buffer.height = height
-   buffer.scale  = gGetBufferScale(buffer.canvas:getHeight())
-   buffer.offset = gGetBufferOffset(buffer.canvas:getWidth(), buffer.scale)
-end
 
 -- Main load
 function love.load()
@@ -70,33 +44,26 @@ function love.load()
    love.graphics.setDefaultFilter("nearest","nearest")
 
    -- Minimum frame time
-   min_dt = 1 / GLOBAL.FRAMERATE
+   min_dt = 1 / AQ.Framerate;
    next_time = love.timer.getTime()
-   
+
    -- Load map
-   map = Map.new(GLOBAL.MAP_PATH.."test-map.lua")
+   map = Map.new(AQ.MapPath.."test-map.lua")
 
    -- Asset references
    local lg = love.graphics
-   fntPixel   = lg.newFont(GLOBAL.FONT_PATH.."pixelfj.TTF", 8)
-   sprBars    = lg.newImage(GLOBAL.IMAGE_PATH.."gui/Bar.png")
-   sprButtons = lg.newImage(GLOBAL.IMAGE_PATH.."gui/BattleButtons.png")
-
-   -- Button quads
-   qButtonBattle= love.graphics.newQuad(0, 0, 16, 16, 80, 16)
-   qButtonSmile = love.graphics.newQuad(16, 0, 16, 16, 80, 16)
-   qButtonTalk  = love.graphics.newQuad(32, 0, 16, 16, 80, 16)
-   qButtonBribe = love.graphics.newQuad(48, 0, 16, 16, 80, 16)
-   qButtonRun   = love.graphics.newQuad(64, 0, 16, 16, 80, 16)
+   fntPixel   = lg.newFont(AQ.FontPath.."pixelfj.TTF", 8)
+   sprBars    = lg.newImage(AQ.ImagePath.."gui/Bar.png")
+   sprButtons = lg.newImage(AQ.ImagePath.."gui/BattleButtons.png")
 
    -- Set cursor
-   imgCursor = love.graphics.newImage(GLOBAL.IMAGE_PATH.."gui/Cursor.png")
+   imgCursor = love.graphics.newImage(AQ.ImagePath.."gui/Cursor.png")
    Cursor = love.mouse.newCursor(imgCursor:getData(), imgCursor:getWidth()/2, imgCursor:getHeight()/2)
    love.mouse.setCursor(Cursor)
 
    -- Drawing canvases
-   FrameBuffer = gMakeBuffer(GLOBAL.PIXEL_WIDTH, GLOBAL.PIXEL_HEIGHT)
-   GUIBuffer = gMakeBuffer(GLOBAL.GUI_PIXEL_WIDTH, GLOBAL.GUI_PIXEL_HEIGHT)
+   EntityCanvas = Canvas.new(AQ.CanvasWidth, AQ.CanvasHeight)
+   GUICanvas = Canvas.new(AQ.GUICanvasWidth, AQ.GUICanvasHeight)
 
    -- Player object loading from definition file
    Cyan = Player.new("data.player-cyan")
@@ -113,29 +80,24 @@ end
 
 -- Main input key-pressed
 function love.keypressed(key, scancode, isrepeat)
-   -- Check for toggle debug (remove on release)
-   if key == "f1" then
-      if Debug.Flags.DRAW_DBG then Debug.Flags.DRAW_DBG = false
-      else Debug.Flags.DRAW_DBG = true end
-   end
-
    -- Debug commands
    if Debug then
-      if key == 'f2' then
-	 if Debug.Flags.DRAW_GUI then Debug.Flags.DRAW_GUI = false
-	 else Debug.Flags.DRAW_GUI = true end
+      if key == "f1" then
+	    Debug.DrawInfo = not Debug.DrawInfo
       end
 
-      if key == 'f3' then
-	 if Debug.Flags.DRAW_MAP then Debug.Flags.DRAW_MAP = false
-	 else Debug.Flags.DRAW_MAP = true end
+      if key == "f2" then
+	    Debug.DrawHelpers = not Debug.DrawHelpers
+      end
+
+      if key == "f3" then
+	    Debug.DrawGUI = not Debug.DrawGUI
       end
    end
 
    -- Pause
    if key == 'p' or key == 'tab' then
-      if gPaused then gPaused = false
-      else gPaused = true end
+      gPaused = not gPaused;
    end
 
    -- F11 toggles fullscreen mode
@@ -160,7 +122,7 @@ end
 function love.joystickpressed(joystick, button)
    -- Pause on select button pressed
    if button == 7 then
-      gTogglePause()
+      gPaused = not gPaused
    end
 end
 
@@ -168,12 +130,9 @@ end
 function love.update(dt)
    next_time = next_time + min_dt
 
-   GLOBAL.WINDOW_WIDTH = love.graphics.getWidth()
-   GLOBAL.WINDOW_HEIGHT = love.graphics.getHeight()
-
    -- Update frame buffer based on current window state
-   gUpdateBuffer(FrameBuffer, GLOBAL.PIXEL_WIDTH, GLOBAL.PIXEL_HEIGHT)
-   gUpdateBuffer(GUIBuffer, GLOBAL.GUI_PIXEL_WIDTH, GLOBAL.GUI_PIXEL_HEIGHT)
+   EntityCanvas:UpdateSize(AQ.CanvasWidth, AQ.CanvasHeight)
+   GUICanvas:UpdateSize(AQ.GUICanvasWidth, AQ.GUICanvasHeight)
 
    -- Everything past here should be affected by pause
    if gPaused then return end
@@ -188,31 +147,29 @@ end
 -- Main Draw
 function love.draw()
    -- Draw game to canvas
-   love.graphics.setCanvas(FrameBuffer.canvas)
+   EntityCanvas:Set()
    Camera.set()
    love.graphics.clear(50, 100, 75)
 
    -- Draw map
    local cyanpos = Camera.position
-   map.sti:setDrawRange(-cyanpos.x, -cyanpos.y, GLOBAL.WINDOW_WIDTH, GLOBAL.WINDOW_HEIGHT)
-
-   if Debug and Debug.Flags.DRAW_MAP then
-      map:draw()
-   end
+   map.sti:setDrawRange(-cyanpos.x, -cyanpos.y, love.graphics.getWidth(), love.graphics.getHeight())
+   map:draw()
 
    -- Draw Cyan
    Cyan:Draw()
 
    -- Draw debug
-   if Debug.Flags.DRAW_DBG then
+   if Debug and Debug.DrawHelpers then
       love.graphics.setFont(fntPixel)
       Cyan:DrawDebug()
    end
+
    Camera.unset()
 
    -- Draw ui (just proof of concept, doesn't actually do anything)
-   if Debug.Flags.DRAW_GUI then
-      love.graphics.setCanvas(GUIBuffer.canvas)
+   if Debug and Debug.DrawGUI then
+      GUICanvas:Set()
       love.graphics.clear()
 
       -- Status bars
@@ -225,70 +182,55 @@ function love.draw()
       love.graphics.rectangle("fill", 0, 8, barWidth, 8)
       love.graphics.setColor(255,255,255)
       love.graphics.draw(sprBars, 0, 0)
-
-      -- Buttons
-      local btnWidth  = 16
-      local btnHeight = sprButtons:getHeight()
-      local margin    = 3
-      local xOffset   = GLOBAL.GUI_PIXEL_WIDTH/2-btnWidth*5/2-margin*5
-      local yOffset   = GLOBAL.GUI_PIXEL_HEIGHT-btnHeight-margin
-      love.graphics.setColor(0, 0, 0, 100)
-      love.graphics.rectangle("fill", 0, yOffset-2, GLOBAL.GUI_PIXEL_WIDTH, GLOBAL.GUI_PIXEL_HEIGHT)
-      love.graphics.setColor(255,255,255,255)
-      love.graphics.draw(sprButtons, qButtonBattle,btnWidth*0*margin/2+xOffset, yOffset)
-      love.graphics.draw(sprButtons, qButtonSmile, btnWidth*1*margin/2+xOffset, yOffset)
-      love.graphics.draw(sprButtons, qButtonTalk,  btnWidth*2*margin/2+xOffset, yOffset)
-      love.graphics.draw(sprButtons, qButtonBribe, btnWidth*3*margin/2+xOffset, yOffset)
-      love.graphics.draw(sprButtons, qButtonRun,   btnWidth*4*margin/2+xOffset, yOffset)
    end
 
+   -- Reset canvas
    love.graphics.setCanvas()
 
-   -- Draw the frame buffer
-   love.graphics.draw(FrameBuffer.canvas,
-		      FrameBuffer.offset.x,
-		      FrameBuffer.offset.y,
-		      0,
-		      FrameBuffer.scale,
-		      FrameBuffer.scale)
+   -- Draw the entity canvas
+   EntityCanvas:Draw()
 
    -- Draw GUI buffer
-   if Debug.Flags.DRAW_GUI then
+   if Debug.DrawGUI then
       love.graphics.setBlendMode("alpha", "premultiplied")
-      love.graphics.draw(GUIBuffer.canvas,
-			 GUIBuffer.offset.x,
-			 GUIBuffer.offset.y,
-			 0,
-			 GUIBuffer.scale,
-			 GUIBuffer.scale)
+      GUICanvas:Draw()
       love.graphics.setBlendMode("alpha")
    end
 
    -- Pause screen
    if gPaused then
       love.graphics.setColor(0, 0, 0, 155)
-      love.graphics.rectangle("fill", 0, 0, GLOBAL.WINDOW_WIDTH, GLOBAL.WINDOW_HEIGHT)
+      love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
       love.graphics.setColor(255,255,255,255)
    end
 
    -- Debug info
-   if Debug.Flags.DRAW_DBG then
-      Debug.Draw()
+   if Debug and Debug.DrawInfo then
+       local stats = love.graphics.getStats()
+       love.graphics.setColor(255, 0, 0, 100)
+       love.graphics.rectangle("fill", 5, love.graphics.getHeight()-110, 180, 135)
+       love.graphics.setColor(255, 255, 255)
+       love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, love.graphics.getHeight()-35)
+       love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, love.graphics.getHeight()-20)
+       love.graphics.print(string.format("Draw Calls: %d\nCanvas Switches: %d\nTexture Mem: %.2f MB\nImages: %d\nCanvases: %d\nFonts: %d",
+    				     stats.drawcalls,
+    				     stats.canvasswitches,
+    				     stats.texturememory/1024/1024,
+    				     stats.images,
+    				     stats.canvases,
+    				     stats.fonts), 10, love.graphics.getHeight()-100)
       love.graphics.rectangle("line",
-			      FrameBuffer.offset.x,
-			      FrameBuffer.offset.y,
-			      FrameBuffer.canvas:getWidth()*FrameBuffer.scale,
-			      FrameBuffer.canvas:getHeight()*FrameBuffer.scale)
-      myButton:DrawDebug()
+			      EntityCanvas.offset,
+			      0,
+			      EntityCanvas.buffer:getWidth()*EntityCanvas.scale,
+			      EntityCanvas.buffer:getHeight()*EntityCanvas.scale)
    end
 
    -- Manual framerate control
-   if Debug.Flags.FPS_MAN then
-      local cur_time = love.timer.getTime()
-      if next_time <= cur_time then
-	 next_time = cur_time
-	 return
-      end
-      love.timer.sleep(next_time - cur_time)
+   local cur_time = love.timer.getTime()
+   if next_time <= cur_time then
+      next_time = cur_time
+      return
    end
+   love.timer.sleep(next_time - cur_time)
 end

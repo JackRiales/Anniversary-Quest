@@ -14,12 +14,11 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-require 'base.util'
-require 'base.bounds'
-local Vec2   = require 'base.vector'
-local Entity = require 'base.entity'
-local Sprite = require 'base.sprite'
-local Collider = require 'base.collider'
+require 'math.bounds'
+
+local Vec2   = require 'math.vector'
+local Entity = require 'entities.entity'
+local Sprite = require 'graphics.sprite'
 
 Player = {}
 Player.__index = Player
@@ -81,13 +80,6 @@ function Player.new(def)
    self.sprite = Sprite.new(self.data.sprite)
    self.states = self.data.states
 
-   self.collider = {}
-   self.collider.width = 16
-   self.collider.height= 8
-   self.collider.rect = Collider.new(self.entity:GetPosition().x-self.collider.width/2,
-				     self.entity:GetPosition().y-self.collider.height/2,
-				     self.collider.width, self.collider.height)
-   
    return setmetatable(self, Player)
 end
 
@@ -169,15 +161,6 @@ function Player:Update(dt)
    -- Gather input
    self:GetMotionInput()
 
-   -- Set collider
-   self.collider.rect:Set(self.entity:GetPosition().x-self.collider.width/2,
-			  self.entity:GetPosition().y-self.collider.height/2,
-			  self.collider.width, self.collider.height)
-   local collisions = self.collider.rect:Check()
-   if #collisions > 1 then
-      -- TODO(Jack)
-   end
-
    -- Move and animate
    self:SetMove(Player.Axes)
    self:SetSpriteState(Player.Axes)
@@ -214,24 +197,21 @@ function Player:DrawDebug(color)
    -- Draw the origin point
    love.graphics.circle("fill", wp.x, wp.y, 3, 5)
 
-   -- Draw the collider
-   love.graphics.rectangle("line",
-			   self.collider.rect.x,
-			   self.collider.rect.y,
-			   self.collider.rect.w,
-			   self.collider.rect.h)
-   
    -- Print debug info
    love.graphics.setColor(0, 0, 0, 100)
-   love.graphics.rectangle("fill", wp.x-21, wp.y+5, 120, 48)
+   love.graphics.rectangle("fill", wp.x-21, wp.y+5, 95, 38)
    if color then
       love.graphics.setColor(color.r, color.g, color.b)
    else
       love.graphics.setColor(self.color.r, self.color.g, self.color.b)
    end
-   PrintWrapped(wp.x-16, wp.y+10, 10, {self.name,
-				    "P:"..Vec2.toString(self.entity:GetPosition()),
-				    "V:"..Vec2.toString(self.entity:GetVelocity())})
+   love.graphics.printf(self.name
+			   .. "\nP:" .. Vec2.toString(self.entity:GetPosition())
+			   .. "\nV:"..Vec2.toString(self.entity:GetVelocity()),
+			wp.x-16,
+			wp.y+10,
+			200,
+			"left");
    love.graphics.setColor(255,255,255)
 end
 
