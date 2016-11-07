@@ -34,7 +34,7 @@ return {
    },
    
    -- Sprite definition
-   sprite = "data.sprite-cyan",
+   sprite = "assets.data.sprite-cyan",
 
    -- Animation names
    states = {

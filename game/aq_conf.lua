@@ -27,7 +27,7 @@ AQ.AssetPath      = "assets/"
 AQ.ImagePath      = AQ.AssetPath.."images/"
 AQ.MusicPath      = AQ.AssetPath.."music/"
 AQ.FontPath       = AQ.AssetPath.."fonts/"
-AQ.DataPath       = "data/"
+AQ.DataPath       = AQ.AssetPath.."data/"
 AQ.MapPath        = AQ.DataPath.."map-data/"
 
 return AQ;

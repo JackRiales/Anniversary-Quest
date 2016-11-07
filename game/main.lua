@@ -14,13 +14,6 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
--- Anniversary Quest
--- by Jack Riales
---
--- P.S. If you find yourself reading this, I love you! Happy 9th.
--- I'm actually writing this on August 7th. Pretty crazy right?
--- Anyway, I hope you enjoy.
-
 -- Dependencies
 local AQ     = require 'aq_conf'
 local Camera = require 'entities.camera'
@@ -66,7 +59,7 @@ function love.load()
    GUICanvas = Canvas.new(AQ.GUICanvasWidth, AQ.GUICanvasHeight)
 
    -- Player object loading from definition file
-   Cyan = Player.new("data.player-cyan")
+   Cyan = Player.new("assets.data.player-cyan")
    Cyan.entity:SetOrigin(16,32)
    Cyan.entity:SetPosition(64, 64)
 
@@ -83,15 +76,15 @@ function love.keypressed(key, scancode, isrepeat)
    -- Debug commands
    if Debug then
       if key == "f1" then
-	    Debug.DrawInfo = not Debug.DrawInfo
+	 Debug.DrawInfo = not Debug.DrawInfo
       end
 
       if key == "f2" then
-	    Debug.DrawHelpers = not Debug.DrawHelpers
+	 Debug.DrawHelpers = not Debug.DrawHelpers
       end
 
       if key == "f3" then
-	    Debug.DrawGUI = not Debug.DrawGUI
+	 Debug.DrawGUI = not Debug.DrawGUI
       end
    end
 
@@ -206,19 +199,19 @@ function love.draw()
 
    -- Debug info
    if Debug and Debug.DrawInfo then
-       local stats = love.graphics.getStats()
-       love.graphics.setColor(255, 0, 0, 100)
-       love.graphics.rectangle("fill", 5, love.graphics.getHeight()-110, 180, 135)
-       love.graphics.setColor(255, 255, 255)
-       love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, love.graphics.getHeight()-35)
-       love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, love.graphics.getHeight()-20)
-       love.graphics.print(string.format("Draw Calls: %d\nCanvas Switches: %d\nTexture Mem: %.2f MB\nImages: %d\nCanvases: %d\nFonts: %d",
-    				     stats.drawcalls,
-    				     stats.canvasswitches,
-    				     stats.texturememory/1024/1024,
-    				     stats.images,
-    				     stats.canvases,
-    				     stats.fonts), 10, love.graphics.getHeight()-100)
+      local stats = love.graphics.getStats()
+      love.graphics.setColor(255, 0, 0, 100)
+      love.graphics.rectangle("fill", 5, love.graphics.getHeight()-110, 180, 135)
+      love.graphics.setColor(255, 255, 255)
+      love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, love.graphics.getHeight()-35)
+      love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, love.graphics.getHeight()-20)
+      love.graphics.print(string.format("Draw Calls: %d\nCanvas Switches: %d\nTexture Mem: %.2f MB\nImages: %d\nCanvases: %d\nFonts: %d",
+					stats.drawcalls,
+					stats.canvasswitches,
+					stats.texturememory/1024/1024,
+					stats.images,
+					stats.canvases,
+					stats.fonts), 10, love.graphics.getHeight()-100)
       love.graphics.rectangle("line",
 			      EntityCanvas.offset,
 			      0,
