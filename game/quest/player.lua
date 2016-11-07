@@ -17,7 +17,7 @@
 require 'engine.math.bounds'
 
 local Vec2   = require 'engine.math.vector'
-local Entity = require 'engine.entities.entity'
+local Entity = require 'engine.ecs.entity'
 local Sprite = require 'engine.graphics.sprite'
 
 Player = {}
