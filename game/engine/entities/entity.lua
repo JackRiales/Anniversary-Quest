@@ -18,7 +18,7 @@
 -- Defines a generic entity, that reacts to "physics" and
 -- can be interacted with (ideally).
 
-local Vec2 = require 'math.vector'
+local Vec2 = require 'engine.math.vector'
 
 local Entity = {}
 Entity.__index = Entity
@@ -50,9 +50,7 @@ function Entity:Update(dt)
 						 Vec2.scale(self.transform.velocity, dt)))
 end
 
---[[
-   Accessors and Mutators, for convenience
---]]
+-- TODO(Jack): This is ... awful. Remove this and format the system better
 function Entity:GetTransform() return self.transform end
 function Entity:GetPosition()  return self.transform.position end
 function Entity:GetVelocity()  return self.transform.velocity end

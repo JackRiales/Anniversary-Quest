@@ -14,11 +14,11 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-require 'math.bounds'
+require 'engine.math.bounds'
 
-local Vec2   = require 'math.vector'
-local Entity = require 'entities.entity'
-local Sprite = require 'graphics.sprite'
+local Vec2   = require 'engine.math.vector'
+local Entity = require 'engine.entities.entity'
+local Sprite = require 'engine.graphics.sprite'
 
 Player = {}
 Player.__index = Player

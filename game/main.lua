@@ -15,12 +15,13 @@
 --]]
 
 -- Dependencies
-local AQ     = require 'aq_conf'
-local Camera = require 'entities.camera'
-local Map    = require 'entities.map'
-local Player = require 'entities.player'
-local Button = require 'ui.button'
-local Canvas = require 'graphics.canvas'
+local AQ     = require 'quest.conf'
+local Canvas = require 'engine.graphics.canvas'
+local Camera = require 'engine.graphics.camera'
+local Map    = require 'engine.graphics.map'
+local Button = require 'engine.ui.button'
+
+local Player = require 'quest.player'
 
 -- Remove on Release --
 local Debug = {}
@@ -154,27 +155,27 @@ function love.draw()
 
    -- Draw debug
    if Debug and Debug.DrawHelpers then
-      love.graphics.setFont(fntPixel)
-      Cyan:DrawDebug()
+	  love.graphics.setFont(fntPixel)
+	  Cyan:DrawDebug()
    end
 
    Camera.unset()
 
    -- Draw ui (just proof of concept, doesn't actually do anything)
    if Debug and Debug.DrawGUI then
-      GUICanvas:Set()
-      love.graphics.clear()
+	  GUICanvas:Set()
+	  love.graphics.clear()
 
-      -- Status bars
-      local barWidth = sprBars:getWidth()
-      local lifeColor = {r=255, g=45, b=72}
-      local powerColor = {r=72, g=76, b=255}
-      love.graphics.setColor(lifeColor.r,lifeColor.g,lifeColor.b)
-      love.graphics.rectangle("fill", 0, 0, barWidth, 8)
-      love.graphics.setColor(powerColor.r,powerColor.g,powerColor.b)
-      love.graphics.rectangle("fill", 0, 8, barWidth, 8)
-      love.graphics.setColor(255,255,255)
-      love.graphics.draw(sprBars, 0, 0)
+	  -- Status bars
+	  local barWidth = sprBars:getWidth()
+	  local lifeColor = {r=255, g=45, b=72}
+	  local powerColor = {r=72, g=76, b=255}
+	  love.graphics.setColor(lifeColor.r,lifeColor.g,lifeColor.b)
+	  love.graphics.rectangle("fill", 0, 0, barWidth, 8)
+	  love.graphics.setColor(powerColor.r,powerColor.g,powerColor.b)
+	  love.graphics.rectangle("fill", 0, 8, barWidth, 8)
+	  love.graphics.setColor(255,255,255)
+	  love.graphics.draw(sprBars, 0, 0)
    end
 
    -- Reset canvas
@@ -185,45 +186,45 @@ function love.draw()
 
    -- Draw GUI buffer
    if Debug.DrawGUI then
-      love.graphics.setBlendMode("alpha", "premultiplied")
-      GUICanvas:Draw()
-      love.graphics.setBlendMode("alpha")
+	  love.graphics.setBlendMode("alpha", "premultiplied")
+	  GUICanvas:Draw()
+	  love.graphics.setBlendMode("alpha")
    end
 
    -- Pause screen
    if gPaused then
-      love.graphics.setColor(0, 0, 0, 155)
-      love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
-      love.graphics.setColor(255,255,255,255)
+	  love.graphics.setColor(0, 0, 0, 155)
+	  love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+	  love.graphics.setColor(255,255,255,255)
    end
 
    -- Debug info
    if Debug and Debug.DrawInfo then
-      local stats = love.graphics.getStats()
-      love.graphics.setColor(255, 0, 0, 100)
-      love.graphics.rectangle("fill", 5, love.graphics.getHeight()-110, 180, 135)
-      love.graphics.setColor(255, 255, 255)
-      love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, love.graphics.getHeight()-35)
-      love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, love.graphics.getHeight()-20)
-      love.graphics.print(string.format("Draw Calls: %d\nCanvas Switches: %d\nTexture Mem: %.2f MB\nImages: %d\nCanvases: %d\nFonts: %d",
+	  local stats = love.graphics.getStats()
+	  love.graphics.setColor(255, 0, 0, 100)
+	  love.graphics.rectangle("fill", 5, love.graphics.getHeight()-110, 180, 135)
+	  love.graphics.setColor(255, 255, 255)
+	  love.graphics.print(string.format("LOVE Ver: %d.%d.%d - %s",love.getVersion()), 10, love.graphics.getHeight()-35)
+	  love.graphics.print("FPS: "..tostring(love.timer.getFPS()), 10, love.graphics.getHeight()-20)
+	  love.graphics.print(string.format("Draw Calls: %d\nCanvas Switches: %d\nTexture Mem: %.2f MB\nImages: %d\nCanvases: %d\nFonts: %d",
 					stats.drawcalls,
 					stats.canvasswitches,
 					stats.texturememory/1024/1024,
 					stats.images,
 					stats.canvases,
 					stats.fonts), 10, love.graphics.getHeight()-100)
-      love.graphics.rectangle("line",
-			      EntityCanvas.offset,
-			      0,
-			      EntityCanvas.buffer:getWidth()*EntityCanvas.scale,
-			      EntityCanvas.buffer:getHeight()*EntityCanvas.scale)
+	  love.graphics.rectangle("line",
+				  EntityCanvas.offset,
+				  0,
+				  EntityCanvas.buffer:getWidth()*EntityCanvas.scale,
+				  EntityCanvas.buffer:getHeight()*EntityCanvas.scale)
    end
 
    -- Manual framerate control
    local cur_time = love.timer.getTime()
    if next_time <= cur_time then
-      next_time = cur_time
-      return
+	  next_time = cur_time
+	  return
    end
    love.timer.sleep(next_time - cur_time)
 end
