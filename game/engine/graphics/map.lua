@@ -20,7 +20,7 @@ Map = {}
 Map.__index = Map
 Map.Bank = {}
 
-function Map.load(path)
+local function Map.load(path)
    if not path then return nil end
    Map.Bank[path] = sti(path)
    return true

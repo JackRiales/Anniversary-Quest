@@ -23,7 +23,7 @@ Sprite.Textures = {} -- Map of all loaded texture images
 Sprite.__index = Sprite
 
 -- Creates a new sprite with the given definition file
-function Sprite.load(def)
+local function Sprite.load(def)
    -- Error check
    if not def then return nil end
 
