@@ -19,7 +19,7 @@ GameState.__index = GameState
 GameState.StateList = {}
 GameState.Current   = nil
 
-function GameState.RegisterNew(name, update, draw, enter, exit)
+function GameState.RegisterNew(name, enter, update, draw, exit)
 	local o  = {}
 	o.name   = name or "New Game State"
 	o.enter  = enter or nil
