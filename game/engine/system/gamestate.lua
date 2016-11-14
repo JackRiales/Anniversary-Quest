@@ -32,9 +32,13 @@ function GameState.RegisterNew(name, enter, update, draw, exit)
 end
 
 function GameState:Set()
-	GameState.Current.exit()
+	if GameState.Current and type(GameState.Current.exit) == "function" then
+		GameState.Current.exit()
+	end
 	GameState.Current = GameState.StateList[self.name]
-	GameState.Current.enter()
+	if GameState.Current and type(GameState.Current.enter) == "function" then
+		GameState.Current.enter()
+	end
 end
 
 function GameState.Update()
