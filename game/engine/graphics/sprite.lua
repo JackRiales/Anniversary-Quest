@@ -113,8 +113,8 @@ function Sprite:Draw(position, angle, scale)
       position.x,
       position.y,
       math.rad(angle),
-      scale.x,
-      scale.y,
+      scale,
+      scale,
       self.origin.x,
       self.origin.y
    )
