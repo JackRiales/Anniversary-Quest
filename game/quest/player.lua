@@ -174,13 +174,13 @@ end
 -- Player draw event
 function Player:Draw()
    -- Draw shadow
-   local shadowPos = self.entity:GetPosition()
+   local shadowPos = self.transform.Position
    love.graphics.setColor(0, 0, 0, 100)
    love.graphics.ellipse("fill", shadowPos.x, shadowPos.y, 8, 4)
    love.graphics.setColor(255,255,255,255)
 
    -- Draw Sprite
-   self.sprite:Draw(self.entity.transform)
+   self.sprite:Draw(self.transform.Position, self.transform.Rotation, self.transform.Scale)
 end
 
 -- Player debug draw event
@@ -190,7 +190,7 @@ function Player:DrawDebug(color)
    else
       love.graphics.setColor(self.color.r, self.color.g, self.color.b)
    end
-   local wp = self.entity:GetPosition()
+   local wp = self.transform.Position
 
    -- Draw the origin point
    love.graphics.circle("fill", wp.x, wp.y, 3, 5)
@@ -204,8 +204,8 @@ function Player:DrawDebug(color)
       love.graphics.setColor(self.color.r, self.color.g, self.color.b)
    end
    love.graphics.printf(self.name
-			   .. "\nP:" .. Vec2.toString(self.entity:GetPosition())
-			   .. "\nV:"..Vec2.toString(self.entity:GetVelocity()),
+			   .. "\nP:" .. Vec2.toString(self.transform.Position)
+			   .. "\nV:"..Vec2.toString(self.transform.Position),
 			wp.x-16,
 			wp.y+10,
 			200,
