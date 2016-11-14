@@ -24,7 +24,7 @@ function Transform.new(position, rotation, scale)
   o._type    = "Transform"            -- Type validator
   o.Position = position or Vec2.new() -- World position
   o.Rotation = rotation or 0          -- Rotation angle (in degrees; casted to rad during draw)
-  o.Scale    = scale    or 0          -- Scale factor (uniform)
+  o.Scale    = scale    or 1          -- Scale factor (uniform)
   o.Parent   = nil                    -- Parent transform
   o.Children = {}                     -- Child transforms
   return setmetatable(o, Transform)
