@@ -109,11 +109,17 @@ end
 
 -- Sets the movement vector based on the given vector (input axes)
 function Player:SetMove(v)
-   -- If the axes are 0, introduce a stopping force (opposite velocity)
+  --[[
+  -- If the axes are 0, introduce a stopping force (opposite velocity)
    if v.x == 0 and v.y == 0 then
       v = Vec2.threshold(Vec2.scale(self.entity:GetVelocity(), -1), 1)
    end
 
+   -- TODO(Jack) Decide to have motion properties in Transform or
+   --            loosely inside objects. It's not... THAT necessary
+   --            for ~everything~ to have motion properties.
+
+   
    -- Set the acceleration from the axes
    local motion = Vec2.scale(Vec2.normalized(v), self.accel)
    self.entity:SetAcceleration(motion.x, motion.y)
@@ -121,6 +127,7 @@ function Player:SetMove(v)
    -- Ensure velocity never crosses speed
    local trimmedVel = Vec2.trim(self.entity:GetVelocity(), self.speed)
    self.entity:SetVelocity(trimmedVel.x, trimmedVel.y)
+   --]]
 end
 
 -- Sets the sprite state, based on the given vector (input axes)
@@ -157,7 +164,7 @@ function Player:Update(dt)
    self:SetSpriteState(self.axes)
 
    -- Update transforms and sprite
-   self.entity:Update(dt)
+   -- self.entity:Update(dt)
    self.sprite:Update(dt)
 
    -- Reset
