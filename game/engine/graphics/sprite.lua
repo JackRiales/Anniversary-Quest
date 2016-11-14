@@ -101,18 +101,18 @@ function Sprite:Update(dt)
    end
 end
 
-function Sprite:Draw(transform)
+function Sprite:Draw(position, angle, scale)
    if not self.flDraw then return end
    love.graphics.draw(
-      Sprite.Textures[self.sprite.texture_url],
-      self.sprite.animations[self.cAnimation][self.cFrame],
-      transform.position.x,
-      transform.position.y,
-      math.rad(transform.angle),
-      transform.scale.x,
-      transform.scale.y,
-      transform.origin.x,
-      transform.origin.y
+      Sprite.Textures[self.texture_url],
+      self.animations[self.cAnimation][self.cFrame],
+      position.x,
+      position.y,
+      math.rad(angle),
+      scale.x,
+      scale.y,
+      self.origin.x,
+      self.origin.y
    )
 end
 
