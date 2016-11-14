@@ -37,6 +37,7 @@ This game was written by me! (Jack) With help from:
 * [LÖVE2D](https://love2d.org), a Lua framework by [Anders Rude](https://bitbucket.org/rude/)
 * [Simple Tiled Implementation (STI)](https://github.com/karai17/Simple-Tiled-Implementation), by [karai17](https://github.com/karai17),A very helpful tool for integrating Tiled into LÖVE2D games
 * [Cupid] (https://bitbucket.org/basicer/cupid), A Love2D debug console by Basicer on Bitbucket.
+* [Cargo] (https://github.com/bjornbytes/cargo), A Love2D asset loader by [BjornBytes](https://github.com/bjornbytes)
 
 Music was made by Visager, and obtained from this [Free Music Archive](http://freemusicarchive.org/member/Visager/blog/Making_Music_for_Unknown_Worlds) page.
 You can find more music from this incredible individual by going to www.visager.us | Licensed under [CC Attribution](https://creativecommons.org/licenses/by/4.0/)
