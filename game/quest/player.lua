@@ -17,7 +17,7 @@
 require 'engine.math.bounds'
 
 local Vec2   = require 'engine.math.vector'
-local Entity = require 'engine.ecs.entity'
+local Transform = require 'engine.system.transform'
 local Sprite = require 'engine.graphics.sprite'
 
 Player = {}
@@ -48,37 +48,13 @@ function Player.new(def)
       if not Player.load(def) then return nil end
    end
 
-   local self = {}
-   self.data   = Player.Bank[def]
+   local self = Player.Bank[def]
 
-   self.name   = self.data.name
-   self.color  = self.data.color
-   self.speed  = self.data.speed
-   self.accel  = self.data.accel
+   self.axes     = Vec2.new()
+   self.inputId  = 1 -- joystick id
 
-   self.controls = {}
-   self.controls.keys = {
-      moveUp   = 'w',
-      moveDown = 's',
-      moveLeft = 'a',
-      moveRight= 'd',
-      shootUp   = 'up',
-      shootDown = 'down',
-      shootLeft = 'left',
-      shootRight= 'right',
-   }
-   self.controls.joystick = {
-      moveUp   = "u", -- hat up
-      moveDown = "d", -- hat down
-      moveLeft = "l", -- hat left
-      moveRight= "r"  -- hat right
-   }
-   self.controls.jid  = 1 -- joystick id
-   
-   self.entity = Entity.new(self.data.name)
-   
-   self.sprite = Sprite.new(self.data.sprite)
-   self.states = self.data.states
+   self.transform = Transform.new()
+   self.sprite = Sprite.new(self.sprite)
 
    return setmetatable(self, Player)
 end
