@@ -57,9 +57,8 @@ function Sprite.new(def)
    end
 
    -- We're good! Create the object
-   local self = {}
-   self.sprite     = Sprite.Bank[def]
-   self.cAnimation = Sprite.Bank[def].animation_names[1]
+   local self = Sprite.Bank[def]
+   self.cAnimation = self.animation_names[1]
    self.cFrame     = 1
    self.elapTime   = 0
    self.timeScale  = 1
@@ -88,7 +87,7 @@ function Sprite:Update(dt)
    self.elapTime = self.elapTime + dt
 
    -- Next frame reached
-   if self.elapTime > self.sprite.frame_duration * self.timeScale then
+   if self.elapTime > self.frame_duration * self.timeScale then
       if self.loopType == "sequence" then
 	 self:_sequenceUpdate()
       elseif self.loopType == "pingpong" then
@@ -101,7 +100,7 @@ function Sprite:Update(dt)
    end
 
    -- Safety check
-   if self.cFrame > #self.sprite.animations[self.cAnimation] then
+   if self.cFrame > #self.animations[self.cAnimation] then
       self.cFrame = 1
    end
 end
@@ -127,7 +126,7 @@ end
 --------------------------------------------------------
 function Sprite:_sequenceUpdate()
    if not self.reverse then
-      if self.cFrame < #self.sprite.animations[self.cAnimation] then
+      if self.cFrame < #self.animations[self.cAnimation] then
 	 self.cFrame = self.cFrame + 1
       else
 	 self.cFrame = 1
@@ -136,14 +135,14 @@ function Sprite:_sequenceUpdate()
       if self.cFrame > 1 then
 	 self.cFrame = self.cFrame - 1
       else
-	 self.cFrame = #self.sprite.animations[self.cAnimation] - 1
+	 self.cFrame = #self.animations[self.cAnimation] - 1
       end
    end
 end
 
 function Sprite:_pingPongUpdate()
    if not self.reverse then
-      if self.cFrame < #self.sprite.animations[self.cAnimation] then
+      if self.cFrame < #self.animations[self.cAnimation] then
 	 self.cFrame = self.cFrame + 1
       else
 	 self.reverse = not self.reverse
@@ -158,7 +157,7 @@ function Sprite:_pingPongUpdate()
 end
 
 function Sprite:_stopUpdate()
-   if self.cFrame < #self.sprite.animations[self.cAnimation] then
+   if self.cFrame < #self.animations[self.cAnimation] then
       self.cFrame = self.cFrame + 1
    end
 end
