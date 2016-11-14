@@ -34,42 +34,42 @@ gPaused = false
 
 -- Main load
 function love.load()
-   -- Extra graphics settings
-   love.graphics.setDefaultFilter("nearest","nearest")
+  -- Extra graphics settings
+  love.graphics.setDefaultFilter("nearest","nearest")
 
-   -- Minimum frame time
-   min_dt = 1 / AQ.Framerate;
-   next_time = love.timer.getTime()
+  -- Minimum frame time
+  min_dt = 1 / AQ.Framerate;
+  next_time = love.timer.getTime()
 
-   -- Load map
-   map = Map.new(AQ.MapPath.."test-map.lua")
+  -- Load map
+  map = Map.new(AQ.MapPath.."test-map.lua")
 
-   -- Asset references
-   local lg = love.graphics
-   fntPixel   = lg.newFont(AQ.FontPath.."pixelfj.TTF", 8)
-   sprBars    = lg.newImage(AQ.ImagePath.."gui/Bar.png")
-   sprButtons = lg.newImage(AQ.ImagePath.."gui/BattleButtons.png")
+  -- Asset references
+  local lg = love.graphics
+  fntPixel   = lg.newFont(AQ.FontPath.."pixelfj.TTF", 8)
+  sprBars    = lg.newImage(AQ.ImagePath.."gui/Bar.png")
+  sprButtons = lg.newImage(AQ.ImagePath.."gui/BattleButtons.png")
 
-   -- Set cursor
-   imgCursor = love.graphics.newImage(AQ.ImagePath.."gui/Cursor.png")
-   Cursor = love.mouse.newCursor(imgCursor:getData(), imgCursor:getWidth()/2, imgCursor:getHeight()/2)
-   love.mouse.setCursor(Cursor)
+  -- Set cursor
+  imgCursor = love.graphics.newImage(AQ.ImagePath.."gui/Cursor.png")
+  Cursor = love.mouse.newCursor(imgCursor:getData(), imgCursor:getWidth()/2, imgCursor:getHeight()/2)
+  love.mouse.setCursor(Cursor)
 
-   -- Drawing canvases
-   EntityCanvas = Canvas.new(AQ.CanvasWidth, AQ.CanvasHeight)
-   GUICanvas = Canvas.new(AQ.GUICanvasWidth, AQ.GUICanvasHeight)
+  -- Drawing canvases
+  EntityCanvas = Canvas.new(AQ.CanvasWidth, AQ.CanvasHeight)
+  GUICanvas = Canvas.new(AQ.GUICanvasWidth, AQ.GUICanvasHeight)
 
-   -- Player object loading from definition file
-   Cyan = Player.new("assets.data.player-cyan")
-   Cyan.entity:SetOrigin(16,32)
-   Cyan.entity:SetPosition(64, 64)
+  -- Player object loading from definition file
+  Cyan = Player.new("assets.data.player-cyan")
+  Cyan.sprite.origin = Vec2.new(16,32)
+  Cyan.transform.Position = Vec2.new(64, 64)
 
-   -- Testinb buttons...
-   myButton = Button.new(
-      {x=20, y=20, w=600, h=500},
-      function() print("hello!") end,
-      function() print("hovering...") end
-   )
+  -- Testinb buttons...
+  myButton = Button.new(
+    {x=20, y=20, w=600, h=500},
+    function() print("hello!") end,
+    function() print("hovering...") end
+  )
 end
 
 -- Main input key-pressed

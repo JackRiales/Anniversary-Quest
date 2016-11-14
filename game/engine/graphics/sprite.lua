@@ -17,6 +17,8 @@
 -- Credit where credit's due, I got help from this tutorial here!
 -- http://www.buildandgun.com/2014/07/animated-sprites-in-love2d.html
 
+local Vec2 = require 'engine.math.vector'
+
 local Sprite = {}    -- Main class
 Sprite.Bank = {}     -- Map of all sprite definitions
 Sprite.Textures = {} -- Map of all loaded texture images
@@ -61,6 +63,9 @@ function Sprite.new(def)
    self.cFrame     = 1
    self.elapTime   = 0
    self.timeScale  = 1
+
+   -- Drawing origin point
+   self.origin     = Vec2.new(self.sprite_size / 2, self.sprite_size / 2)
 
    -- Loop type affects how frames change
    -- Sequence: Simple 1.2.3.1 loop
