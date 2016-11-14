@@ -23,7 +23,22 @@ local Sprite = require 'engine.graphics.sprite'
 Player = {}
 Player.__index = Player
 Player.Bank = {}
-Player.Axes = Vec2.new()
+
+-- Control configurations
+Player.Controls = {}
+Player.Controls.Keys = {
+  moveUp   = 'w',
+  moveDown = 's',
+  moveLeft = 'a',
+  moveRight= 'd',
+}
+
+Player.Controls.Joystick = {
+  moveUp   = "u", -- hat up
+  moveDown = "d", -- hat down
+  moveLeft = "l", -- hat left
+  moveRight= "r"  -- hat right
+}
 
 -- Loads a player definition file
 function Player.load(def)
@@ -60,18 +75,18 @@ function Player.new(def)
 end
 
 function Player:SetKeyboardControls(controls)
-   self.controls.keys.moveUp   = controls.moveUp   or "w"
-   self.controls.keys.moveDown = controls.moveDown or "s"
-   self.controls.keys.moveLeft = controls.moveLeft or "a"
-   self.controls.keys.moveRight= controls.moveRight or "d"
+   Player.Controls.Keys.moveUp   = controls.moveUp   or "w"
+   Player.Controls.Keys.moveDown = controls.moveDown or "s"
+   Player.Controls.Keys.moveLeft = controls.moveLeft or "a"
+   Player.Controls.Keys.moveRight= controls.moveRight or "d"
 end
 
 function Player:GetMotionInput()
    -- Check keyboard input
-   if     love.keyboard.isDown(self.controls.keys.moveUp)    then Player.Axes.y = -1
-   elseif love.keyboard.isDown(self.controls.keys.moveDown)  then Player.Axes.y =  1 end
-   if     love.keyboard.isDown(self.controls.keys.moveLeft)  then Player.Axes.x = -1
-   elseif love.keyboard.isDown(self.controls.keys.moveRight) then Player.Axes.x =  1 end
+   if     love.keyboard.isDown(Player.Controls.Keys.moveUp)    then self.axes.y = -1
+   elseif love.keyboard.isDown(Player.Controls.Keys.moveDown)  then self.axes.y =  1 end
+   if     love.keyboard.isDown(Player.Controls.Keys.moveLeft)  then self.axes.x = -1
+   elseif love.keyboard.isDown(Player.Controls.Keys.moveRight) then self.axes.x =  1 end
 
    -- Check joystick axes
    if love.joystick.getJoystickCount() < 1 then return end
@@ -85,10 +100,10 @@ function Player:GetMotionInput()
    -- Check d-pad
    if Player.Axes.x == 0 and Player.Axes.y == 0 then
       local hat = joystick:getHat(1)
-      if     string.find(hat, self.controls.joystick.moveUp)    then Player.Axes.y = -1
-      elseif string.find(hat, self.controls.joystick.moveDown)  then Player.Axes.y =  1 end
-      if     string.find(hat, self.controls.joystick.moveLeft)  then Player.Axes.x = -1
-      elseif string.find(hat, self.controls.joystick.moveRight) then Player.Axes.x =  1 end
+      if     string.find(hat, Player.Controls.Joystick.moveUp)    then self.axes.y = -1
+      elseif string.find(hat, Player.Controls.Joystick.moveDown)  then self.axes.y =  1 end
+      if     string.find(hat, Player.Controls.Joystick.moveLeft)  then self.axes.x = -1
+      elseif string.find(hat, Player.Controls.Joystick.moveRight) then self.axes.x =  1 end
    end
 end
 
@@ -138,15 +153,15 @@ function Player:Update(dt)
    self:GetMotionInput()
 
    -- Move and animate
-   self:SetMove(Player.Axes)
-   self:SetSpriteState(Player.Axes)
+   self:SetMove(self.axes)
+   self:SetSpriteState(self.axes)
 
    -- Update transforms and sprite
    self.entity:Update(dt)
    self.sprite:Update(dt)
 
    -- Reset
-   Player.Axes = Vec2.new()
+   self.axes = Vec2.new()
 end
 
 -- Player draw event
