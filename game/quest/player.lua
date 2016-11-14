@@ -109,6 +109,7 @@ end
 
 -- Sets the movement vector based on the given vector (input axes)
 function Player:SetMove(v)
+  self.transform:Translate(v)
   --[[
   -- If the axes are 0, introduce a stopping force (opposite velocity)
    if v.x == 0 and v.y == 0 then
