@@ -40,11 +40,11 @@ end
 
 function Canvas:Draw()
    love.graphics.draw(self.buffer,
-		      self.offset,
-		      0,
-		      0,
-		      self.scale,
-		      self.scale)
+		                self.offset,
+		                0,
+		                0,
+		                self.scale,
+		                self.scale)
 end
 
 return Canvas;
