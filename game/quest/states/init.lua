@@ -15,22 +15,16 @@
 --]]
 
 local GameState = require 'engine.system.gamestate'
+local gs_init = {}
+gs_init.name = "Init"
 
-local function Init_Enter()
+function gs_init.enter()
 end
 
-local function Init_Update()
+function gs_init.update(dt)
 end
 
-local function Init_Draw()
+function gs_init.draw()
 end
 
-local function Init_Exit()
-end
-
-local GSInit = GameState.RegisterNew("Init",
-                                     Init_Enter,
-                                     Init_Update,
-                                     Init_Draw,
-                                     Init_Exit)
-return GSInit
+return GameState.register(gs_init)
