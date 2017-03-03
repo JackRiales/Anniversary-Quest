@@ -41,7 +41,7 @@ function Button:update(dt)
    -- This is probably going to be inaccurate because of scaling...
    -- TODO(Jack): Make class for frame buffers to get proper mouse position
    local x, y = love.mouse.getPosition()
-   if PointIntersectsBounds({x=x, y=y}, self.rect) then
+   if self.rect:CheckPoint({x=x, y=y}) then
       self._hovering = true
       if not self._hoverlock and type(self.onhover)=='function' then
 	 self.onhover()
