@@ -19,19 +19,21 @@ GameState.__index = GameState
 GameState.StateList = {}
 GameState.Current   = nil
 
-function GameState.RegisterNew(name, enter, update, draw, exit)
-	local o  = {}
-	o.name   = name or "New Game State"
-	o.enter  = enter or nil
-	o.update = update or nil
-	o.draw   = draw or nil
-	o.exit   = exit or nil
-	GameState.StateList[o.name] = o
-	setmetatable(o, GameState)
-	return o
+function GameState.register(state)
+	local st = {
+		name = state.name or "New Game State",
+		enter = state.enter or nil,
+		update = state.update or nil,
+		draw = state.draw or nil,
+		keypressed = state.keypressed or nil,
+		joystickpressed = state.joystickpressed or nil,
+		exit = state.exit or nil
+	}
+	GameState.StateList[st.name] = st
+	return setmetatable(st, GameState)
 end
 
-function GameState:Set()
+function GameState:setcurrent()
 	if GameState.Current and type(GameState.Current.exit) == "function" then
 		GameState.Current.exit()
 	end
@@ -41,13 +43,25 @@ function GameState:Set()
 	end
 end
 
-function GameState.Update()
+function GameState.update(dt)
 	if GameState.Current and type(GameState.Current.update) == "function" then 
-		GameState.Current.update()
+		GameState.Current.update(dt)
 	end
 end
 
-function GameState.Draw()
+function GameState.keypressed(key, scancode, isrepeat)
+	if GameState.Current and type(GameState.Current.keypressed) == "function" then
+		GameState.current.keypressed(key, scancode, isrepeat)
+	end
+end
+
+function GameState.joystickpressed(joystick, button)
+	if GameState.Current and type(GameState.Current.joystickpressed) == "function" then
+		GameState.current.joystickpressed(joystick, button)
+	end
+end
+
+function GameState.draw()
 	if GameState.Current and type(GameState.Current.draw) == "function" then 
 		GameState.Current.draw()
 	end
