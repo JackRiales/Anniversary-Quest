@@ -42,7 +42,7 @@ function Transform:SetParent(parent, castPosition)
 end
 
 function Transform:Translate(deltaPosition)
-  self.Position = Vec2.add(self.Position, deltaPosition)
+  self.Position = self.Position + deltaPosition
   if #self.Children > 0 then
     for i=0, #self.Children do
       self.Children[i]:Translate(deltaPosition)

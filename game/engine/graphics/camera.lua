@@ -17,8 +17,8 @@
 local Vec2 = require 'engine.math.vector'
 
 local Camera = {}
-Camera.position = Vec2.new()
-Camera.scale    = Vec2.new(1, 1)
+Camera.position = Vec2()
+Camera.scale    = Vec2(1, 1)
 Camera.rotation = 0
 
 function Camera.set()
@@ -48,7 +48,7 @@ function Camera.moveScale(sx, sy)
 end
 
 function Camera.setPosition(x, y)
-   Camera.position = Vec2.new(x, y)
+   Camera.position = Vec2(x, y)
 end
 
 function Camera.setRotation(theta)
@@ -56,7 +56,7 @@ function Camera.setRotation(theta)
 end
 
 function Camera.setScale(x, y)
-   Camera.scale = Vec2.new(x or 1, y or 1)
+   Camera.scale = Vec2(x or 1, y or 1)
 end
 
 return Camera
