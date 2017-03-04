@@ -21,6 +21,10 @@ function Bounds.new(x, y, w, h)
    return setmetatable({x=x, y=y, w=w, h=h}, Bounds)
 end
 
+function Bounds.__call(me, x, y, w, h)
+   return Bounds.new(x, y, w, h)
+end
+
 -- Bounding box point intersection
 -- Returns true if the given point is inside the bounding box
 function Bounds:CheckPoint(point)
