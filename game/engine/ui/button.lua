@@ -24,9 +24,9 @@ function Button.new(rect, onclick, onhover, onexit)
    local self  = {}
    self.active = true
    self.rect   = rect
-   self.onclick = onclick
-   self.onhover = onhover
-   self.onexit  = onexit
+   self.onclick = onclick or nil
+   self.onhover = onhover or nil
+   self.onexit  = onexit or nil
    self._hovering  = false
    self._clicked   = false
    self._hoverlock = false
