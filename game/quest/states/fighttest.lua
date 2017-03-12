@@ -14,18 +14,15 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local GameState = require 'engine.system.gamestate'
-local QuestStates = {}
+local _state = {}
+_state.name = "Fighting Test"
 
-function QuestStates.load(assets)
-  local statefiles = love.filesystem.getDirectoryItems("quest/states")
-  for _, file in ipairs(statefiles) do
-    if file ~= "init.lua" then -- don't try and register the initializer
-      local title = string.sub(file, 1, #file-4)
-      QuestStates[title] = GameState.register(require('quest.states.'..title))
-    end
-  end
-  return QuestStates
+function _state.update(dt)
+  -- do nothing!
 end
 
-return QuestStates
+function _state.draw()
+  love.graphics.print(_state.name, 10, 10)
+end
+
+return _state

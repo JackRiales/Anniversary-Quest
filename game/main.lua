@@ -17,8 +17,9 @@
 function love.load()
   -- Main external asset table
   Assets = require('lib.cargo').init('assets')
-  Init = require('quest.states.init')
   GameState = require('engine.system.gamestate')
+  Quest = require('quest.states.init').load()
+  Quest.fighttest:setcurrent()
 end
 
 function love.update(dt)
