@@ -43,6 +43,10 @@ function Map.new(map, itemMap, enemyMap, player)
    return setmetatable(self, Map)
 end
 
+function Map.__call(map, itemMap, enemyMap, player)
+   return Map.new(map, itemMap, enemyMap, player)
+end
+
 function Map:update(dt)
    self.sti:update(dt)
 end

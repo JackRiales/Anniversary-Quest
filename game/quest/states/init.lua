@@ -17,7 +17,7 @@
 local GameState = require 'engine.system.gamestate'
 local QuestStates = {}
 
-function QuestStates.load(assets)
+function QuestStates.load()
   local statefiles = love.filesystem.getDirectoryItems("quest/states")
   for _, file in ipairs(statefiles) do
     if file ~= "init.lua" then -- don't try and register the initializer

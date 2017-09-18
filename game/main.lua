@@ -14,9 +14,23 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-function love.load()
+function love.load(arg)
   -- Main external asset table
   Assets = require('lib.cargo').init('assets')
+
+  -- Third party GUI system
+  require('lib.gooi')
+
+  -- Testing
+  gooi.newButton({text = "Quit"}):onRelease( function () love.event.quit() end )
+  gooi.newButton({
+    text = "Hide UI",
+    x = 80,
+    y = 40,
+    w = 100,
+    h = 25
+  })
+
   GameState = require('engine.system.gamestate')
   Quest = require('quest.states.init').load()
   Quest.fighttest:setcurrent()
@@ -30,10 +44,19 @@ function love.keypressed(key, scancode, isrepeat)
   GameState.keypressed(key, scancode, isrepeat)
 end
 
+function love.mousepressed(x, y, button)
+  gooi.pressed()
+end
+
+function love.mousereleased(x, y, button)
+  gooi.released()
+end
+
 function love.joystickpressed(joystick, button)
   GameState.joystickpressed(joystick, button)
 end
 
 function love.draw()
   GameState.draw()
+  gooi.draw()
 end

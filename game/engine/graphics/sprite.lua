@@ -76,6 +76,10 @@ function Sprite.new(def)
   return setmetatable(self, Sprite)
 end
 
+function Sprite.__call(def)
+  return Sprite.new(def)
+end
+
 function Sprite:SetAnimation(name)
   self.cAnimation = name
 end
